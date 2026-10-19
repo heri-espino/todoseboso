@@ -10,7 +10,10 @@ const SITE=path.join(__dirname,"..","site");
 const JS=fs.readFileSync(path.join(SITE,"reference26_residuals.js"),"utf8");
 const actual=JSON.parse(fs.readFileSync(
   path.join(SITE,"data/reference26_residuals.json"),"utf8"));
+const panelNames=["magnitud","influencia","supuestos","espacial","semivariograma","bootstrap","alcance"];
 const ids=[
+ ...panelNames.map(name=>"r26-"+name),
+ ...panelNames.map(name=>"r26-tab-"+name),
  "reference26-residuals","r26-residual-status","r26-summary-cards",
  "r26-error-scale","r26-maximum-error","r26-influence-lead",
  "r26-influence-bar","r26-deletion-body","r26-tests-body",
@@ -23,22 +26,33 @@ class Element {
   constructor(tag="div") {
     this.tagName=tag;this.children=[];this.attributes={};
     this.textContent="";this.value="";this.title="";this.style={};
-    this.events={};this.className="";
+    this.events={};this.className="";this.hidden=false;this.tabIndex=0;
+    this.focused=false;
   }
   append(...items){this.children.push(...items);}
   replaceChildren(...items){this.children=[...items];}
   setAttribute(key,val){this.attributes[key]=val;}
   addEventListener(key,callback){this.events[key]=callback;}
-  dispatch(key){this.events[key]?.();}
+  dispatch(key,event){this.events[key]?.(event);}
+  focus(){this.focused=true;}
+  getAttribute(key){return this.attributes[key];}
 }
-function mount(fetchImpl) {
+function mount(fetchImpl,initialHash="") {
   const nodes=Object.fromEntries(ids.map(id=>[id,new Element()]));
   nodes["r26-moran-k"].value="8";
   nodes["r26-spatial-target"].value="signed_residual";
   const document={getElementById:id=>nodes[id]||null,
                   createElement:tag=>new Element(tag)};
-  const context={document,fetch:fetchImpl,console};
+  const winEvents={};
+  const window={
+    location:{hash:initialHash},
+    history:{replaceState(_a,_b,hash){window.location.hash=hash;}},
+    addEventListener(name,callback){winEvents[name]=callback;},
+    dispatch(name){winEvents[name]?.();}
+  };
+  const context={document,window,fetch:fetchImpl,console};
   vm.runInNewContext(JS,context,{filename:"reference26_residuals.js"});
+  nodes.__window=window;
   return nodes;
 }
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
@@ -116,6 +130,54 @@ test("renders Reference26 alone and accessible numerical charts",async()=>{
  assert.match(nodes["r26-bootstrap-note"].textContent,/dos de los siete/);
 });
 
+test("single-panel tabs expose only the chosen statistics and update shareable hashes",async()=>{
+ const nodes=mount(async()=>({ok:true,json:async()=>actual}));
+ await tick();
+ for(const name of panelNames){
+   const active=name==="magnitud";
+   assert.equal(nodes["r26-"+name].hidden,!active);
+   assert.equal(nodes["r26-tab-"+name].getAttribute("aria-selected"),String(active));
+   assert.equal(nodes["r26-tab-"+name].tabIndex,active?0:-1);
+ }
+ nodes["r26-tab-espacial"].dispatch("click");
+ assert.equal(nodes["r26-magnitud"].hidden,true);
+ assert.equal(nodes["r26-espacial"].hidden,false);
+ assert.equal(nodes.__window.location.hash,"#r26-espacial");
+ assert.equal(nodes["r26-geary-chart"].children.length,5);
+ let prevented=false;
+ nodes["r26-tab-espacial"].dispatch("keydown",{
+   key:"ArrowRight",preventDefault(){prevented=true;}
+ });
+ assert.equal(prevented,true);
+ assert.equal(nodes["r26-semivariograma"].hidden,false);
+ assert.equal(nodes["r26-espacial"].hidden,true);
+ assert.equal(nodes["r26-tab-semivariograma"].focused,true);
+ nodes["r26-tab-semivariograma"].dispatch("keydown",{
+   key:"Home",preventDefault(){}
+ });
+ assert.equal(nodes["r26-magnitud"].hidden,false);
+ nodes["r26-tab-magnitud"].dispatch("keydown",{
+   key:"End",preventDefault(){}
+ });
+ assert.equal(nodes["r26-alcance"].hidden,false);
+ nodes.__window.location.hash="#r26-bootstrap";
+ nodes.__window.dispatch("hashchange");
+ assert.equal(nodes["r26-bootstrap"].hidden,false);
+ assert.equal(nodes["r26-alcance"].hidden,true);
+ // External section navigation must not unexpectedly change the chosen tab.
+ nodes.__window.location.hash="#pruebas";
+ nodes.__window.dispatch("hashchange");
+ assert.equal(nodes["r26-bootstrap"].hidden,false);
+});
+test("deep-linked residual tabs open before the aggregate data loads",async()=>{
+ const nodes=mount(async()=>({ok:false}),"#r26-supuestos");
+ await tick();
+ assert.equal(nodes["r26-supuestos"].hidden,false);
+ assert.equal(nodes["r26-magnitud"].hidden,true);
+ assert.match(nodes["r26-residual-status"].textContent,/no disponibles/i);
+ nodes["r26-tab-influencia"].dispatch("click");
+ assert.equal(nodes["r26-influencia"].hidden,false);
+});
 test("refuses wrong model, bad partitions and fake/improper provenance",async()=>{
  const copies=[
   {...actual,model:"Compact14"},
@@ -149,6 +211,14 @@ test("site ships no external ensemble UI or fabricated private histogram",()=>{
  assert.match(html,/id="r26-semivariograma"/);
  assert.match(html,/id="r26-supuestos"/);
  assert.match(html,/id="r26-alcance"/);
+ const tabs=[...html.matchAll(/role="tab" id="r26-tab-([^"]+)" aria-controls="r26-([^"]+)"/g)];
+ assert.equal(tabs.length,7);
+ assert.deepEqual(tabs.map(m=>m[1]),panelNames);
+ assert.deepEqual(tabs.map(m=>m[2]),panelNames);
+ const panels=[...html.matchAll(/id="r26-(magnitud|influencia|supuestos|espacial|semivariograma|bootstrap|alcance)" role="tabpanel"/g)];
+ assert.equal(panels.length,7);
+ assert.match(html,/id="r26-tab-magnitud"[^>]+aria-selected="true"/);
+ assert.equal((html.match(/role="tabpanel"[^>]* hidden/g)||[]).length,6);
  assert.match(html,/<a href="#estadisticas-finales">Nuevo: diagnóstico de residuos LOOCV<\/a>/);
  assert.match(html,/<a href="#pruebas">Pruebas anteriores: asociaciones<\/a>/);
  assert.ok(html.indexOf('id="pruebas"') < html.indexOf('id="estadisticas-finales"'));

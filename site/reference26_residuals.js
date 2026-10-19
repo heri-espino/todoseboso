@@ -10,6 +10,59 @@
     if (cls) el.className = cls;
     return el;
   };
+  const panelNames=["magnitud","influencia","supuestos","espacial",
+    "semivariograma","bootstrap","alcance"];
+  const panelIds=panelNames.map(name=>"r26-"+name);
+  function setPanel(id,{focus=false,updateHash=false}={}){
+    if(!panelIds.includes(id))return;
+    panelIds.forEach(panelId=>{
+      const isActive=panelId===id;
+      const panel=$(panelId);
+      const tab=$("r26-tab-"+panelId.slice(4));
+      if(!panel || !tab)return;
+      panel.hidden=!isActive;
+      tab.setAttribute("aria-selected",String(isActive));
+      tab.tabIndex=isActive?0:-1;
+      if(isActive && focus && typeof tab.focus==="function")tab.focus();
+    });
+    if(updateHash && typeof window!=="undefined" &&
+        typeof window.history?.replaceState==="function"){
+      // Anchor is shareable without scrolling past the tab bar.
+      window.history.replaceState(null,"","#"+id);
+    }
+  }
+  function initExplorer(){
+    const currentHash=()=>typeof window!=="undefined" ?
+      (window.location?.hash||"").replace(/^#/,""):"";
+    panelIds.forEach((id,index)=>{
+      const tab=$("r26-tab-"+id.slice(4));
+      if(!tab)return;
+      tab.addEventListener("click",()=>setPanel(id,{updateHash:true}));
+      tab.addEventListener("keydown",event=>{
+        const key=event?.key;
+        let destination;
+        if(key==="ArrowRight")destination=(index+1)%panelIds.length;
+        else if(key==="ArrowLeft")destination=(index-1+panelIds.length)%panelIds.length;
+        else if(key==="Home")destination=0;
+        else if(key==="End")destination=panelIds.length-1;
+        else return;
+        event.preventDefault();
+        setPanel(panelIds[destination],{focus:true,updateHash:true});
+      });
+    });
+    const syncFromLocation=()=>{
+      const requested=currentHash();
+      // Keep the current tab for unrelated page navigation.
+      if(panelIds.includes(requested))setPanel(requested);
+    };
+    if(typeof window!=="undefined" && typeof window.addEventListener==="function"){
+      window.addEventListener("hashchange",syncFromLocation);
+      window.addEventListener("popstate",syncFromLocation);
+    }
+    setPanel(panelIds.includes(currentHash())?currentHash():panelIds[0]);
+  }
+  initExplorer();
+
   const finite = value => typeof value === "number" && Number.isFinite(value);
   const fmt = (value, digits=6) =>
     finite(value) ? value.toLocaleString("es-MX", {maximumFractionDigits:digits}) : "No disponible";
