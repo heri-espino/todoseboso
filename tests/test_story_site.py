@@ -39,7 +39,7 @@ class StorySiteTest(unittest.TestCase):
         self.assertIn("PREDICCIÓN REAL · EN TU NAVEGADOR", html)
         self.assertIn("id=\"predict-real\"", html)
         self.assertIn("id=\"ensamble\"", html)
-        self.assertIn("id=\\\"estadisticas-finales\\\"", html)
+        self.assertIn('id="estadisticas-finales"', html)
         self.assertIn("id=\"reference26-view\"", html)
         self.assertIn("id=\"predicciones-59\"", html)
         self.assertIn("id=\"pred59-rows\"", html)
