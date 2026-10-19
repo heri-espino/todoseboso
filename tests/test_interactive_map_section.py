@@ -9,7 +9,7 @@ class NativeMapSectionTest(unittest.TestCase):
     def test_map_is_its_own_final_section(self):
         html=(SITE/"index.html").read_text(encoding="utf-8")
         self.assertEqual(html.count('id="mapa-interactivo"'),1)
-        self.assertLess(html.index('id="simulador"'),html.index('id="mapa-interactivo"'))
+        self.assertLess(html.index('id="preguntas"'),html.index('id="mapa-interactivo"'))
         self.assertLess(html.index('id="mapa-interactivo"'),html.index("</main>"))
         self.assertIn('id="geo-leaflet-map"',html)
         self.assertIn('id="geo-details"',html)
