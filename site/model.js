@@ -69,17 +69,18 @@
     const result = c + g * (e - c) + delta;
     $("#climate-number").textContent = fmt(c) + " t/ha";
     $("#local-number").textContent = fmt(e) + " t/ha";
-    $("#corrector-number").textContent = (delta >= 0 ? "+" : "") + fmt(delta) + " t/ha";
+    $("#corrector-number").textContent = fmt(delta) + " t/ha";
     $("#mix-climate").style.width = (100 * (1 - g)) + "%";
     $("#mix-local").style.width = (100 * g) + "%";
     $("#mix-swatch").setAttribute("aria-label",
       fmt(100 * (1 - g), 1) + " % clima, " + fmt(100 * g, 1) + " % experto local");
     $("#example-result").textContent = fmt(result);
-    $("#example-equation").textContent = "La parte climática aporta " +
-      fmt(c * (1 - g), 3) + " t/ha y la parte local aporta " +
-      fmt(e * g, 3) + " t/ha. La corrección final " +
-      (delta >= 0 ? "suma " : "resta ") + fmt(Math.abs(delta), 2) +
-      " t/ha. El resultado ilustrativo es " + fmt(result, 3) + " t/ha.";
+    $("#example-equation").textContent =
+      "La contribución climática es de " + fmt(c * (1 - g), 3) +
+      " t/ha y la contribución local es de " + fmt(e * g, 3) +
+      " t/ha. La corrección residual ilustrativa es de " + fmt(delta, 2) +
+      " t/ha. En consecuencia, la estimación ilustrativa resultante es de " +
+      fmt(result, 3) + " t/ha.";
   }
   ["example-climate", "example-local", "example-corrector"].forEach((id) =>
     $("#" + id).addEventListener("input", example));
@@ -114,10 +115,11 @@
     const complete = button.dataset.support === "complete";
     activeButtons("[data-support]", "support", button.dataset.support);
     $("#support-formula").textContent = complete ?
-      "Mezcla de clima y vecinos + corrección final" : "Mezcla de clima y vecinos + 0";
+      "Combinación climática y local con corrección residual acotada" :
+      "Combinación climática y local sin corrección residual";
     $("#support-note").textContent = complete ?
-      "Si los tres indicadores existen, la corrección puede sumar o restar hasta 0.25 t/ha." :
-      "Si falta cualquiera de los tres, el corrector R3 se desactiva. No se elimina la predicción base.";
+      "Con los tres indicadores disponibles, la corrección residual puede modificar la estimación en un máximo de 0.25 t/ha, en sentido positivo o negativo." :
+      "Ante la ausencia de cualquiera de los tres indicadores, la corrección residual R3 se desactiva y se conserva la combinación climática y local.";
   }));
 
   let research = null;

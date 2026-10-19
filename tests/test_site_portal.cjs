@@ -42,4 +42,7 @@ assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
 assert.match(nav,/revealReferenceFromHash/);
 assert.match(nav,/modelHeading.insertAdjacentElement\("afterend", figure\)/);
 assert.ok(html.includes("andrea-hh.github.io/todoseboso/explorador/mapa.html"));
+assert.match(html,/id="geo-leaflet-map"/);
+assert.match(html,/src="\.\/native_map\.js"/);
+assert.doesNotMatch(html,/<iframe[^>]*andrea-hh\.github\.io/);
 console.log("PASS: editorial index, full document, deep links, verified plots, ensemble, and map.");

@@ -37,5 +37,8 @@ for(const id of ["recorrido","ensamble","datos","variables","preparacion",
 }
 assert.ok(html.indexOf('id="mapa-interactivo"')>html.indexOf('id="simulador"'));
 assert.ok(html.includes("andrea-hh.github.io/todoseboso/explorador/mapa.html"));
+assert.match(html,/id="geo-leaflet-map"/);
+assert.match(html,/src="\.\/native_map\.js"/);
+assert.doesNotMatch(html,/<iframe[^>]*andrea-hh\.github\.io/);
 assert.ok(!html.includes('src="./portal.js"'));
 console.log("Subtle scroll reveal, responsive interactions and matching map/math/diagram: PASS");

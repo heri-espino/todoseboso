@@ -205,3 +205,25 @@ button,.nav-popover,.chapter-card,.collaborator-map-frame{box-shadow:none!import
 #arquitectura .math-proof.model-formula .math-scroll math{
   color:var(--ink)!important;
 }
+
+/* The two educational demonstrations use the same neutral paper palette as
+   the verified result and statistical panels. */
+.geo-interactive,.missing-demo{
+ background:#fff!important;color:var(--ink)!important;
+ border:1px solid var(--rule)!important;box-shadow:none!important;
+ border-radius:0!important;
+}
+.geo-interactive h3,.geo-interactive label,.missing-demo h3{
+ color:var(--ink)!important;
+}
+.geo-interactive p,.missing-demo p,.geo-interactive .equation-caption{
+ color:#58695f!important;
+}
+.geo-interactive output,.geo-interactive .example-total strong,
+.missing-demo .support-formula{color:var(--forest)!important}
+.geo-interactive .example-total{border-top:1px solid var(--rule)!important}
+.geo-interactive .mix-swatch #mix-climate{background:#8da695}
+.geo-interactive .mix-swatch #mix-local{background:#c0c9bd}
+.geo-interactive input[type="range"]{accent-color:var(--jade)}
+.missing-demo .buttonset button{border-color:var(--rule);border-radius:0}
+.missing-demo .buttonset button.active{background:var(--forest);color:#fff}

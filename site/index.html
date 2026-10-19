@@ -7,13 +7,13 @@
 <title>GeoCebada · Ensamble de Reference26 y Compact14</title>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css"><link rel="stylesheet" href="./ensemble_story.css">
-<script src="./navigation.js" defer></script><script src="./scroll_motion.js" defer></script><script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script><script src="./parcel_core.js" defer></script><script src="./predictor.js" defer></script>
+<script src="./navigation.js" defer></script><script src="./scroll_motion.js" defer></script><script src="./native_map.js" defer></script><script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script><script src="./parcel_core.js" defer></script><script src="./predictor.js" defer></script>
 <script src="./reference26_engine.js" defer></script>
 <script src="./predictions59.js" defer></script>
 <script src="./ensemble_contract.js" defer></script>
 <script src="./ensemble_story.js" defer></script>
 <script src="./browser_inference.js" defer></script>
-<link rel="stylesheet" href="./interactive-map.css"><link rel="stylesheet" href="./navigation.css"><link rel="stylesheet" href="./editorial.css"><link rel="stylesheet" href="./scroll_motion.css">
+<link rel="stylesheet" href="./interactive-map.css"><link rel="stylesheet" href="./navigation.css"><link rel="stylesheet" href="./editorial.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="./scroll_motion.css">
 </head>
 <body>
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -228,12 +228,12 @@
 <div><div class="geo-cluster-list" id="cluster-list" role="group" aria-label="Peso aprendido del experto local en cuatro grupos geológicos"></div>
 <p class="small-note">Los números 0–3 son identificadores arbitrarios de K-means. No son municipios, clases de fertilidad ni niveles ordenados de rendimiento. Los porcentajes son los pesos del ajuste final sobre las 138 parcelas conocidas.</p></div>
 <div class="geo-interactive">
-<h3>Prueba cómo funciona la mezcla</h3><p>Ejemplo numérico inventado. Conservamos el mismo clima y experto local; cambia únicamente el peso geológico y el ajuste final.</p>
+<h3>Ejemplo numérico de la combinación de componentes</h3><p>Ejercicio ilustrativo con valores hipotéticos. Las estimaciones climática y local se mantienen constantes; se modifica el peso asignado según el grupo geológico y se observa el efecto de la corrección residual. Los valores no representan predicciones individuales.</p>
 <label for="example-climate">Estimación climática <output id="climate-number">4.00 t/ha</output></label><input id="example-climate" type="range" min="250" max="550" value="400" step="10">
-<label for="example-local">Estimación con vecinos <output id="local-number">4.80 t/ha</output></label><input id="example-local" type="range" min="250" max="550" value="480" step="10">
-<label for="example-corrector">Corrección final ilustrativa <output id="corrector-number">+0.00 t/ha</output></label><input id="example-corrector" type="range" min="-25" max="25" value="0" step="5">
+<label for="example-local">Estimación local por vecindad <output id="local-number">4.80 t/ha</output></label><input id="example-local" type="range" min="250" max="550" value="480" step="10">
+<label for="example-corrector">Corrección residual ilustrativa <output id="corrector-number">0.00 t/ha</output></label><input id="example-corrector" type="range" min="-25" max="25" value="0" step="5">
 <div class="mix-swatch" id="mix-swatch" aria-label="Mezcla de pesos según el grupo"><span id="mix-climate"></span><span id="mix-local"></span></div>
-<div class="example-total"><span>Resultado ilustrativo</span><strong id="example-result">—</strong><small>t/ha</small></div><p id="example-equation" class="equation-caption" aria-live="polite"></p>
+<div class="example-total"><span>Estimación ilustrativa resultante</span><strong id="example-result">—</strong><small>t/ha</small></div><p id="example-equation" class="equation-caption" aria-live="polite"></p>
 </div></div>
 <div class="note-inline"><strong>La diferencia entre K y k:</strong> en el ajuste final <strong>K = 4 grupos geológicos</strong> y <strong>k = 24 vecinos geográficos</strong>. Son dos operaciones distintas. Los parámetros de Ridge y la agrupación se ajustan sólo con el entrenamiento de cada evaluación.</div>
 </div></section>
@@ -245,7 +245,7 @@
 <div class="missing-item"><span>Datos geológicos</span><h3>Representación física</h3><p>Las columnas numéricas no observadas utilizan la mediana del entrenamiento antes de la transformación. Un cero real en la composición no es un dato faltante.</p></div>
 <div class="missing-item"><span>Información para R3</span><h3>Corrección desactivada</h3><p>Si falta cualquiera de los tres indicadores de la corrección, la predicción conserva la mezcla base. En el ajuste final esto ocurre para 8 de las 59 parcelas.</p></div>
 </div>
-<div class="missing-demo"><div><h3>¿Qué parte de la fórmula se usa?</h3><p>Selecciona el estado de los indicadores residuales. El ejemplo sólo explica la regla de activación; no revela datos individuales.</p></div><div class="buttonset"><button class="active" type="button" data-support="complete" aria-pressed="true">Tres indicadores completos</button><button type="button" data-support="missing" aria-pressed="false">Falta algún indicador</button></div><div class="support-formula" id="support-formula" aria-live="polite">Mezcla climática-local + corrección acotada</div><p id="support-note">La corrección puede sumar o restar hasta 0.25 t/ha.</p></div>
+<div class="missing-demo"><div><h3>Condiciones de activación de la corrección residual</h3><p>Seleccione la disponibilidad de los tres indicadores necesarios para la corrección. Este ejercicio describe la regla de activación del modelo y no utiliza observaciones individuales.</p></div><div class="buttonset"><button class="active" type="button" data-support="complete" aria-pressed="true">Tres indicadores residuales disponibles</button><button type="button" data-support="missing" aria-pressed="false">Al menos un indicador residual ausente</button></div><div class="support-formula" id="support-formula" aria-live="polite">Combinación de las estimaciones climática y local, con corrección residual acotada</div><p id="support-note">Cuando los tres indicadores están disponibles, la corrección residual puede modificar la estimación hasta en 0.25 t/ha, en sentido positivo o negativo.</p></div>
 </div></section>
 
 <section class="section" id="ajuste"><div class="shell">
@@ -378,16 +378,35 @@
 <section class="section section-soft collaborator-map" id="mapa-interactivo" aria-labelledby="collaborator-map-title">
 <div class="shell">
 <div class="section-heading collaborator-map-heading"><div>
-<p class="eyebrow">EXPLORACIÓN GEOGRÁFICA</p>
-<h2 id="collaborator-map-title">¿Dónde están <em>las 197 parcelas?</em></h2>
-</div><p>Explora la ubicación de las parcelas agrícolas de Hidalgo, Puebla y Tlaxcala. Cambia entre vista satelital y mapa ligero, filtra por estado y distingue las 138 parcelas de entrenamiento de las 59 parcelas por predecir.</p></div>
-<div class="collaborator-map-toolbar"><span>VISOR GEOGRÁFICO · CICLO 2025</span><a href="https://andrea-hh.github.io/todoseboso/explorador/mapa.html" target="_blank" rel="noopener noreferrer">Abrir mapa completo</a></div>
-<div class="collaborator-map-frame">
-<iframe src="https://andrea-hh.github.io/todoseboso/explorador/mapa.html" title="Mapa interactivo de GeoCebada realizado por Andrea-HH, con filtros por estado, selección de parcelas y vista satelital" loading="lazy" referrerpolicy="no-referrer" aria-describedby="collaborator-map-credit"></iframe>
+<p class="eyebrow">13 · EXPLORACIÓN GEOGRÁFICA</p>
+<h2 id="collaborator-map-title">Distribución espacial de <em>las 197 parcelas.</em></h2>
+</div><p>Explore las parcelas de Hidalgo, Puebla y Tlaxcala. El visor distingue los 138 registros de entrenamiento y las 59 parcelas por estimar; permite seleccionar polígonos y consultar las variables ambientales disponibles.</p></div>
+<div id="geoc-native-map" class="geoc-native-map" aria-label="Explorador geográfico integrado">
+  <div class="geo-topline"><span>LOCALIZACIÓN Y RESULTADOS POR PARCELA</span><a href="https://andrea-hh.github.io/todoseboso/explorador/mapa.html" target="_blank" rel="noopener noreferrer">Abrir versión original</a></div>
+  <div class="geo-native-layout">
+    <aside class="geo-native-sidebar" aria-label="Filtros y descripción de parcelas">
+      <div class="geo-native-counters" aria-label="Distribución de parcelas">
+        <div><strong>197</strong><span>Total</span></div><div><strong>138</strong><span>Entrenamiento</span></div><div><strong>59</strong><span>Por estimar</span></div>
+      </div>
+      <div class="geo-native-controls">
+        <label for="geo-state">Estado</label>
+        <select id="geo-state" disabled><option value="all">Todos los estados</option><option value="Hidalgo">Hidalgo</option><option value="Puebla">Puebla</option><option value="Tlaxcala">Tlaxcala</option></select>
+        <label for="geo-parcel">Identificador de parcela</label>
+        <select id="geo-parcel" disabled><option value="">Seleccionar parcela</option></select>
+        <p id="geo-visible" class="geo-native-count">197 parcelas en el estudio</p>
+      </div>
+      <div class="geo-native-detail"><p class="geo-native-kicker">FICHA DE PARCELA</p><div id="geo-details" aria-live="polite"><p class="geo-muted">Seleccione una parcela para consultar sus características.</p></div></div>
+      <p class="geo-legend" id="geo-legend">Entrenamiento y parcelas por estimar</p>
+    </aside>
+    <div class="geo-native-mapcolumn">
+      <div class="geo-map-controls"><div class="geo-map-base" aria-label="Capa cartográfica"><button type="button" data-geo-base="light" aria-pressed="true">Cartografía</button><button type="button" data-geo-base="satellite" aria-pressed="false">Satélite</button></div><button type="button" id="geo-reset">Vista general</button></div>
+      <div id="geo-leaflet-map" role="region" aria-label="Mapa interactivo con 197 parcelas; seleccione los marcadores o utilice los filtros."></div>
+      <p id="geo-status" role="status" aria-live="polite">Preparando geometrías y factores ambientales…</p>
+    </div>
+  </div>
 </div>
-<p class="small-note collaborator-map-credit" id="collaborator-map-credit">Explorador elaborado por <a href="https://github.com/Andrea-HH/todoseboso/tree/paginAndrea/site/explorador" target="_blank" rel="noopener noreferrer">Andrea-HH</a>. El mapa se carga desde su <a href="https://andrea-hh.github.io/todoseboso/explorador/mapa.html" target="_blank" rel="noopener noreferrer">sitio original ↗</a>, donde también puedes abrirlo en pantalla completa. Las 59 cosechas desconocidas no son mediciones observadas.</p>
-</div>
-</section>
+<p class="small-note collaborator-map-credit" id="collaborator-map-credit">Fuente cartográfica y de datos: <a href="https://github.com/Andrea-HH/todoseboso/tree/paginAndrea/site/explorador" target="_blank" rel="noopener noreferrer">Andrea-HH</a>, versión documentada de los 197 polígonos, 138 rendimientos reportados y 59 predicciones archivadas de Reference26. Este visor dispone de una interfaz propia; el rendimiento real de las 59 parcelas permanece desconocido. <a href="https://andrea-hh.github.io/todoseboso/explorador/mapa.html" target="_blank" rel="noopener noreferrer">Consultar el explorador original.</a></p>
+</div></section>
 
 </main><footer class="model-footer"><div class="shell"><strong>GeoCebada · AgroCebada FIRA 2026</strong><span>Ensamble en preparación · Reference26 + Compact14 · Investigación retrospectiva de 2025</span><a href="#inicio">Volver al inicio ↑</a></div></footer>
 </body></html>

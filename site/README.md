@@ -349,3 +349,32 @@ apartado Arquitectura se unificaron en blanco/gris claro con tipografía
 oscura. No cambian las fórmulas ni las etiquetas.
 
 Verificar con `node tests/test_site_motion.cjs` y el workflow de Pages.
+
+## Mapa integrado con interfaz académica y ejercicios didácticos (2026-10-19)
+
+La sección cartográfica ya **no usa un iframe** ni reproduce la interfaz visual
+del sitio de Andrea-HH. `site/native_map.js` implementa un visor Leaflet
+independiente con controles, tipografía y paneles acordes al documento.
+Mantiene 197 polígonos, filtros por estado, selección por ID, capas
+cartográfica/satelital, la ficha geográfica, indicadores climáticos y los
+rendimientos reportados (138) o estimaciones **archivadas** de Reference26 (59).
+
+**Procedencia:** las geometrías y cifras se descargan directamente de
+`Andrea-HH/todoseboso@95f942177d47f48bb966417ea9d19cf25fff4ced`,
+archivos públicos del explorador `data/mapa_publico.json.gz`,
+`predictions.csv` y `training_yields.csv`. No se copiaron los algoritmos,
+las hojas de estilo ni el HTML del compañero. El origen permanece
+externo y versionado; si se retira o cambia el acceso de red, el visor
+muestra un aviso y enlaza al original. Para mayor autonomía será necesario
+publicar una copia del dataset con autorización explícita.
+
+Los dos recuadros ilustrativos (mezcla y soporte de la corrección R3)
+emplean superficies blancas, bordes finos y vocabulario académico.
+La corrección se presenta con su valor numérico, sin signos superfluos
+cuando es nula, y el resumen dinámico distingue contribución climática,
+contribución local y corrección residual.
+
+La aparición al hacer scroll usa un intervalo de ~1.3 s; los aumentos al
+pasar el cursor duran ~0.8 s y aplican sombras grises tenues. El visor
+cartográfico permanece sin escalado para no obstaculizar Leaflet. Se sigue
+respetando `prefers-reduced-motion`.
