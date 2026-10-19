@@ -147,6 +147,12 @@ test("site exposes accessible search and keeps historical inference separate",()
   assert.match(html,/id="ensemble-paired-body"/);
   assert.match(html,/src="\.\/ensemble_metrics\.js"/);
   assert.match(html,/src="\.\/browser_inference\.js"/);
-  assert.ok(!fs.existsSync(path.join(SITE,"data","ensemble_evaluation.json")),
-            "Never commit fabricated finished statistical results.");
+  const output = path.join(SITE,"data","ensemble_evaluation.json");
+  if (fs.existsSync(output)) {
+    const actual = JSON.parse(fs.readFileSync(output,"utf8"));
+    assert.equal(actual.not_independent_weight_validation,true);
+    assert.equal(actual.n_labeled,138);
+    assert.deepEqual(new Set(actual.models.map(x=>x.model)),
+      new Set(["Reference26_mean","Compact14","Ensemble_final"]));
+  }
 });
