@@ -89,5 +89,12 @@ test("site only stages real estimates; sample payload exists inside tests",()=>{
   const html=fs.readFileSync(path.join(site,"index.html"),"utf8");
   assert.match(html,/id="ensemble-predictions59"/);
   assert.match(html,/src="\.\/ensemble_predictions59\.js"/);
-  assert.ok(!fs.existsSync(path.join(site,"data","ensemble_predictions59.json")));
+  const output=path.join(site,"data","ensemble_predictions59.json");
+  if (fs.existsSync(output)) {
+    const real=JSON.parse(fs.readFileSync(output,"utf8"));
+    assert.equal(real.n_predictions,59);
+    assert.equal(real.no_true_y_available_for_59,true);
+    assert.equal(real.parity.python_replayed_both_joblibs,true);
+    assert.equal(real.rows.length,59);
+  }
 });
