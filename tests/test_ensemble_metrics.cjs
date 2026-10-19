@@ -13,7 +13,11 @@ const IDS = [
   "ensemble-metrics-search", "ensemble-spatial-body",
   "ensemble-spatial-k", "ensemble-spatial-target",
   "ensemble-metrics-count", "ensemble-spatial-status",
-  "ensemble-top-line", "ensemble-paired-body"
+  "ensemble-top-line", "ensemble-paired-body",
+  "ensemble-interpretation-overview", "ensemble-reading-accuracy",
+  "ensemble-reading-tails", "ensemble-reading-calibration",
+  "ensemble-reading-normality", "ensemble-reading-spatial",
+  "ensemble-reading-paired"
 ];
 
 class FakeElement {
@@ -127,6 +131,16 @@ test("renders all three models, normality diagnostics, spatial and paired contra
   assert.equal(nodes["ensemble-top-line"].children.length,3);
   assert.equal(nodes["ensemble-spatial-body"].children.length,6);
   assert.equal(nodes["ensemble-paired-body"].children.length,1);
+  assert.match(nodes["ensemble-interpretation-overview"].textContent,
+               /menor RMSE descriptivo/);
+  assert.match(nodes["ensemble-reading-accuracy"].textContent,
+               /0.07|0,07|0.069|0,069/);
+  assert.match(nodes["ensemble-reading-normality"].textContent,
+               /Shapiro/);
+  assert.match(nodes["ensemble-reading-spatial"].textContent,
+               /Holm|no se detectó/i);
+  assert.match(nodes["ensemble-reading-paired"].textContent,
+               /selección previa de pesos/);
   assert.ok(nodes["ensemble-metrics-body"].children.length >= 5);
   assert.match(nodes["ensemble-metrics-status"].textContent, /mismas 138 etiquetas/);
   nodes["ensemble-metrics-family"].value="normality";
@@ -138,6 +152,39 @@ test("renders all three models, normality diagnostics, spatial and paired contra
   nodes["ensemble-spatial-k"].value="4";
   nodes["ensemble-spatial-k"].dispatch("change");
   assert.equal(nodes["ensemble-spatial-body"].children.length,0);
+  assert.match(nodes["ensemble-reading-spatial"].textContent,
+               /No se dispone de Moran I/);
+});
+
+test("contextual interpretation reacts to significant corrected Moran and respects caution", async () => {
+  const result = JSON.parse(JSON.stringify(sample));
+  for (const model of result.models) {
+    model.metrics.bias_t_ha = model.model === "Ensemble_final" ? -0.000617 : 0.001466;
+  }
+  result.models[2].metrics.p95_ae_t_ha = .779594;
+  result.models[2].metrics.linf_t_ha = 2.141844;
+  result.models[2].metrics.median_ae_t_ha = .247911;
+  result.spatial.find(x => x.model === "Ensemble_final" &&
+    x.statistic === "Moran_I").estimate = .38;
+  result.spatial.find(x => x.model === "Ensemble_final" &&
+    x.statistic === "Moran_I").p_two_sided_holm_all = .01;
+  result.diagnostics.conditional_error = [{
+    model: "Ensemble_final",
+    koenker_breusch_pagan_asymptotic_p_exploratory: .34,
+    brown_forsythe_3_predicted_terciles_p_exploratory: .87
+  }];
+  const nodes = contextFor(async()=>({ok:true,json:async()=>result}));
+  await settled();
+  assert.match(nodes["ensemble-reading-spatial"].textContent,
+    /agrupamiento espacial/);
+  assert.match(nodes["ensemble-reading-tails"].textContent,
+    /2,141844|2.141844/);
+  assert.match(nodes["ensemble-reading-calibration"].textContent,
+    /subestimación/);
+  assert.match(nodes["ensemble-reading-normality"].textContent,
+    /Brown/);
+  assert.match(nodes["ensemble-reading-paired"].textContent,
+    /observaciones/);
 });
 
 test("site exposes accessible search and keeps historical inference separate",()=>{
