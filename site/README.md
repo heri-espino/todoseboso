@@ -47,3 +47,20 @@ La interpretación científica, el detalle completo de cifras y las fuentes est�
 No se presenta un segundo modelo, un ensamble externo o valores p inventados. Las distribuciones exactas y las estadísticas espaciales adicionales sin agregados compartidos se identifican como no disponibles en vez de simularlas.
 
 La publicación de GitHub Pages usa solo site/; website/ conserva material histórico, pero no se despliega.
+
+## Métricas ampliadas del modelo nuevo e incertidumbre
+
+La sección exclusiva de Reference26 corregido incluye una tabla
+desplegable con L1, L2, L∞, MSE, RMSE, MAE, P95, P99, R²,
+sesgo, WAPE y Huber. Para la política anidada muestra además
+el **cambio pareado de RMSE** frente a Reference26 original
+(−0.005246 t/ha), IC bootstrap exploratorio de percentiles
+al 95 % **[−0.011068, +0.000282] t/ha** con 10 000 remuestreos
+y p maxT exploratorio **0.052895**. El intervalo incluye cero;
+no es un IC del RMSE absoluto. No publicar un IC absoluto
+sin `bootstrap_95ci_7.csv`, que no fue compartido.
+
+Fuente pública agregada y sin resultados individuales:
+`site/data/reference26_analog_extended_metrics.json`.
+Metodología: `docs/REFERENCE26_ANALOG_NESTED_SITE.md`.
+Prueba: `node tests/test_reference26_analog_extended_metrics.cjs`.
