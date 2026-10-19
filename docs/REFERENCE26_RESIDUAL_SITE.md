@@ -70,3 +70,38 @@ El resultado se guarda fuera de la página pública en outputs/reference26_resid
 Tras examinar el JSON agregado de staging y autorizar su difusión, se puede ejecutar de nuevo con --publish y revisar git diff antes de hacer commit. La página detecta automáticamente los resultados auténticos de Geary C, Moran de |e|, Moran de e² y el semivariograma. No se necesita entrenamiento y el ajuste estadístico no altera las 59 predicciones.
 
 No presentar un histograma o Q–Q parcelario a partir de las estadísticas resumidas si no existe una exportación agregada separada autorizada.
+
+## Si el usuario sólo tiene GeoC instalado en Windows
+
+**No hay que clonar Todoseboso**. Los archivos generados por GeoC pueden
+adjuntarse a la conversación. El agente que mantiene la PR verifica los
+agregados, descarta cualquier dato parcelario y hace commit directamente en
+`heri-espino/todoseboso` mediante GitHub.
+
+Desde PowerShell, dentro de la carpeta GeoC, inspeccionar primero:
+
+```powershell
+$source = "reports/reference26_compact14_fresh138/analysis"
+Get-Item "$source/global_spatial_autocorrelation.csv", "$source/residual_semivariogram.csv"
+```
+
+Si faltan estos dos CSV de análisis, generar los agregados reales una vez
+con `python tools/report_reference26_compact14_final.py --run`; utiliza las
+predicciones LOOCV ya guardadas y no vuelve a entrenar 138 modelos.
+Comprimir **sólo** los dos archivos de diagnósticos espaciales:
+
+```powershell
+Compress-Archive -LiteralPath "$source/global_spatial_autocorrelation.csv", "$source/residual_semivariogram.csv" -DestinationPath "reference26_spatial_aggregates.zip" -Force
+```
+
+Adjuntar `reference26_spatial_aggregates.zip` directamente al chat. No subir
+`PRIVATE_parcel_influence.csv`, `private_regional_errors.csv`, columnas
+con `ID_POLIGONO`, rendimientos verdaderos, coordenadas ni residuos
+por parcela. Aunque los CSV agrupan varios modelos, el importador extrae
+exclusivamente `Reference26_mean` y no publica las comparaciones externas.
+
+El agente verifica contenido y consistencia, actualiza
+`site/data/reference26_residuals.json` en PR #20, y deja constancia de las
+pruebas. El camino local `scripts/export_reference26_residual_aggregates.py`
+es *alternativo*, no una dependencia obligatoria para quien sólo tenga GeoC.
+
