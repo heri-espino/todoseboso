@@ -1,0 +1,25 @@
+name: Validate Reference26 residual visualization
+
+on:
+  pull_request:
+    paths:
+      - "site/index.html"
+      - "site/reference26_residuals.js"
+      - "site/reference26_residuals.css"
+      - "site/data/reference26_residuals.json"
+      - "tests/test_reference26_residuals.cjs"
+      - ".github/workflows/verify_reference26_residuals.yml"
+  workflow_dispatch:
+
+jobs:
+  residuals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify page and source file syntax
+        run: node --check site/reference26_residuals.js
+      - name: Validate actual VM numerical outputs and evidence gates
+        run: node --test tests/test_reference26_residuals.cjs
