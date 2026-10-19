@@ -3,6 +3,8 @@
 */
 (function(global){
 "use strict";
+  const validNumber=x=>typeof x==="number" && Number.isFinite(x);
+  const error=message=>{throw new Error(message);};
   const IDS=["Ensemble","Reference26","Compact14"];
   const SHA=/^[0-9a-f]{64}$/;
   function parsePayload(payload,reference){
