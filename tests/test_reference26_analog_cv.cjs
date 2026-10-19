@@ -57,4 +57,5 @@ assert.ok(html.indexOf('id="reference26-analog-cv"') >
           html.indexOf('id="ajuste"'));
 assert.ok(html.indexOf('id="reference26-analog-cv"') <
           html.indexOf('id="resultados"'));
+require("./test_reference26_analog_extended_metrics.cjs");
 console.log("Dedicated nested analog section: verified aggregate metrics, mechanism, navigation and privacy.");
