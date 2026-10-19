@@ -93,12 +93,18 @@ contra el JSON de agregados, verifica los 138 folds, la distribución
 128+5+5, el índice, la navegación, la independencia del apartado y
 las advertencias de alcance y privacidad.
 
-## Ampliación: métricas completas disponibles e incertidumbre
+## Página independiente y métricas ampliadas
 
-La sección pública ahora incluye una tabla plegable con **12
-métricas numéricas del selector anidado** verificadas a partir del
-log entregado por el usuario después de completar el análisis
-`--run --bootstrap 10000` en su VM:
+La página `site/modelo-corregido.html` presenta **únicamente**
+el nuevo predictor de rendimiento con corrección adaptativa mediante
+parcelas análogas. La página principal da acceso directo a ella.
+No incluye rankings de otros modelos, sus resultados históricos,
+ni pruebas de comparación con modelos anteriores.
+
+El visor incorpora una tabla desplegable con las **12 métricas
+LOOCV del selector anidado** extraídas del resumen agregado
+enviado por el usuario después de ejecutar
+`--run --bootstrap 10000`:
 
 | Métrica | Resultado |
 |---|---:|
@@ -107,51 +113,33 @@ log entregado por el usuario después de completar el análisis
 | MSE | 0.214269 (t/ha)² |
 | L1 | 45.809975 t/ha |
 | L2 | 5.437752 t/ha |
-| L∞ / error absoluto máximo | 2.119565 t/ha |
-| P95 del error absoluto | 0.782014 t/ha |
-| P99 del error absoluto | 1.687373 t/ha |
+| L∞ / máximo absoluto | 2.119565 t/ha |
+| P95 absoluto | 0.782014 t/ha |
+| P99 absoluto | 1.687373 t/ha |
 | R² predictivo | 0.702083 |
-| Sesgo estimado − real | −0.005062 t/ha |
-| WAPE | 8.392565 % |
+| Sesgo (estimado − real) | −0.005062 t/ha |
+| WAPE | 8.392565% |
 | Huber media, δ=0.5 t/ha | 0.082625 (t/ha)² |
 
-Estos son resultados LOOCV sobre las 138 cosechas observadas; no
-deben interpretarse como errores de las 59 parcelas restantes.
+El usuario no compartió `bootstrap_95ci_7.csv`: los límites
+del intervalo bootstrap para **RMSE absoluto** no se publican.
+El sitio identifica expresamente esta ausencia; no se sustituye
+por un intervalo para diferencias entre modelos.
+Los valores publicados corresponden a 138 parcelas reales
+evaluadas con exclusión de etiqueta y no a las 59 incógnitas.
 
-**Intervalo mostrado, con cuidado:**
+**Advertencias:** las configuraciones fueron escogidas después
+de otras exploraciones de las 138 etiquetas; la inferencia es
+exploratoria. El remuestreo iid ignora correlación espacial.
+No se publican identificadores ni resultados parcelarios
+individuales.
 
-- Cambio de RMSE = RMSE(NestedSelection) − RMSE(Reference26 original):
-  **−0.005246 t/ha**.
-- Intervalo bootstrap pareado de percentiles al 95 %:
-  **[−0.011068, +0.000282] t/ha**, con **10 000** remuestreos
-  de los pares de errores guardados. **Incluye cero**.
-- Prueba exploratoria de mejora de MSE, cambio de signo con
-  ajuste maxT entre seis alternativas: **p = 0.052895**.
-- Son análisis exploratorios y condicionales, no evidencia
-  confirmatoria; las cinco recetas fueron preseleccionadas
-  post-hoc tras examinar las mismas 138 respuestas y el
-  remuestreo simple no modela dependencia espacial.
-
-**No confundir** el intervalo pareado del **cambio de RMSE** con
-un intervalo de confianza del **RMSE absoluto de 0.462892**.
-El usuario todavía no compartió `bootstrap_95ci_7.csv`, que
-contiene ese otro intervalo. No se publican extremos inventados,
-coeficientes p adicionales, ni precisión de las 59 parcelas.
-
-Se publica exclusivamente el agregado verificable
-`site/data/reference26_analog_extended_metrics.json`, sin ID,
-coordenadas, muestras originales ni predicciones individuales.
-El apartado continúa sin incluir comparaciones históricas con
-otros modelos: la comparación contra Reference26 original se
-usa únicamente para explicar la incertidumbre de **la
-corrección de este mismo modelo**.
-
-Proveniencia: script GeoC
-`tools/report_reference26_top5_all_metrics.py`, rama
-`analysis/reference26-nested-full-metrics-20261019`; resultados
-`--summary` y `--run --bootstrap 10000` enviados en el chat
-el 19 de octubre de 2026.
-
+Datos agregados: `site/data/reference26_analog_extended_metrics.json`.
 Pruebas: `node tests/test_reference26_analog_extended_metrics.cjs`,
-también incorporada en la suite existente
-`node tests/test_reference26_analog_cv.cjs`.
+integradas en el resto de controles de navegación.
+
+**Publicación:** el apartado está en el repositorio Todoseboso.
+Su visualización mediante una URL GitHub Pages requiere una
+configuración de Pages válida y una revisión publicada de
+`main`. No afirmar que la página está en línea sin comprobarlo.
+
