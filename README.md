@@ -1,6 +1,6 @@
 # AgroCebada FIRA 2026 · fira_nuria
 
-**Sitio de divulgación del fork:** [Historia de Reference26](site/) · [fuentes y auditoría](site/README.md). El sitio presenta métricas agregadas; GitHub Pages requiere configuración en Settings → Pages. La investigación upstream contiene nuevos [contrastes de las cuatro señales C-T3](results/core4_relevance/v1/README.md) y [evidencia de los componentes Reference26](results/reference26_component_evidence/v1/README.md).
+**Sitio del modelo final de FIRA:** [Expertos agroespaciales con corrección por parcelas análogas](site/) · [reproducibilidad del sitio](site/README.md) · [inferencia real](deployment/README.md). Esta versión publica las 59 predicciones finales corregidas y una comparación LOOCV de siete estrategias. El despliegue de la API de parcelas nuevas sigue pendiente de un joblib entrenado con media y paridad numérica completa. GitHub Pages sólo publica la web estática. La investigación upstream contiene nuevos [contrastes de las cuatro señales C-T3](results/core4_relevance/v1/README.md) y [evidencia de los componentes Reference26](results/reference26_component_evidence/v1/README.md).
 
 
 **El propósito del proyecto es desarrollar y validar un modelo que estime el rendimiento de cebada, en toneladas por hectárea, para las parcelas sin rendimiento conocido del Reto AgroCebada FIRA 2026.** La investigación de variables y algoritmos sirve para elegir y explicar esa solución; no es un objetivo independiente ni una búsqueda del menor error sin considerar su uso.
@@ -9,7 +9,7 @@ Trabajamos con **197 parcelas de Hidalgo, Puebla y Tlaxcala**, ciclo 2025: **138
 
 La finalidad práctica es apoyar la estimación de productividad y aportar información para decisiones agropecuarias y financieras. Este estudio no valida un sistema automático de otorgamiento de crédito, una relación causal agronómica ni la transferencia a cualquier región o año.
 
-**Etapa actual: champions Reference26 y Compact14**, con C-T3 como control y B1 como sensibilidad. L40 se conserva como benchmark fuerte del equipo; queda fuera del reentrenamiento propio, no de la comparación. [Resultados: validación y predicciones finales](results/README.md) · [Reproducción](documentation/current_champions_reproduction.md).
+**Etapa histórica de desarrollo: champions Reference26 y Compact14**, con C-T3 como control y B1 como sensibilidad. L40 se conserva como benchmark fuerte del equipo; queda fuera del reentrenamiento propio, no de la comparación. [Resultados: validación y predicciones finales](results/README.md) · [Reproducción](documentation/current_champions_reproduction.md).
 
 ## Propósito y entregables según los lineamientos
 
