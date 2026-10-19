@@ -138,17 +138,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Build source-verified browser runtime if binary model assets are committed
+      - name: Validate the 59 final corrected predictions without exporting legacy runtime
         run: |
-          if [ -f deployment/model_artifacts/final_train138.joblib ] && \
-             [ -f deployment/model_artifacts/features197.parquet ] && \
-             [ -f deployment/model_artifacts/distance197.npy ]; then
-            python -m pip install -r deployment/requirements-api.txt
-            python scripts/export_reference26_browser.py
-            node --test tests/test_reference26_browser.cjs
-          else
-            echo "Page without trained runtime: live buttons remain disabled."
-          fi
+          node --test tests/test_predictions59.cjs
+          python scripts/check_model_story.py
+      - name: Ensure obsolete browser training bundle is not in deployed site
+        run: |
+          test ! -e site/data/reference26_runtime.json
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
