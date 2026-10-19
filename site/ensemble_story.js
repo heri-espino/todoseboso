@@ -85,7 +85,7 @@
   }
 
   // Renderer reads only validated model data and DOM nodes already on the page.
-  let manifest=null,reference=null,validated=null,active="Ensemble";
+  let manifest=null,reference=null,validated=null,futurePayload=null,active="Ensemble";
   const $=byId;
   const modelLabels={Ensemble:"Ensamble de dos modelos",Reference26:"Regresión local con mezcla geológica",Compact14:"Regresión local compacta"};
   const explain={
@@ -113,6 +113,7 @@
     const pane=$("ensemble-dynamic-view");
     existing.hidden=id!=="Reference26";
     pane.hidden=id==="Reference26";
+    pane.setAttribute("aria-labelledby",id==="Compact14"?"tab-compact":"tab-ensemble");
     $("ensemble-current-title").textContent=modelLabels[id];
     $("ensemble-current-description").textContent=explain[id];
     $("ensemble-current-status").textContent=buttonStatus(id);
@@ -221,13 +222,27 @@
   function activate(){
     fillDiagram();select(active);
   }
+  function applyPending(){
+    if(!futurePayload||!reference)return;
+    try{
+      const parsed=parsePayload(futurePayload,reference);
+      const wanted=manifest?.models?.Compact14?.upcoming_artifact_sha256;
+      if(wanted!==null&&wanted!==undefined&&wanted!==parsed.source_models.Compact14.artifact_sha256)
+        error("Compact14 no corresponde al hash declarado para el modelo final.");
+      validated=parsed;
+      $("ensemble-source-status").textContent=
+        "Dos modelos y ensamble disponibles para las mismas 59 parcelas; las cosechas reales siguen siendo desconocidas.";
+    }catch(e){
+      validated=null;
+      $("ensemble-source-status").textContent="La comparación final está bloqueada: "+e.message;
+    }
+    activate();
+  }
   function registerReference(runtime){
     if(!runtime||!Array.isArray(runtime.existing_59)||runtime.existing_59.length!==59)
       error("La versión original Reference26 debe contener 59 predicciones verificadas.");
     reference=runtime;
-    try{
-      if(validated)validated=parsePayload(validated.raw,reference);
-    }catch(e){validated=null;$("ensemble-source-status").textContent="No se pudo verificar el ensamble: "+e.message;}
+    applyPending();
     activate();
   }
   function rejectReference(message){
@@ -243,19 +258,18 @@
       if(manifest.schema_version!==1||
          JSON.stringify(manifest.presentation_order)!==JSON.stringify(IDS)||
          manifest.study.unlabeled_parcels!==59||
-         manifest.ensemble.method!==null||manifest.ensemble.weights!==null)
+         !["awaiting_final_models","ready"].includes(manifest.status))
         error("La preparación inicial del ensamble no coincide con el contrato.");
       // The future file is optional. Absence is explicitly not a model failure.
       const later=await fetch(manifest.future_prediction_file,{cache:"no-store"});
       if(later.ok){
-        const data=await later.json();
-        if(!reference)error("Primero hay que verificar Reference26 antes del ensamble.");
-        validated=parsePayload(data,reference);
-        validated.raw=data;
-        $("ensemble-source-status").textContent="Ensamble verificado para las mismas 59 parcelas del ajuste final.";
+        futurePayload=await later.json();
+        if(reference)applyPending();
+        else $("ensemble-source-status").textContent=
+          "Exportaciones cargadas; comprobando Reference26 antes de habilitar cualquier comparación.";
       }else if(later.status===404){
         $("ensemble-source-status").textContent=
-          "Reference26 disponible en el navegador; ensamble y Compact14 esperan los dos modelos finales y los pesos calibrados.";
+          "Esperando los dos modelos finales y sus pesos; Reference26 se comprobará por separado en este navegador.";
       }else error("El archivo futuro de predicciones no pudo leerse ("+later.status+").");
       activate();
     }catch(e){
