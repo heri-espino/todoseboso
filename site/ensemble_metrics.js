@@ -196,6 +196,198 @@
     $("ensemble-spatial-status").textContent =
       spatialBody.children.length + " pruebas de autocorrelación espacial. P-valores de permutación exploratorios, corregidos por multiplicidad.";
   }
+  function number(x) {
+    return typeof x === "number" && Number.isFinite(x);
+  }
+  function humanModel(model) {
+    return friendly[model] || model;
+  }
+  function statement(id, value) {
+    const target = $(id);
+    if (target) target.textContent = value;
+  }
+  function pDescription(p, label) {
+    if (!number(p)) return label + ": p no disponible.";
+    return label + ": p = " + format(p) +
+      (p < .05 ? " (señal exploratoria al 5%)" :
+                " (no se detecta evidencia al 5%)") + ".";
+  }
+  function signedDifference(a, b, unit) {
+    if (!number(a) || !number(b)) return "diferencia no disponible";
+    return format(a-b) + (unit ? " " + unit : "");
+  }
+  function renderInterpretation(data) {
+    const model = modelById(data);
+    const base = model.Reference26_mean;
+    const alt = model.Compact14;
+    const ens = model.Ensemble_final;
+    const rmse = [base.rmse_t_ha, alt.rmse_t_ha, ens.rmse_t_ha];
+    const existsRmse = rmse.every(number);
+    if (existsRmse) {
+      const best = modelNames.reduce((a,b) =>
+        model[a].rmse_t_ha <= model[b].rmse_t_ha ? a : b);
+      statement("ensemble-interpretation-overview",
+        "En 138 parcelas evaluadas por exclusión individual, " +
+        humanModel(best) + " presenta el menor RMSE descriptivo (" +
+        format(model[best].rmse_t_ha) + " t/ha). " +
+        "Esto compara errores sobre las mismas parcelas; los pesos de la mezcla " +
+        "se eligieron examinando esas 138 cosechas. No es una validación " +
+        "independiente de la selección del ensamble.");
+      const reduction = 100*(base.rmse_t_ha-ens.rmse_t_ha)/base.rmse_t_ha;
+      statement("ensemble-reading-accuracy",
+        "Reference26 con media: RMSE " + format(base.rmse_t_ha) +
+        " t/ha; Compact14: " + format(alt.rmse_t_ha) +
+        " t/ha; ensamble: " + format(ens.rmse_t_ha) +
+        " t/ha. Frente a Reference26, la reducción relativa del RMSE " +
+        "es " + format(reduction) + "%. " +
+        (number(ens.mae_t_ha) ? "El MAE del ensamble es " +
+        format(ens.mae_t_ha) + " t/ha. " : "") +
+        (number(ens.r2_cv) ? "Su R² predictivo es " + format(ens.r2_cv) +
+        ", calculado como 1 − SSE/TSS sobre las 138 cosechas, " +
+        "no como porcentaje de predicciones correctas. " : "") +
+        "Una diferencia pequeña de RMSE no demuestra superioridad práctica " +
+        "ni estadística.");
+    } else {
+      statement("ensemble-interpretation-overview",
+        "Faltan valores de RMSE de alguno de los tres modelos: no se puede concluir cuál rinde mejor.");
+      statement("ensemble-reading-accuracy",
+        "No se dispone de una comparación completa de RMSE sobre los tres modelos.");
+    }
+    if ([ens.median_ae_t_ha, ens.p95_ae_t_ha, ens.linf_t_ha].every(number)) {
+      statement("ensemble-reading-tails",
+        "Para el ensamble, la mediana del error absoluto es " +
+        format(ens.median_ae_t_ha) + " t/ha; el percentil 95 es " +
+        format(ens.p95_ae_t_ha) + " t/ha y el máximo (norma L∞) es " +
+        format(ens.linf_t_ha) + " t/ha. El percentil 95 describe un " +
+        "umbral que alcanza al menos el 95% de esta muestra. " +
+        "El máximo caracteriza la peor predicción observada, no el error " +
+        "máximo futuro. L¹ y L² son normas totales y deben distinguirse de MAE y RMSE.");
+    } else {
+      statement("ensemble-reading-tails",
+        "La tabla contiene medidas de errores extremos cuando se exportan; faltan uno o más cuantiles para interpretarlos conjuntamente.");
+    }
+    if (number(ens.bias_t_ha)) {
+      const bias = ens.bias_t_ha;
+      let explanation = "El sesgo medio del ensamble es " +
+        format(bias) + " t/ha (predicción menos observado): " +
+        (Math.abs(bias) < 1e-12 ? "cercano a cero en la muestra. " :
+        bias > 0 ? "predomina la sobreestimación en promedio. " :
+                   "predomina la subestimación en promedio. ");
+      if (number(ens.calibration_slope) &&
+          number(ens.calibration_intercept_t_ha)) {
+        explanation += "La regresión descriptiva de observado frente a predicho " +
+          "tiene pendiente " + format(ens.calibration_slope) +
+          " e intercepto " + format(ens.calibration_intercept_t_ha) +
+          " t/ha. Valores de pendiente cercanos a 1 e intercepto cercano a 0 " +
+          "son compatibles con una mejor calibración lineal, pero no demuestran " +
+          "calibración probabilística. ";
+      }
+      statement("ensemble-reading-calibration",
+        explanation + "Un sesgo medio pequeño puede coexistir con errores individuales grandes.");
+    } else {
+      statement("ensemble-reading-calibration",
+        "Faltan los valores de sesgo y calibración del ensamble.");
+    }
+    const normality = data.diagnostics?.normality || [];
+    const condition = data.diagnostics?.conditional_error || [];
+    const parts = [];
+    for (const name of modelNames) {
+      const row = normality.find(x => x.model === name);
+      if (!row) continue;
+      const p = row.shapiro_p_exploratory;
+      if (!number(p)) continue;
+      parts.push(humanModel(name) + ": Shapiro–Wilk p = " + format(p) +
+        (p < .05 ? ", señal de desviación respecto de normalidad" :
+                   ", sin evidencia suficiente para rechazar normalidad") +
+        (row.anderson_reject_at_5pct === true ?
+          "; Anderson–Darling rechaza al 5%" :
+          row.anderson_reject_at_5pct === false ?
+          "; Anderson–Darling no rechaza al 5%" : "") + ".");
+    }
+    const hetero = condition.find(x => x.model === "Ensemble_final");
+    if (hetero) {
+      parts.push(pDescription(
+        hetero.koenker_breusch_pagan_asymptotic_p_exploratory,
+        "Koenker–Breusch–Pagan del ensamble"));
+      parts.push(pDescription(
+        hetero.brown_forsythe_3_predicted_terciles_p_exploratory,
+        "Brown–Forsythe por terciles"));
+    }
+    statement("ensemble-reading-normality",
+      (parts.length ? parts.join(" ") :
+       "Los tests de normalidad y dispersión condicional aún no cuentan con resultados completos. ") +
+      "Estos p-valores son diagnósticos: los errores LOOCV comparten " +
+      "entrenamientos y pueden depender espacialmente. Rechazar normalidad " +
+      "no invalida RMSE/MAE; no rechazarla no demuestra una distribución normal. " +
+      "Las pruebas de dispersión no establecen por sí solas homocedasticidad.");
+    renderSpatialInterpretation(data);
+    const pair = (data.diagnostics?.paired_losses || []).filter(
+      x => x.model === "Ensemble_final");
+    const sq = pair.find(x => x.loss === "squared_error");
+    const ab = pair.find(x => x.loss === "absolute_error");
+    const messages = [];
+    for (const [row, text, unit] of [
+      [sq, "Pérdida cuadrática", "(t/ha)²"],
+      [ab, "Error absoluto", "t/ha"]
+    ]) {
+      if (!row || !number(row.mean_loss_difference)) continue;
+      messages.push(text + ": diferencia media frente a Reference26 = " +
+        format(row.mean_loss_difference) + " " + unit +
+        " (negativa favorece al ensamble); " +
+        (number(row.fraction_improved) ?
+          format(100*row.fraction_improved) + "% de parcelas mejoran. " : "") +
+        pDescription(row.wilcoxon_p_exploratory_holm_all, "Wilcoxon p Holm"));
+    }
+    statement("ensemble-reading-paired",
+      (messages.length ? messages.join(" ") :
+        "Faltan los resultados de pérdidas emparejadas. ") +
+      "La corrección por comparaciones múltiples no corrige la selección " +
+      "previa de pesos basada en estas mismas 138 observaciones. " +
+      "Una mejora media puede depender de muy pocas parcelas; no implica " +
+      "una ventaja independiente o robusta.");
+  }
+  function renderSpatialInterpretation(data) {
+    const k = Number(knn.value), variable = target.value;
+    const group = (data.spatial || []).filter(
+      x => x.model === "Ensemble_final" && x.knn === k &&
+        x.spatial_variable === variable);
+    const mor = group.find(x => x.statistic === "Moran_I");
+    const gea = group.find(x => x.statistic === "Geary_C");
+    const labels = {
+      signed_residual:"residuos firmados",
+      absolute_error:"errores absolutos",
+      squared_error:"errores al cuadrado"
+    };
+    if (!mor || !number(mor.estimate)) {
+      statement("ensemble-reading-spatial",
+        "No se dispone de Moran I para el vecindario y la variable seleccionados; " +
+        "no corresponde afirmar independencia espacial.");
+      return;
+    }
+    const corrected = mor.p_two_sided_holm_all;
+    let phrase = "Para " + labels[variable] + " y k = " + k +
+      " vecinos, Moran I del ensamble = " + format(mor.estimate) +
+      ". " + pDescription(corrected, "p bilateral Holm");
+    if (number(corrected)) {
+      phrase += corrected < .05 ?
+        (mor.estimate > 0 ?
+          " Hay una señal exploratoria de agrupamiento espacial de valores semejantes." :
+          " Hay una señal exploratoria de contraste entre valores vecinos.") :
+        " No se detectó una señal significativa con esta familia de pruebas; " +
+        "ello no prueba independencia espacial.";
+    }
+    if (gea && number(gea.estimate)) {
+      phrase += " Geary C = " + format(gea.estimate) +
+        (gea.estimate < 1 ? " (< 1 sugiere semejanza local)." :
+          gea.estimate > 1 ? " (> 1 sugiere contraste local)." :
+          " (≈1 es referencia de aleatoriedad).");
+    }
+    statement("ensemble-reading-spatial",
+      phrase + " Son pruebas de permutación sobre centroides y pesos KNN; " +
+      "no demuestran causalidad geográfica ni garantizan extrapolación " +
+      "a zonas distintas. Cambiar k o la definición de residuo es " +
+      "un análisis de sensibilidad, no replicaciones independientes.");
+  }
   function renderPaired(data) {
     const root = $("ensemble-paired-body");
     root.replaceChildren();
@@ -240,11 +432,18 @@
       }
       filter.addEventListener("change",()=>render(data));
       search.addEventListener("input",()=>render(data));
-      knn.addEventListener("change",()=>renderSpatial(data));
-      target.addEventListener("change",()=>renderSpatial(data));
+      knn.addEventListener("change",()=>{
+        renderSpatial(data);
+        renderSpatialInterpretation(data);
+      });
+      target.addEventListener("change",()=>{
+        renderSpatial(data);
+        renderSpatialInterpretation(data);
+      });
       render(data);
       renderSpatial(data);
       renderPaired(data);
+      renderInterpretation(data);
       loading.textContent = "Resultados agregados de 138 parcelas LOOCV cargados. Los pesos del ensamble se seleccionaron usando estas mismas 138 etiquetas.";
     } catch (err) {
       loading.textContent = "Análisis final pendiente de publicar: " + err.message;
