@@ -418,7 +418,12 @@ a partir del valor nominal y las dos coberturas de validación **real**
 de `site/data/new_research.json`. Se utiliza un rango mínimo de ocho
 puntos porcentuales, ticks de dos puntos porcentuales y límites en
 [0, 100 %]. Se especifica expresamente que los ejes no comienzan en
-cero: no se exageran visualmente comparaciones sin avisarlo. Los puntos
+cero: no se exageran visualmente comparaciones sin avisarlo.
+Para la vista de 80 % nominal, las coberturas documentadas son
+80.435 % (Reference26) y 80.507 % (Compact14). Para 90 % nominal,
+92.899 % y 92.971 %, respectivamente. Estos son resultados archivados
+de la evaluación aleatoria, no garantías futuras ni intervalos de
+confianza. La escala se actualiza cuando cambia el nivel seleccionado. Los puntos
 mantienen sus tooltips de datos exactos y acceso por Tab. En móvil,
 se desplaza el visor horizontal al área de interés sin eliminar el
 desplazamiento manual ni los textos descriptivos.
