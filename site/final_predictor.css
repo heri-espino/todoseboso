@@ -1,0 +1,23 @@
+.fm-predict{padding:32px;background:#f1f5ed;border:1px solid #d7e1d4;margin:24px 0 40px}
+.fm-predict h3{font-size:clamp(25px,3vw,34px);margin:6px 0 14px;color:var(--forest)}
+.fm-predict>p{font-size:13px;line-height:1.85;max-width:950px}
+.fm-api-bar{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:22px 0}
+.fm-api-bar label{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700;flex:1 1 300px}
+.fm-api-bar input{width:100%;font-size:13px;padding:12px;border:1px solid #b7c7b8;color:var(--forest)}
+.fm-predict button{background:var(--forest);border:1px solid var(--forest);color:white;font:inherit;font-size:12px;padding:12px 18px;font-weight:700;cursor:pointer}
+.fm-predict button:disabled{opacity:.42;cursor:not-allowed}
+.fm-api-status{background:#e7efe3;border-left:3px solid #779a7f;padding:15px;font-size:12px!important;max-width:none!important}
+.fm-api-status[data-error="true"]{background:#f8eee2;border-color:#b98c48}
+.fm-predict details{border-top:1px solid #ceddce;padding:17px 0}
+.fm-predict details>summary{font-weight:750;font-size:15px;color:var(--forest);cursor:pointer}
+.fm-input-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:24px 0}
+.fm-input{display:flex;flex-direction:column;gap:4px;padding:10px;background:#fff;border:1px solid #d7e1d4;min-width:0}
+.fm-input>span{font-size:12px;font-weight:720;color:var(--forest)}
+.fm-input>small{font-family:monospace;font-size:10px;color:#557267;overflow-wrap:anywhere}
+.fm-input input{border:1px solid #b9caba;padding:9px;font:inherit;font-size:13px;color:var(--forest);width:100%}
+.fm-real-result{margin:16px 0 0;font-size:13px;color:var(--forest);line-height:1.65}
+.fm-real-result strong{display:block;font-size:29px;margin:6px 0}
+.fm-batch-layout{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:22px 0}
+.fm-batch-layout input{font-size:12px;max-width:100%}
+.fm-api-notes{font-size:12px!important;color:var(--muted);max-width:1000px!important}
+@media(max-width:640px){.fm-predict{padding:18px}.fm-input-grid{grid-template-columns:1fr}}
