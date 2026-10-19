@@ -99,7 +99,9 @@
   "sources": {
     "submission": "https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/submission59_final.csv",
     "methodology": "https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/docs/REFERENCE26_FINAL59_SELECTED.md",
-    "study": "https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/docs/REFERENCE26_TOP5_NESTED_LOOCV.md"
+    "study": "https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/docs/REFERENCE26_TOP5_NESTED_LOOCV.md",
+    "source_git_blob_sha": "bae97eb606bc703842a681fe7acc1489e4018d2c",
+    "source_ref": "heri-espino/GeoC@experiment/reference26-top5-final59/submission59_final.csv"
   },
   "caveat": "Los cinco candidatos fueron preseleccionados tras observar errores LOOCV en estas mismas 138 parcelas. El selector anidado evita usar la respuesta de su parcela externa dentro de la elección, pero no es una validación independiente de toda la búsqueda. Las 59 cosechas reales siguen desconocidas."
 }
