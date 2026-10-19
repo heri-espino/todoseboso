@@ -1,14 +1,13 @@
-name: Verify ensemble metrics dashboard
+name: Verify Reference26 residual dashboard
 
 on:
   pull_request:
     paths:
       - "site/index.html"
-      - "site/ensemble_metrics.js"
-      - "site/ensemble_metrics.css"
-      - "site/ensemble_predictions59.js"
-      - "tests/test_ensemble_metrics.cjs"
-      - "tests/test_ensemble_predictions59.cjs"
+      - "site/reference26_residuals.js"
+      - "site/reference26_residuals.css"
+      - "site/data/reference26_residuals.json"
+      - "tests/test_reference26_residuals.cjs"
       - ".github/workflows/validate_ensemble_dashboard.yml"
   workflow_dispatch:
 
@@ -23,8 +22,6 @@ jobs:
         with:
           node-version: "22"
       - name: Verify JavaScript syntax
-        run: |
-          node --check site/ensemble_metrics.js
-          node --check site/ensemble_predictions59.js
-      - name: Verify browser contracts and privacy gates
-        run: node --test tests/test_ensemble_metrics.cjs tests/test_ensemble_predictions59.cjs
+        run: node --check site/reference26_residuals.js
+      - name: Verify provenance and chart contracts
+        run: node --test tests/test_reference26_residuals.cjs
