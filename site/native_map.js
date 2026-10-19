@@ -148,8 +148,20 @@
       const enabled=ids.has(r.id);
       const polygon=polygonMap.get(r.id);
       const marker=pinMap.get(r.id);
-      if(polygon)polygon.setStyle({...styleOf(r),opacity:enabled?1:0,fillOpacity:enabled?styleOf(r).fillOpacity:0});
-      if(marker)marker.setStyle({...markerStyle(r),opacity:enabled?1:0,fillOpacity:enabled?1:0,interactive:enabled});
+      // Remove excluded layers entirely: visually transparent polygons should
+      // not intercept clicks or keyboard focus in a filtered geographic view.
+      if(polygon){
+        if(enabled){
+          if(!polygons.hasLayer(polygon))polygons.addLayer(polygon);
+          polygon.setStyle(styleOf(r));
+        }else if(polygons.hasLayer(polygon))polygons.removeLayer(polygon);
+      }
+      if(marker){
+        if(enabled){
+          if(!pins.hasLayer(marker))pins.addLayer(marker);
+          marker.setStyle(markerStyle(r));
+        }else if(pins.hasLayer(marker))pins.removeLayer(marker);
+      }
     }
     renderDetails();
   }
@@ -204,8 +216,8 @@
       layer.eachLayer(p=>{
         p.on("click",()=>choose(r.id));
         p.bindTooltip(r.id+" · "+r.state);
-        polygonMap.set(r.id,p);
       });
+      polygonMap.set(r.id,layer);
       const center=layer.getBounds().getCenter();
       if(!Number.isFinite(center.lat)||!Number.isFinite(center.lng)||
           center.lat<16||center.lat>23||center.lng< -101||center.lng> -95)
