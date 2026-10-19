@@ -61,3 +61,35 @@
 .real-model-metrics{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
 .real-model-metrics th,.real-model-metrics td{padding:10px 9px;border-bottom:1px solid var(--rule);text-align:left}
 .real-model-metrics th{color:var(--forest);font-weight:750;white-space:nowrap}
+
+/* Empirical distribution and interval coverage are full-width figures.
+   Initial view follows the data-rich domain, with mobile overflow navigable. */
+.evidence-chart-stack{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  gap:34px;margin-top:24px;
+}
+.evidence-chart-stack>div{
+  min-width:0;padding:25px clamp(14px,2.5vw,28px);
+  border:1px solid var(--rule);background:var(--paper);
+}
+.evidence-chart-stack>div>h3{margin:0 0 10px}
+.evidence-chart-stack>div>p{max-width:900px;line-height:1.75}
+#distribution-quantiles.figure-host,#interval-results.figure-host{
+  max-width:1050px;margin:18px auto 3px;background:transparent;
+}
+#distribution-quantiles .figure-scroll,#interval-results .figure-scroll{
+  width:100%;padding:12px 0 8px;margin:0 auto;
+  scroll-behavior:auto;
+}
+#distribution-quantiles .figure-reading,#interval-results .figure-reading{
+  margin:4px 0 0!important;padding:9px 0 0;
+}
+#distribution-quantiles .figure-axis-note,#interval-results .figure-axis-note{
+  max-width:940px;margin:10px 0 0!important;
+}
+@media(max-width:760px){
+  .evidence-chart-stack{gap:24px}
+  .evidence-chart-stack>div{padding:19px 12px}
+  #distribution-quantiles .figure-scroll,
+  #interval-results .figure-scroll{scrollbar-width:thin}
+}

@@ -93,6 +93,42 @@
     node.addEventListener("blur", idle);
     node.addEventListener("mouseleave", idle);
   }
+  // Focus the viewport on the values actually encoded in each chart.  The
+  // endpoints are rounded OUTWARDS so none of the sourced data is clipped.
+  // A minimum span prevents visual exaggeration of tiny differences.
+  function focusedAxis(values, options) {
+    const o=options||{};
+    const step=o.step||1;
+    const finite=values.filter(Number.isFinite);
+    if(!finite.length)throw Error("No hay datos finitos para definir el eje.");
+    const min=Math.min(...finite),max=Math.max(...finite);
+    const center=(min+max)/2;
+    const span=Math.max(max-min, o.minSpan||0);
+    const padding=Math.max(o.padding||0,span*(o.paddingFraction||0));
+    const rawMin=center-span/2-padding,rawMax=center+span/2+padding;
+    let lo=Math.floor(Math.max(o.floor??-Infinity,rawMin)/step+1e-9)*step;
+    let hi=Math.ceil(Math.min(o.ceiling??Infinity,rawMax)/step-1e-9)*step;
+    if(o.floor!=null)lo=Math.max(o.floor,lo);
+    if(o.ceiling!=null)hi=Math.min(o.ceiling,hi);
+    if(hi<=lo)throw Error("Rango de eje inválido.");
+    lo=Number(lo.toFixed(8));hi=Number(hi.toFixed(8));
+    const steps=Math.round((hi-lo)/step);
+    const labels=Array.from({length:steps+1},(_,i)=>Number((lo+i*step).toFixed(8)));
+    return {domain:[lo,hi],labels,sourceRange:[min,max]};
+  }
+  // In narrow viewports, open centered on the plotted values, not on a
+  // large empty margin. The chart remains scrollable in both directions.
+  function centerFocusedViewport(target,canvas,centerX){
+    if(typeof window.requestAnimationFrame!=="function")return;
+    window.requestAnimationFrame(()=>{
+      const wrap=target.querySelector(".figure-scroll");
+      if(!wrap||typeof canvas.getBoundingClientRect!=="function")return;
+      const width=canvas.getBoundingClientRect().width,visible=wrap.clientWidth;
+      if(!(width>visible+2))return;
+      const goal=width*centerX/WIDTH-visible/2;
+      wrap.scrollLeft=Math.max(0,Math.min(width-visible,goal));
+    });
+  }
   function ticks(canvas, domain, xrange, y, values, format) {
     for (const x of values) {
       const xx = interpolate(x, domain, xrange);
@@ -295,27 +331,46 @@
     }));
   }
   function intervals(target, rows, nominal) {
-    const {canvas, tip, colors} = start(target, "Cobertura observada frente a cobertura nominal de los intervalos", 245);
-    const domain = [0.5, 1.0], xr = [305, 835];
-    ticks(canvas, domain, xr, 206, [0.5, 0.6, 0.7, 0.8, 0.9, 1.0], (x) => Math.round(x * 100) + "%");
-    const nom = interpolate(nominal, domain, xr);
-    line(canvas, nom, 25, nom, 194, {color: colors.gold, width: 3, dash: "6 5"});
-    rows.forEach((row, i) => {
-      const y = 75 + i * 80;
-      const label = row.model === "Reference26" ? "Clima, vecinos y geología" : "Clima y vecinos, sin geología";
-      descriptiveLabel(canvas, label, "Anchura media: " + fmt(row.width, 3) + " t/ha", y);
-      const x = interpolate(row.coverage, domain, xr);
-      const point = svg("circle", {cx: x, cy: y, r: 9, fill: i ? colors.forest : colors.jade,
-        stroke: colors.paper, "stroke-width": 2});
-      canvas.appendChild(point);
-      interactive(point, label + ": cobertura observada " + fmt(row.coverage * 100, 2) +
-        " %. Nivel nominal " + fmt(nominal * 100, 0) + "%. Anchura media " +
-        fmt(row.width, 3) + " t/ha.", tip);
-      textNode(canvas, fmt(row.coverage * 100, 1) + " %", 865, y, {size: 15, weight: 750});
+    if(!Array.isArray(rows)||rows.length!==2||!Number.isFinite(nominal) ||
+      rows.some(row=>!Number.isFinite(row.coverage)||row.coverage<0||row.coverage>1 ||
+        !Number.isFinite(row.width)||row.width<0)) {
+      throw Error("Coberturas empíricas incompletas o fuera de rango.");
+    }
+    const {canvas,tip,colors}=start(target,
+      "Cobertura observada y nivel nominal: escala centrada en los resultados documentados", 300, 690);
+    canvas.setAttribute("preserveAspectRatio","xMidYMin meet");
+    const axis=focusedAxis([nominal,...rows.map(row=>row.coverage)],{
+      step:0.02,minSpan:0.08,paddingFraction:0.02,floor:0,ceiling:1
     });
-    target.append(Object.assign(document.createElement("p"), {
-      className: "figure-axis-note",
-      textContent: "Línea mostaza: cobertura nominal. Círculos: cobertura observada en evaluación aleatoria. No es una garantía para las 59 parcelas."
+    const domain=axis.domain,xr=[270,865];
+    ticks(canvas,domain,xr,254,axis.labels,x=>Math.round(x*100)+" %");
+    const nom=interpolate(nominal,domain,xr);
+    line(canvas,nom,43,nom,238,{color:colors.gold,width:2,dash:"5 6"});
+    textNode(canvas,"Cobertura nominal: "+fmt(nominal*100,0)+" %",
+      270,19,{size:13,weight:670,color:colors.muted});
+    rows.forEach((row,i)=>{
+      const y=96+i*91;
+      const label=row.model==="Reference26"?"Reference26 · geología":
+        "Compact14 · sin geología";
+      descriptiveLabel(canvas,label,"Anchura media: "+fmt(row.width,3)+" t/ha",y,12);
+      const observed=interpolate(row.coverage,domain,xr);
+      const point=svg("circle",{cx:observed,cy:y,r:9,
+        fill:i?colors.forest:colors.jade,stroke:colors.paper,"stroke-width":2.5});
+      canvas.appendChild(point);
+      interactive(point,label+": cobertura observada "+fmt(row.coverage*100,2)+
+        " %. Nivel nominal "+fmt(nominal*100,0)+" %. Anchura media "+
+        fmt(row.width,3)+" t/ha.",tip);
+      textNode(canvas,fmt(row.coverage*100,2)+" %",887,y,{size:15,weight:750});
+    });
+    centerFocusedViewport(target,canvas,(nom+
+      rows.reduce((sum,row)=>sum+interpolate(row.coverage,domain,xr),0)/rows.length)/2);
+    target.append(Object.assign(document.createElement("p"),{
+      className:"figure-axis-note",
+      textContent:"Eje horizontal ajustado automáticamente al nivel nominal y a las " +
+        "coberturas observadas: "+fmt(domain[0]*100,0)+"–"+
+        fmt(domain[1]*100,0)+" %. La escala no comienza en cero. " +
+        "Línea discontinua: nivel nominal; círculos: cobertura observada en " +
+        "validación aleatoria. No implica cobertura garantizada para las 59 parcelas."
     }));
   }
 
@@ -382,39 +437,63 @@
     }));
   }
   function distribution(target, rows) {
-    const {canvas, tip, colors} = start(target,
-      "Resumen de rendimientos observados y rendimientos estimados por estado: mediana e intervalos entre percentiles", 570, 780);
-    const xr = [280, 854], domain = [1.5, 6.0];
-    ticks(canvas, domain, xr, 521, [2, 3, 4, 5, 6], (x) => fmt(x, 0));
-    const regions = [{id:"all", name:"Las tres entidades"}, {id:"Hidalgo",name:"Hidalgo"},
-      {id:"Puebla",name:"Puebla"}, {id:"Tlaxcala",name:"Tlaxcala"}];
-    regions.forEach((region, i) => {
-      const top = 84 + i * 109;
-      if (i) line(canvas, 10, top - 47, 980, top - 47, {color: colors.rule});
-      textNode(canvas, region.name, 15, top, {size: 15, weight: 750});
-      const group = rows.filter((row) => row.region === region.id);
-      for (const [index, kind, label, color] of [[0, "Observed138", "Cosechas conocidas", colors.jade],
-        [1, "Predicted59", "Estimaciones del modelo", colors.gold]]) {
-        const row = group.find((x) => x.cohort === kind);
-        if (!row) continue;
-        const y = top - 20 + index * 34;
-        const x10 = interpolate(row.p10, domain, xr), x90 = interpolate(row.p90, domain, xr);
-        const x25 = interpolate(row.q25, domain, xr), x75 = interpolate(row.q75, domain, xr);
-        const median = interpolate(row.median, domain, xr);
-        line(canvas, x10, y, x90, y, {color, width: 3});
-        line(canvas, x25, y, x75, y, {color, width: 12});
-        const dot = svg("circle", {cx: median, cy: y, r: 8, fill: colors.paper, stroke: color, "stroke-width": 3});
-        canvas.appendChild(dot);
-        interactive(dot, region.name + ", " + label.toLowerCase() + ": " + row.n +
-          " parcelas, mediana " + fmt(row.median, 3) + " t/ha; entre percentiles 25–75 [" +
-          fmt(row.q25, 3) + ", " + fmt(row.q75, 3) + "]; entre 10–90 [" +
-          fmt(row.p10, 3) + ", " + fmt(row.p90, 3) + "].", tip);
-        textNode(canvas, label, 876, y, {size: 10, color: colors.muted});
+    if(!Array.isArray(rows)||rows.length!==8||rows.some(row=>
+      !Number.isFinite(row.p10)||!Number.isFinite(row.q25)||
+      !Number.isFinite(row.median)||!Number.isFinite(row.q75)||
+      !Number.isFinite(row.p90)||row.p10>row.q25||row.q25>row.median||
+      row.median>row.q75||row.q75>row.p90))
+      throw Error("El resumen regional no contiene percentiles verificables.");
+    const {canvas,tip,colors}=start(target,
+      "Rendimientos registrados y estimaciones de Reference26 por estado: mediana y percentiles", 550, 740);
+    canvas.setAttribute("preserveAspectRatio","xMidYMin meet");
+    // The outer whiskers represent P10–P90, not minima/maxima.
+    const axis=focusedAxis(rows.flatMap(row=>[row.p10,row.p90]),{
+      step:0.5,minSpan:1,paddingFraction:0.08
+    });
+    const domain=axis.domain,xr=[269,872];
+    ticks(canvas,domain,xr,511,axis.labels,x=>fmt(x,1));
+    textNode(canvas,"Cosechas registradas",18,26,{size:13,weight:670,color:colors.jade});
+    textNode(canvas,"Estimaciones Reference26",302,26,{size:13,weight:670,color:colors.gold});
+    const regions=[{id:"all",name:"Tres entidades"},{id:"Hidalgo",name:"Hidalgo"},
+      {id:"Puebla",name:"Puebla"},{id:"Tlaxcala",name:"Tlaxcala"}];
+    regions.forEach((region,i)=>{
+      const top=93+i*105;
+      if(i)line(canvas,15,top-41,974,top-41,{color:colors.rule});
+      textNode(canvas,region.name,16,top,{size:15,weight:680});
+      const group=rows.filter(row=>row.region===region.id);
+      for(const [index,kind,label,color] of [
+        [0,"Observed138","Cosechas conocidas",colors.jade],
+        [1,"Predicted59","Estimaciones del modelo",colors.gold]
+      ]){
+        const row=group.find(r=>r.cohort===kind);
+        if(!row)throw Error("No hay percentiles de "+region.name+" para "+kind);
+        const y=top-18+index*34;
+        const a=interpolate(row.p10,domain,xr),b=interpolate(row.p90,domain,xr);
+        const q1=interpolate(row.q25,domain,xr),q3=interpolate(row.q75,domain,xr);
+        const median=interpolate(row.median,domain,xr);
+        line(canvas,a,y,b,y,{color,width:3});
+        line(canvas,q1,y,q3,y,{color,width:12});
+        const point=svg("circle",{
+          cx:median,cy:y,r:8,fill:colors.paper,stroke:color,"stroke-width":3
+        });
+        canvas.appendChild(point);
+        interactive(point,region.name+", "+label.toLowerCase()+": "+row.n+
+          " parcelas, mediana "+fmt(row.median,3)+" t/ha; percentiles 25–75 ["+
+          fmt(row.q25,3)+", "+fmt(row.q75,3)+"]; percentiles 10–90 ["+
+          fmt(row.p10,3)+", "+fmt(row.p90,3)+"].",tip);
+        textNode(canvas,"n="+row.n,900,y,{size:12,color:colors.muted});
       }
     });
-    target.append(Object.assign(document.createElement("p"), {
-      className: "figure-axis-note",
-      textContent: "La línea fina marca los percentiles 10 y 90; la gruesa, 25 y 75; el círculo es la mediana. Son grupos de parcelas distintos, no errores de predicción. Eje en t/ha."
+    const center=rows.reduce((sum,row)=>sum+row.median,0)/rows.length;
+    centerFocusedViewport(target,canvas,interpolate(center,domain,xr));
+    target.append(Object.assign(document.createElement("p"),{
+      className:"figure-axis-note",
+      textContent:"Escala horizontal centrada en los percentiles 10–90 observados " +
+        "("+fmt(domain[0],1)+"–"+fmt(domain[1],1)+
+        " t/ha), con margen adicional. El eje no comienza en cero; los " +
+        "mínimos y máximos individuales pueden quedar fuera de este rango. " +
+        "Línea fina: P10–P90; línea gruesa: P25–P75; círculo: mediana. " +
+        "Son parcelas distintas, no errores de predicción."
     }));
   }
   global.GeoCharts = Object.freeze({models, performance, ablations, r3, expertWeights, coefficients, forest, intervals, parcelCounts, distribution});

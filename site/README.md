@@ -401,3 +401,29 @@ inventadas no se ejecuta ni está enlazado desde la página. El archivo
 repositorio, pero no se carga en el sitio público. Las gráficas sin
 observaciones individuales auténticas comunican expresamente la
 ausencia de esos datos, sin construir residuos artificiales.
+
+## Gráficas de distribución y cobertura con escala de datos (2026-10-19)
+
+Las visualizaciones `distribution-quantiles` y `interval-results` ocupan
+cada una el ancho disponible, sin reducirse a dos columnas que recortaban
+la información en el primer fotograma. `GeoCharts.distribution` centra el
+eje en los percentiles 10 y 90 de las 8 filas archivadas en
+`site/data/distribution.json`, con un margen hacia fuera y marcas
+redondeadas de 0.5 t/ha. Los mínimos y máximos individuales **no** se
+presentan como observables en ese gráfico ni como los límites de los
+intervalos P10–P90.
+
+`GeoCharts.intervals` recalcula el eje al seleccionar 80 o 90 % nominal
+a partir del valor nominal y las dos coberturas de validación **real**
+de `site/data/new_research.json`. Se utiliza un rango mínimo de ocho
+puntos porcentuales, ticks de dos puntos porcentuales y límites en
+[0, 100 %]. Se especifica expresamente que los ejes no comienzan en
+cero: no se exageran visualmente comparaciones sin avisarlo. Los puntos
+mantienen sus tooltips de datos exactos y acceso por Tab. En móvil,
+se desplaza el visor horizontal al área de interés sin eliminar el
+desplazamiento manual ni los textos descriptivos.
+
+Las pruebas de `tests/test_svg_charts.cjs` deben comprobar por separado
+ambos valores nominales, los límites calculados, que todos los percentiles
+se encuentren dentro del área visible y que las cifras provengan de
+los archivos públicos, no de valores improvisados.
