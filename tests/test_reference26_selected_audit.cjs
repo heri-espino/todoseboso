@@ -63,6 +63,20 @@ assert.ok(content.includes("0.782014"));
 assert.ok(content.includes("0.779618"));
 assert.ok(content.includes("0.108689"));
 assert.ok(content.includes("0 / 138"));
+assert.ok(content.includes("Ver tabla completa de 22 métricas y normas por modelo"));
+assert.ok(content.includes("NRMSE sobre media observada"));
+assert.ok(content.includes("Skill MAE frente a media"));
+for (const model of data.models) {
+  for (const key of [
+    "sse","median_ae","p90_ae","p95_ae","error_sd",
+    "max_overprediction","max_underprediction","explained_variance",
+    "nrmse_mean_pct","nrmse_sd_pct","mae_skill_mean"
+  ]) {
+    assert.ok(Number.isFinite(model[key]), "Missing full metric: " + model.id + ":" + key);
+    assert.ok(content.includes(Math.abs(model[key]).toFixed(6)),
+      "Full table must include " + model.id + ":" + key);
+  }
+}
 
 for (const k of [4,8,12,24]) {
   const rows = data.moran.filter(r => r.k === k);
