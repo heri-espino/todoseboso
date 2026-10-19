@@ -1,6 +1,8 @@
 # AgroCebada FIRA 2026 · fira_nuria
 
-**Sitio de divulgación del fork:** [Historia de Reference26](site/) · [fuentes y auditoría](site/README.md). El sitio presenta métricas agregadas; GitHub Pages requiere configuración en Settings → Pages. La investigación upstream contiene nuevos [contrastes de las cuatro señales C-T3](results/core4_relevance/v1/README.md) y [evidencia de los componentes Reference26](results/reference26_component_evidence/v1/README.md).
+**Sitio público de GeoCebada:** [Abrir GitHub Pages](https://heri-espino.github.io/todoseboso/) · [Vista alternativa de la versión publicada (sin depender de Pages)](https://raw.githack.com/heri-espino/todoseboso/main/site/index.html) · [Fuentes y auditoría](site/README.md). El despliegue oficial usa GitHub Actions y publica el contenido de `site/` desde `main`; las ramas y pull requests no aparecen automáticamente en el sitio oficial.
+
+**Vista previa del próximo modelo (PR #24, todavía sin fusionar):** [modelo agroespacial corregido y 59 estimaciones](https://raw.githack.com/heri-espino/todoseboso/feature/agrospatial-analog-final-model-site/site/index.html). Esta vista previa no implica que la versión ya haya sido publicada ni que esté habilitada la inferencia de parcelas nuevas. La investigación upstream contiene nuevos [contrastes de las cuatro señales C-T3](results/core4_relevance/v1/README.md) y [evidencia de los componentes Reference26](results/reference26_component_evidence/v1/README.md).
 
 
 **El propósito del proyecto es desarrollar y validar un modelo que estime el rendimiento de cebada, en toneladas por hectárea, para las parcelas sin rendimiento conocido del Reto AgroCebada FIRA 2026.** La investigación de variables y algoritmos sirve para elegir y explicar esa solución; no es un objetivo independiente ni una búsqueda del menor error sin considerar su uso.
