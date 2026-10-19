@@ -1,7 +1,7 @@
 "use strict";
 const {test}=require("node:test");
 const assert=require("node:assert/strict");
-const fs=require("node:fs"),path=require("node:path"),vm=require("node:vm");
+const fs=require("node:fs"),path=require("node:path"),vm=require("node:vm"),crypto=require("node:crypto");
 const root=path.join(__dirname,"..");
 const csv=fs.readFileSync(path.join(root,"site/data/submission59_final.csv"),"utf8");
 const manifest=JSON.parse(fs.readFileSync(path.join(root,"site/data/final_model.json"),"utf8"));
@@ -35,6 +35,11 @@ test("Final corrected 59 are the exact GeoC published competition target set",()
   assert.ok(Math.abs(summary.selected_median-values[29])<1e-10);
   assert.ok(Math.abs(summary.selected_min-values[0])<1e-10);
   assert.ok(Math.abs(summary.selected_max-values[58])<1e-10);
+  const blob=crypto.createHash("sha1").update(
+    "blob "+Buffer.byteLength(csv)+"\\0".replace(/\\0$/,String.fromCharCode(0))+csv
+  ).digest("hex");
+  assert.equal(blob,manifest.sources.source_git_blob_sha,
+    "Source Git blob mismatch: final CSV was changed without source review.");
   assert.equal(manifest.final_fit_selected,"robust26_3_neighbors_supported_0p25");
   assert.ok(manifest.historical_candidate_selection_posthoc);
   assert.equal(manifest.loocv.length,7);
