@@ -2,7 +2,7 @@
    - Reference26 currently comes from the verified native-browser runtime.
    - Compact14 and ensemble outputs are only displayed after a matching
      separately exported, signed-off pair of final model artifacts exists.
-   - No assumed 50/50 weights, no fabricated LOOCV scores or yields.
+   - No assumed 50/50 weights, no fabricated validation scores or parcel yields.
 */
 "use strict";
 (function(global){
