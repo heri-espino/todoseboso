@@ -53,3 +53,37 @@
 @media(max-width:720px){.reference26-residuals .r26-panel-grid{grid-template-columns:1fr}.reference26-residuals .r26-interval-row{grid-template-columns:minmax(110px,auto) minmax(75px,1fr);gap:.45rem}.reference26-residuals .r26-interval-row strong{grid-column:2;text-align:left;font-size:.78rem}.reference26-residuals .r26-moran-row{grid-template-columns:60px minmax(70px,1fr) 70px}}
 @media print{.reference26-residuals .r26-panel{break-inside:avoid}.reference26-residuals .r26-panel-grid{display:block}.reference26-residuals .r26-panel{margin:0 0 1rem}.reference26-residuals details{break-inside:avoid}.reference26-residuals .r26-tablescroll{overflow:visible}}
 @media(prefers-reduced-motion:reduce){.reference26-residuals *{transition:none!important;animation:none!important}}
+
+
+/* Dedicated, discoverable residual-only chapter; legacy statistical section remains separate. */
+.reference26-residuals{background:linear-gradient(180deg,#f4f7f3 0%,var(--surface,#fff) 18%,var(--surface,#fff) 100%);scroll-margin-top:5rem}
+.reference26-residuals .section-heading h2{max-width:22ch}
+.reference26-residuals .section-heading a{text-decoration:underline;text-underline-offset:3px}
+.reference26-residuals .r26-chapter-intro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem;margin:1.4rem 0}
+.reference26-residuals .r26-chapter-intro p{margin:0;padding:1rem 1.25rem;border-left:3px solid #577968;background:#e9f0e9;line-height:1.7;font-size:.94rem}
+.reference26-residuals .r26-local-nav{display:flex;gap:.55rem;flex-wrap:wrap;padding:1rem 0 1.15rem;border-top:1px solid var(--line,#d9ddd4);border-bottom:1px solid var(--line,#d9ddd4)}
+.reference26-residuals .r26-local-nav a{display:inline-flex;padding:.5rem .75rem;text-decoration:none;font-size:.78rem;font-weight:650;color:#225340;background:#e7eee7;border:1px solid #c8d6c9;border-radius:4px}
+.reference26-residuals .r26-local-nav a:hover,.reference26-residuals .r26-local-nav a:focus-visible{color:#fff;background:#225340}
+.reference26-residuals .r26-panel-full{grid-column:1 / -1}
+.reference26-residuals .r26-panel h4{font-size:1rem;margin:.65rem 0 .25rem}
+.reference26-residuals .r26-controls{display:flex;align-items:center;gap:1rem 2rem;flex-wrap:wrap;margin:1.3rem 0;padding:.85rem 1rem;background:#f3f6f1;border:1px solid var(--line,#d9ddd4)}
+.reference26-residuals .r26-spatial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}
+.reference26-residuals .r26-spatial-grid>div{min-width:0}
+.reference26-residuals .r26-geary-dot{background:#a75540;box-shadow:0 0 0 1px #a75540}
+.reference26-residuals .r26-compact-table{max-width:680px}
+.reference26-residuals .r26-compact-table caption{text-align:left;font-weight:650;margin-bottom:.35rem;font-size:.85rem}
+.reference26-residuals .r26-reading-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.reference26-residuals .r26-variogram-chart{margin:1.5rem 0 1rem;max-width:870px;padding:1rem 1.3rem 1rem 2rem;border:1px solid var(--line,#d9ddd4);background:#f8faf7;border-radius:6px}
+.reference26-residuals .r26-variogram-plot{height:210px;position:relative;border-bottom:1px solid #668375;border-left:1px solid #668375;margin:.9rem 0 0;background:repeating-linear-gradient(to top,transparent,transparent calc(25% - 1px),#e1e8e0 25%)}
+.reference26-residuals .r26-variogram-guide{position:absolute;inset:auto 0 0 0;border-bottom:1px solid #668375}
+.reference26-residuals .r26-variogram-dot{position:absolute;z-index:1;display:block;width:12px;height:12px;border:2px solid #fff;border-radius:50%;background:#356b59;box-shadow:0 0 0 1px #356b59;transform:translate(-50%,50%)}
+.reference26-residuals .r26-variogram-x{text-align:right}
+.reference26-residuals [id^="r26-"]{scroll-margin-top:5.5rem}
+.reference26-residuals .r26-panel:target,.reference26-residuals .r26-evidence:target{outline:2px solid #356b59;outline-offset:2px}
+.reference26-residuals .r26-evidence{padding:1.6rem;border:1px solid var(--line,#d9ddd4);background:#f5f8f4;border-radius:6px}
+.reference26-residuals .r26-evidence h3{font-size:1.25rem}
+.reference26-residuals .r26-evidence p{line-height:1.7}
+.chapter-residual-link{background:rgba(52,112,84,.08);border-left:2px solid #397a65;padding:.6rem}
+@media(max-width:850px){.reference26-residuals .r26-spatial-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.reference26-residuals .r26-chapter-intro,.reference26-residuals .r26-reading-pair{grid-template-columns:1fr}.reference26-residuals .r26-local-nav a{font-size:.77rem}.reference26-residuals .r26-variogram-chart{padding:.8rem .8rem .8rem 1.25rem}.reference26-residuals .r26-variogram-plot{height:180px}}
+@media(prefers-reduced-motion:reduce){.reference26-residuals *{transition:none!important;animation:none!important}}
