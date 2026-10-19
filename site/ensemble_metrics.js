@@ -82,7 +82,11 @@
   function format(x) {
     if (x === null || x === undefined || (typeof x === "number" && !Number.isFinite(x))) return "No aplicable";
     if (typeof x === "boolean") return x ? "Sí" : "No";
-    if (typeof x === "number") return Number.isInteger(x) ? x.toLocaleString("es-MX") : Number(x.toPrecision(6)).toLocaleString("es-MX", {maximumFractionDigits:8});
+    if (typeof x === "number") {
+      if (x !== 0 && Math.abs(x) < 0.00001) return x.toExponential(3);
+      return Number.isInteger(x) ? x.toLocaleString("es-MX") :
+        Number(x.toPrecision(6)).toLocaleString("es-MX", {maximumFractionDigits:8});
+    }
     return String(x);
   }
   function requirePayload(data) {
@@ -211,10 +215,6 @@
     return label + ": p = " + format(p) +
       (p < .05 ? " (señal exploratoria al 5%)" :
                 " (no se detecta evidencia al 5%)") + ".";
-  }
-  function signedDifference(a, b, unit) {
-    if (!number(a) || !number(b)) return "diferencia no disponible";
-    return format(a-b) + (unit ? " " + unit : "");
   }
   function renderInterpretation(data) {
     const model = modelById(data);
