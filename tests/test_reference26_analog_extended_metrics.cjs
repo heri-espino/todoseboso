@@ -64,4 +64,6 @@ assert.ok(dedicated.includes("/* Self-contained static publication: works withou
 assert.ok(dedicated.includes(".reference26-analog-story .r26a-statboard"));
 assert.ok(!dedicated.includes('href="./reference26_analog_cv.css"'));
 assert.ok(!dedicated.includes('href="./styles.css"'));
+const browserRunner=fs.readFileSync("site/browser_inference.js", "utf8");
+assert.ok(browserRunner.includes('link.href="#reference26-analog-cv"'), "Missing-runtime fallback must link to current model");
 console.log("Single-model standalone page: 12 actual LOOCV metrics verified; no prior-model comparison.");
