@@ -228,6 +228,13 @@
   }
   function render(entries,meta) {
     rows59=prepare(entries,meta);
+    for(const row of rows59){
+      const location=places.get(row.id);
+      if(location&&["Hidalgo","Puebla","Tlaxcala"].includes(location.state)){
+        row.state=location.state;
+        row.municipality=String(location.municipality||"");
+      }
+    }
     root.hidden=false;
     status.textContent="59 estimaciones finales verificadas contra el CSV de GeoC. "+
       "Modelo agroespacial con 3 parcelas análogas; las cosechas reales son desconocidas.";
@@ -240,8 +247,9 @@
     window.dispatchEvent(new CustomEvent("geoc:final59-ready",{detail:{n:59}}));
   }
   function setGeography(info) {
-    if(!rows59.length||!info||typeof info!=="object")return;
+    if(!info||typeof info!=="object")return;
     places=new Map(Object.entries(info));
+    if(!rows59.length)return;
     for(const row of rows59){
       const location=places.get(row.id);
       if(location&&["Hidalgo","Puebla","Tlaxcala"].includes(location.state)){
