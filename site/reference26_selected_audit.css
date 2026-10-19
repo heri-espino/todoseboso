@@ -72,6 +72,16 @@
 .tsb-stat-audit .tsb-audit-parameter span{display:block;color:var(--audit-muted);font-size:.78rem;line-height:1.6}
 .tsb-stat-audit .tsb-audit-formula{background:#e7efe7;border:1px solid #d1dfd2;padding:20px 24px;overflow-x:auto;font-size:.99rem;font-family:ui-serif,Georgia,serif;line-height:1.75}
 .tsb-stat-audit .tsb-audit-source{margin:30px 0 0;font-size:.8rem;color:var(--audit-muted);line-height:1.75}
+
+.tsb-stat-audit .tsb-audit-full-detail{border:1px solid var(--audit-stroke);background:#fffefa;margin:20px 0 0;padding:0;overflow:hidden}
+.tsb-stat-audit .tsb-audit-full-detail summary{list-style:none;cursor:pointer;padding:17px 48px 17px 22px;position:relative;font-weight:685;font-size:.92rem;color:var(--audit-ink)}
+.tsb-stat-audit .tsb-audit-full-detail summary::-webkit-details-marker{display:none}
+.tsb-stat-audit .tsb-audit-full-detail summary::after{content:"+";position:absolute;right:23px;top:11px;font-size:1.5rem;font-weight:350;color:var(--audit-accent)}
+.tsb-stat-audit .tsb-audit-full-detail[open] summary::after{content:"−"}
+.tsb-stat-audit .tsb-audit-full-detail summary:focus-visible{outline:3px solid #b68536;outline-offset:-3px}
+.tsb-stat-audit .tsb-audit-full-detail > .tsb-audit-lede{padding:0 22px;margin:4px 0 20px}
+.tsb-stat-audit .tsb-audit-full-detail > .tsb-audit-table-wrap{border:0;border-top:1px solid var(--audit-stroke)}
+
 @media(max-width:800px){
  .tsb-stat-audit .tsb-audit-hero{grid-template-columns:1fr;gap:19px}
  .tsb-stat-audit .tsb-audit-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
