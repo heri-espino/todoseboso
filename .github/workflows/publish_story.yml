@@ -88,6 +88,8 @@ jobs:
           fi
       - name: Validate observed-data chart exporter syntax
         run: python -m py_compile scripts/export_real_chart_data.py
+      - name: Validate source-backed 2025 chart data
+        run: python -m unittest discover -s tests -p 'test_real_chart_snapshot.py'
       - name: Validate SVG chart rendering and data fidelity
         run: node --test tests/test_svg_charts.cjs
       - name: Check parcel arithmetic and percentage interpretation
