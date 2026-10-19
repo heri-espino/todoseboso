@@ -227,3 +227,11 @@ button,.nav-popover,.chapter-card,.collaborator-map-frame{box-shadow:none!import
 .geo-interactive input[type="range"]{accent-color:var(--jade)}
 .missing-demo .buttonset button{border-color:var(--rule);border-radius:0}
 .missing-demo .buttonset button.active{background:var(--forest);color:#fff}
+
+/* After removal of hypothetical demonstrations, source-backed charts and
+   measured geologic weights take the full available reading width. */
+.observed-data-panel{border:1px solid var(--rule);background:#fff;padding:clamp(19px,3vw,32px);margin-top:32px}
+.observed-data-panel>.real-data-figure{margin:0}
+#geologia .geo-layout{grid-template-columns:minmax(0,1fr);max-width:950px;gap:0}
+#geologia .geo-cluster-list{width:100%}
+#resultados .loocv-panel{border-color:var(--rule)}
