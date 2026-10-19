@@ -16,8 +16,8 @@ en Reference26, pero no predice el rendimiento por sí solo.
 
 ## Recorrido del lector
 
-1. Visión de ensamble (pendiente), Reference26 disponible y Compact14 pendiente.
-2. Datos de 197 parcelas (138 con rendimiento, 59 por estimar).
+1. Ensamble en preparación y selección entre Reference26 y Compact14.
+1. Datos de 197 parcelas (138 con rendimiento, 59 por estimar).
 2. Inventario interactivo completo de las 26 variables, por función
    (4 clima, 7 local, 2 ubicación, 10 geología, 3 residuales).
 3. Construcción, agregaciones temporales, imputación, escalado, raíz
@@ -50,6 +50,18 @@ La versión antigua de comparación se conserva en el repositorio
 `.github/workflows/publish_story.yml` **no la publica** ni deja un segundo
 sitio alternativo. En Pages sólo se publica `site/`.
 
+## Visualización ensemble-first
+
+El selector principal muestra **Ensamble → Reference26 → Compact14** en ese
+orden. La vista inicial del ensamble queda **pendiente de calibración**:
+no se asignan pesos, métricas ni predicciones antes de recibir ambos
+modelos finales y comprobar las mismas 59 parcelas. La vista de Reference26
+conserva su evaluación y 59 predicciones verificadas; Compact14 todavía
+requiere su exportación. Las secciones metodológicas posteriores siguen
+explicando Reference26 específicamente.
+
+[Contrato y checklist de integración](./ENSEMBLE_HANDOFF.md).
+
 ## Gráficas vinculadas a datos reales
 
 El gráfico «¿En qué estados están las 197 parcelas?» se alimenta de
@@ -72,6 +84,42 @@ siendo explícitamente ficticios: no existen datos públicos mensuales
 individuales suficientes para sustituirlos fielmente en este clon.
 En ningún caso se construyen series mensuales, dispersogramas observado
 contra predicho ni mapas de centroides a partir de resúmenes agregados.
+
+## Dataset pequeño para nuevas gráficas reales
+
+## Observaciones reales publicadas · 2025
+
+`site/data/real_charts.json` contiene ahora las cifras empíricas de lluvia
+mensual y NDVI para abril–octubre de 2025, obtenidas del archivo original
+`monthly_inputs_apr_oct.parquet` aportado el 19 de octubre de 2026
+(SHA-256 `971bdac1808036e7ca9be3260faa7608e82e2530ef0285a0c0f432a6fae2d635`).
+La fuente incluye **5,516 registros** de **197 parcelas** en **2022–2025**.
+Para 2025 hay **197 observaciones válidas en cada mes** tanto de lluvia
+como de NDVI. En los años previos existen 39 faltantes de NDVI, que no se
+imputan. Los gráficos publicados describen sólo 2025.
+
+Los gráficos usan valores calculados del archivo original: la mediana de
+precipitación de junio de 2025 fue `237.6761 mm`; la mediana NDVI de
+septiembre fue `0.545`. Incluyen percentiles 10/90 y número real de
+parcelas. Las mediciones climáticas y satelitales no son rendimientos
+observados y **no** estiman el error de las 59 parcelas desconocidas.
+
+La tabla de errores LOOCV individuales continúa vacía hasta disponer de
+138 predicciones fuera de muestra por modelo. La demostración didáctica
+separada de 210 mm sigue identificada como inventada.
+
+
+La herramienta [`scripts/export_real_chart_data.py`](../scripts/export_real_chart_data.py)
+extrae sólo las cinco columnas mensuales necesarias de los Parquet
+locales, resume lluvia y NDVI por mes sin inventar mediciones y, si se
+proporcionan OOF LOOCV genuinas, calcula métricas de error y su distribución.
+Escribe un JSON pequeño en `outputs/site_extract/real_charts.json`
+(excluido de Git) para revisión antes de publicar como
+`site/data/real_charts.json`. El navegador sólo muestra los gráficos
+empíricos si existe un archivo con esquema válido. Mientras no exista,
+informa que faltan los datos, sin trazar valores simulados.
+
+[Comandos, archivos exactos y garantías de procedencia](../documentation/real_chart_data_export.md).
 
 ## Validación
 
@@ -206,31 +254,25 @@ La comprobación automática `tests/test_predictions59.cjs` asegura 59 IDs
 soporte para R3, y que se rechazan cifras o entradas manipuladas.
 
 
-## Datos observacionales y OOF reales — trabajo simultáneo preservado
+## Explorador geográfico de Andrea-HH
 
-La herramienta [`scripts/export_real_chart_data.py`](../scripts/export_real_chart_data.py)
-extrae sólo las columnas mensuales necesarias de los Parquet locales, resume
-lluvia y NDVI sin inventar mediciones, y puede procesar predicciones OOF
-LOOCV genuinas cuando estén disponibles. Escribe el resumen local en
-`outputs/site_extract/real_charts.json` antes de publicarlo como
-`site/data/real_charts.json`. La página muestra un aviso claro si estos datos
-no están disponibles. Véase
-[documentación del exportador](../documentation/real_chart_data_export.md).
+La última sección de `site/index.html` (`#mapa-interactivo`) integra el
+[explorador interactivo de Andrea-HH](https://github.com/Andrea-HH/todoseboso/tree/paginAndrea/site/explorador)
+por medio de un único `iframe` independiente con la
+[versión publicada](https://andrea-hh.github.io/todoseboso/explorador/mapa.html).
+Se mantienen sus propios filtros por estado y conjunto, selección de parcelas,
+controles Leaflet, base satelital y atribuciones. El código de modelado de
+este repositorio no se modifica.
 
+**Dependencia externa:** la capa de geometrías, los datos del explorador y
+los tiles satelitales son gestionados por el sitio original; no están incluidos
+en el `main` de este repositorio. Si el despliegue externo está caído o cambia
+su ruta, la vista embebida dejará de funcionar. Debajo del marco se incluye
+un enlace directo al sitio original como alternativa de acceso. Se recomienda
+coordinar con la autora una exportación versionada y autorizada de los datos
+antes de convertir la integración en una dependencia autocontenida.
 
-## Observaciones reales publicadas · 2025
-
-`site/data/real_charts.json` contiene las cifras empíricas de lluvia mensual
-y NDVI de abril a octubre de 2025, extraídas de
-`monthly_inputs_apr_oct.parquet` (SHA-256:
-`971bdac1808036e7ca9be3260faa7608e82e2530ef0285a0c0f432a6fae2d635`).
-La fuente contiene 5,516 registros de 197 parcelas entre 2022 y 2025.
-En 2025 hay 197 observaciones válidas por mes tanto de lluvia como de NDVI.
-En años anteriores hay 39 valores faltantes de NDVI y no se imputaron.
-
-La mediana de precipitación de junio de 2025 fue 237.6761 mm y la mediana
-de NDVI en septiembre fue 0.545. Estas son observaciones de clima y satélite,
-**no cosechas**. No permiten medir el error de las 59 parcelas desconocidas.
-El LOOCV individual permanece pendiente de exportar los 138 valores fuera
-de muestra por modelo. La demostración de lluvia de 210 mm sigue señalada
-como inventada.
+Prueba local sin acceso de red:
+`python -m unittest discover -s tests -p 'test_interactive_map_section.py'`.
+La disponibilidad del iframe y de sus capas remotas se debe verificar
+manualmente en el despliegue después de fusionar la PR.

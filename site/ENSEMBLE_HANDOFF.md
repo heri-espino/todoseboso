@@ -141,6 +141,6 @@ Archivos del PR:
 - `site/ensemble_story.css`: estilos responsivos.
 - `tests/test_ensemble_story.cjs`: pruebas de compatibilidad y fallos.
 
-**Concurrencia:** otro agente está trabajando en `main`. Esta implementación
-se entrega exclusivamente por PR, sin fusionar ni modificar los archivos
-del otro agente.
+**Integración:** el marco visual está en `main`; los artefactos entrenados,
+pesos finales, versiones y predicciones deben conectarse después de una
+validación numérica independiente.
