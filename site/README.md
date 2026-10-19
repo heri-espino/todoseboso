@@ -231,3 +231,7 @@ del soporte total de la estimación.
 La comprobación automática `tests/test_predictions59.cjs` asegura 59 IDs
 únicos, 59 predicciones con paridad frente a Python, 51 con R3 y ocho sin
 soporte para R3, y que se rechazan cifras o entradas manipuladas.
+
+## Navigation and chapter overview
+
+The published `site/` presentation uses an accessible four-part menu: **El estudio**, **El modelo**, **Evaluación**, **Explorar**. Each contains direct anchors to the original subsections; four reading-guide cards below the introduction mirror the same content. This is a navigation-only improvement: no chart, model, dataset, formula, or prediction behavior changes. The native `<details>` dropdowns and links work without JavaScript; `site/navigation.js` adds mobile-menu toggling, active-section indication, click-outside and Escape behavior. `site/navigation.css` provides responsive styling. Run `node --check site/navigation.js` and `node tests/test_site_navigation.cjs` to verify.
