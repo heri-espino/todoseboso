@@ -216,3 +216,21 @@ LOOCV genuinas cuando estén disponibles. Escribe el resumen local en
 `site/data/real_charts.json`. La página muestra un aviso claro si estos datos
 no están disponibles. Véase
 [documentación del exportador](../documentation/real_chart_data_export.md).
+
+
+## Observaciones reales publicadas · 2025
+
+`site/data/real_charts.json` contiene las cifras empíricas de lluvia mensual
+y NDVI de abril a octubre de 2025, extraídas de
+`monthly_inputs_apr_oct.parquet` (SHA-256:
+`971bdac1808036e7ca9be3260faa7608e82e2530ef0285a0c0f432a6fae2d635`).
+La fuente contiene 5,516 registros de 197 parcelas entre 2022 y 2025.
+En 2025 hay 197 observaciones válidas por mes tanto de lluvia como de NDVI.
+En años anteriores hay 39 valores faltantes de NDVI y no se imputaron.
+
+La mediana de precipitación de junio de 2025 fue 237.6761 mm y la mediana
+de NDVI en septiembre fue 0.545. Estas son observaciones de clima y satélite,
+**no cosechas**. No permiten medir el error de las 59 parcelas desconocidas.
+El LOOCV individual permanece pendiente de exportar los 138 valores fuera
+de muestra por modelo. La demostración de lluvia de 210 mm sigue señalada
+como inventada.
