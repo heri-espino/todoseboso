@@ -187,3 +187,238 @@
   .reference26-analog-story *, .reference26-analog-story *::before,
   .reference26-analog-story *::after { transition: none!important; animation: none!important; }
 }
+
+
+/* Verified 138-LOOCV aggregate diagnostics: collapsible details and paired CI. */
+.reference26-analog-story .r26a-extended {
+  padding: clamp(35px, 5vw, 59px) 0 0;
+  border-bottom: 1px solid var(--a-line);
+}
+.reference26-analog-story .r26a-extended-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, .9fr);
+  align-items: end;
+  gap: 22px 48px;
+  margin-bottom: 21px;
+}
+.reference26-analog-story .r26a-extended-heading .r26a-equation-label {
+  margin: 0 0 10px;
+  font-size: .7rem;
+  font-weight: 730;
+  letter-spacing: .1em;
+  color: var(--a-accent);
+}
+.reference26-analog-story .r26a-extended-heading h3 { margin-bottom: 0; }
+.reference26-analog-story .r26a-extended-heading p:last-child {
+  max-width: 55ch;
+  color: var(--a-muted);
+  line-height: 1.72;
+  font-size: .89rem;
+  margin: 0;
+}
+.reference26-analog-story .r26a-metric-detail {
+  background: #fff;
+  border: 1px solid var(--a-line);
+  margin: 0 0 28px;
+}
+.reference26-analog-story .r26a-metric-detail summary {
+  padding: 20px 45px 20px 22px;
+}
+.reference26-analog-story .r26a-metric-detail summary::after {
+  right: 19px;
+}
+.reference26-analog-story .r26a-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 35px);
+  padding: 0 22px 13px;
+}
+.reference26-analog-story .r26a-metric-group { min-width: 0; }
+.reference26-analog-story .r26a-metric-group h4 {
+  color: var(--a-ink);
+  font-size: .87rem;
+  letter-spacing: .01em;
+  font-weight: 680;
+  margin: 0 0 12px;
+}
+.reference26-analog-story .r26a-metric-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--a-muted);
+  font-size: .82rem;
+  line-height: 1.55;
+}
+.reference26-analog-story .r26a-metric-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.reference26-analog-story .r26a-metric-table th,
+.reference26-analog-story .r26a-metric-table td {
+  padding: 11px 6px;
+  border-bottom: 1px solid #e9eee8;
+  text-align: left;
+}
+.reference26-analog-story .r26a-metric-table thead th {
+  font-size: .7rem;
+  font-weight: 680;
+  color: var(--a-muted);
+}
+.reference26-analog-story .r26a-metric-table tbody th {
+  color: var(--a-ink);
+  font-weight: 470;
+}
+.reference26-analog-story .r26a-metric-table td {
+  text-align: right;
+  white-space: nowrap;
+  color: var(--a-ink);
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+}
+.reference26-analog-story .r26a-metric-detail .r26a-metric-note {
+  padding: 0 22px 18px;
+  margin: 0;
+  max-width: 100ch;
+  font-size: .79rem;
+  line-height: 1.75;
+}
+.reference26-analog-story .r26a-ci {
+  background: #e9f0e8;
+  border: 1px solid #d5e0d5;
+  padding: clamp(21px, 3vw, 33px);
+  color: var(--a-ink);
+  margin-bottom: 20px;
+}
+.reference26-analog-story .r26a-ci-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.reference26-analog-story .r26a-ci-header h4 {
+  color: var(--a-ink);
+  font-size: clamp(1rem, 2vw, 1.24rem);
+  margin: 0 0 9px;
+  line-height: 1.34;
+}
+.reference26-analog-story .r26a-ci-header p {
+  font-size: .84rem;
+  line-height: 1.7;
+  color: var(--a-muted);
+  max-width: 63ch;
+  margin: 0;
+}
+.reference26-analog-story .r26a-ci-estimate {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.reference26-analog-story .r26a-ci-estimate small {
+  color: var(--a-muted);
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.reference26-analog-story .r26a-ci-estimate strong {
+  color: var(--a-accent);
+  font-size: 1.65rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.reference26-analog-story .r26a-ci-estimate strong span {
+  font-size: .9rem;
+  font-weight: 400;
+}
+.reference26-analog-story .r26a-ci-plot { margin: 26px 6px 19px; }
+.reference26-analog-story .r26a-ci-track {
+  position: relative;
+  background: #c7d5c9;
+  border-radius: 10px;
+  height: 3px;
+  margin: 22px 3px 15px;
+}
+.reference26-analog-story .r26a-ci-band {
+  position: absolute;
+  left: 6.66%;
+  width: 81.07%;
+  top: -4px;
+  height: 11px;
+  background: #87ab98;
+  border-radius: 3px;
+}
+.reference26-analog-story .r26a-ci-zero {
+  position: absolute;
+  left: 85.71%;
+  top: -15px;
+  width: 2px;
+  height: 33px;
+  background: #65736a;
+  z-index: 1;
+}
+.reference26-analog-story .r26a-ci-point {
+  position: absolute;
+  left: 48.24%;
+  top: -8px;
+  width: 19px;
+  height: 19px;
+  background: #2e7058;
+  border: 3px solid #f0f5ef;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 0 1px #2e7058;
+  z-index: 2;
+}
+.reference26-analog-story .r26a-ci-scale {
+  display: flex;
+  justify-content: space-between;
+  font-variant-numeric: tabular-nums;
+  color: var(--a-muted);
+  font-size: .76rem;
+}
+.reference26-analog-story .r26a-ci-scale span:nth-child(2) {
+  margin-left: auto;
+  margin-right: 14.29%;
+}
+.reference26-analog-story .r26a-ci-interval {
+  border-top: 1px solid #d4e0d4;
+  padding-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 7px 24px;
+  font-size: .89rem;
+  color: var(--a-muted);
+}
+.reference26-analog-story .r26a-ci-interval strong {
+  color: var(--a-ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.reference26-analog-story .r26a-ci-caveat {
+  font-size: .82rem;
+  line-height: 1.73;
+  color: var(--a-muted);
+  margin: 19px 0 0;
+}
+.reference26-analog-story .r26a-inference-detail { margin: 0 0 30px; }
+@media (max-width: 800px) {
+  .reference26-analog-story .r26a-extended-heading,
+  .reference26-analog-story .r26a-metric-grid {
+    grid-template-columns: 1fr;
+  }
+  .reference26-analog-story .r26a-metric-grid { gap: 25px; }
+  .reference26-analog-story .r26a-metric-table {
+    font-size: .83rem;
+  }
+}
+@media (max-width: 440px) {
+  .reference26-analog-story .r26a-metric-table td { white-space: normal; }
+  .reference26-analog-story .r26a-ci-estimate strong { font-size: 1.34rem; }
+}
