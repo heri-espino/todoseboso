@@ -92,3 +92,66 @@ La prueba del nuevo capítulo compara los cuatro números públicos
 contra el JSON de agregados, verifica los 138 folds, la distribución
 128+5+5, el índice, la navegación, la independencia del apartado y
 las advertencias de alcance y privacidad.
+
+## Ampliación: métricas completas disponibles e incertidumbre
+
+La sección pública ahora incluye una tabla plegable con **12
+métricas numéricas del selector anidado** verificadas a partir del
+log entregado por el usuario después de completar el análisis
+`--run --bootstrap 10000` en su VM:
+
+| Métrica | Resultado |
+|---|---:|
+| RMSE | 0.462892 t/ha |
+| MAE | 0.331956 t/ha |
+| MSE | 0.214269 (t/ha)² |
+| L1 | 45.809975 t/ha |
+| L2 | 5.437752 t/ha |
+| L∞ / error absoluto máximo | 2.119565 t/ha |
+| P95 del error absoluto | 0.782014 t/ha |
+| P99 del error absoluto | 1.687373 t/ha |
+| R² predictivo | 0.702083 |
+| Sesgo estimado − real | −0.005062 t/ha |
+| WAPE | 8.392565 % |
+| Huber media, δ=0.5 t/ha | 0.082625 (t/ha)² |
+
+Estos son resultados LOOCV sobre las 138 cosechas observadas; no
+deben interpretarse como errores de las 59 parcelas restantes.
+
+**Intervalo mostrado, con cuidado:**
+
+- Cambio de RMSE = RMSE(NestedSelection) − RMSE(Reference26 original):
+  **−0.005246 t/ha**.
+- Intervalo bootstrap pareado de percentiles al 95 %:
+  **[−0.011068, +0.000282] t/ha**, con **10 000** remuestreos
+  de los pares de errores guardados. **Incluye cero**.
+- Prueba exploratoria de mejora de MSE, cambio de signo con
+  ajuste maxT entre seis alternativas: **p = 0.052895**.
+- Son análisis exploratorios y condicionales, no evidencia
+  confirmatoria; las cinco recetas fueron preseleccionadas
+  post-hoc tras examinar las mismas 138 respuestas y el
+  remuestreo simple no modela dependencia espacial.
+
+**No confundir** el intervalo pareado del **cambio de RMSE** con
+un intervalo de confianza del **RMSE absoluto de 0.462892**.
+El usuario todavía no compartió `bootstrap_95ci_7.csv`, que
+contiene ese otro intervalo. No se publican extremos inventados,
+coeficientes p adicionales, ni precisión de las 59 parcelas.
+
+Se publica exclusivamente el agregado verificable
+`site/data/reference26_analog_extended_metrics.json`, sin ID,
+coordenadas, muestras originales ni predicciones individuales.
+El apartado continúa sin incluir comparaciones históricas con
+otros modelos: la comparación contra Reference26 original se
+usa únicamente para explicar la incertidumbre de **la
+corrección de este mismo modelo**.
+
+Proveniencia: script GeoC
+`tools/report_reference26_top5_all_metrics.py`, rama
+`analysis/reference26-nested-full-metrics-20261019`; resultados
+`--summary` y `--run --bootstrap 10000` enviados en el chat
+el 19 de octubre de 2026.
+
+Pruebas: `node tests/test_reference26_analog_extended_metrics.cjs`,
+también incorporada en la suite existente
+`node tests/test_reference26_analog_cv.cjs`.
