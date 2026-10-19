@@ -14,7 +14,8 @@ const ids=[
  "reference26-residuals","r26-residual-status","r26-summary-cards",
  "r26-error-scale","r26-maximum-error","r26-influence-lead",
  "r26-influence-bar","r26-deletion-body","r26-tests-body",
- "r26-moran-chart","r26-moran-k","r26-moran-body","r26-moran-reading",
+ "r26-moran-chart","r26-moran-k","r26-spatial-target","r26-moran-body","r26-moran-reading",
+ "r26-variogram-body","r26-variogram-status",
  "r26-bootstrap-chart","r26-block-body","r26-bootstrap-note",
  "r26-unavailable"
 ];
@@ -33,6 +34,7 @@ class Element {
 function mount(fetchImpl) {
   const nodes=Object.fromEntries(ids.map(id=>[id,new Element()]));
   nodes["r26-moran-k"].value="8";
+  nodes["r26-spatial-target"].value="signed_residual";
   const document={getElementById:id=>nodes[id]||null,
                   createElement:tag=>new Element(tag)};
   const context={document,fetch:fetchImpl,console};
@@ -83,7 +85,12 @@ test("renders Reference26 alone and accessible numerical charts",async()=>{
  nodes["r26-moran-k"].value="4";
  nodes["r26-moran-k"].dispatch("change");
  assert.match(nodes["r26-moran-reading"].textContent,/k = 4/);
- assert.equal(nodes["r26-moran-body"].children.length,4);
+ assert.equal(nodes["r26-moran-body"].children.length,5);
+ nodes["r26-spatial-target"].value="absolute_error";
+ nodes["r26-spatial-target"].dispatch("change");
+ assert.match(nodes["r26-moran-reading"].textContent,/aún no están publicados/);
+ assert.equal(nodes["r26-moran-body"].children.length,0);
+ assert.match(nodes["r26-variogram-status"].textContent,/no disponible/);
  assert.match(nodes["r26-bootstrap-note"].textContent,/dos de los siete/);
 });
 
@@ -113,6 +120,8 @@ test("site ships no external ensemble UI or fabricated private histogram",()=>{
  const html=fs.readFileSync(path.join(SITE,"index.html"),"utf8");
  assert.match(html,/id="estadisticas-finales"/);
  assert.match(html,/id="r26-bootstrap-chart"/);
+ assert.match(html,/id="r26-spatial-target"/);
+ assert.match(html,/id="r26-variogram-body"/);
  assert.match(html,/src="\.\/reference26_residuals\.js"/);
  assert.doesNotMatch(html,/Compact14|Ensamble de dos modelos/);
  assert.doesNotMatch(html,/src="\.\/ensemble_/);
