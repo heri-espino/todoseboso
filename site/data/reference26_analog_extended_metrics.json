@@ -32,19 +32,6 @@
     "wape_pct": 8.392565,
     "huber_mean_delta_0p5": 0.082625
   },
-  "paired_change_vs_unchanged_reference26": {
-    "definition": "RMSE(NestedSelection) - RMSE(original Reference26 mean), all 138 matched OOF heldouts",
-    "estimate_t_ha": -0.005246,
-    "iid_paired_bootstrap_percentile_95ci_t_ha": [
-      -0.011068,
-      0.000282
-    ],
-    "includes_zero": true,
-    "bootstrap_draws": 10000,
-    "maxT_six_model_one_sided_signflip_p": 0.052895,
-    "six_way_family_posthoc": true,
-    "notes": "Only a paired confidence interval for the RMSE CHANGE is supplied. This is NOT a confidence interval for the absolute 0.462892 RMSE."
-  },
   "limitations": {
     "absolute_rmse_confidence_interval_available": false,
     "absolute_rmse_confidence_interval_source": "bootstrap_95ci_7.csv was not shared; cannot report numerical absolute RMSE CI",
@@ -52,5 +39,11 @@
     "why": "Five candidate corrections were chosen after examining these same 138 labels; bootstrap assumes iid parcels while residuals can be spatially correlated",
     "adjusted_r2_not_applicable": true,
     "no_errors_for_59_unknown": true
+  },
+  "confidence_intervals": {
+    "absolute_rmse_t_ha": null,
+    "available": false,
+    "status": "pending_aggregated_bootstrap_95ci_7_csv",
+    "note": "No numerical CI for absolute RMSE was provided; no intervals are invented."
   }
 }
