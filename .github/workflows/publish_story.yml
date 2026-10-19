@@ -157,6 +157,13 @@ jobs:
         run: |
           mkdir -p _pages
           cp -a site/. _pages/
+      - name: Verify staged GitHub Pages entrypoints
+        run: |
+          test -s _pages/index.html
+          test -s _pages/modelo-corregido.html
+          test -s _pages/styles.css
+          test -s _pages/data/reference26_analog_extended_metrics.json
+          echo "Pages artifact contains its homepage, corrected-model chapter, styles and source metrics."
       - name: Upload public single-model site
         uses: actions/upload-pages-artifact@v3
         with:
@@ -164,3 +171,20 @@ jobs:
       - name: Deploy site
         id: deploy
         uses: actions/deploy-pages@v4
+      - name: Probe public GitHub Pages URL after deployment
+        if: ${{ steps.deploy.outcome == 'success' }}
+        env:
+          PAGE_URL: ${{ steps.deploy.outputs.page_url }}
+        shell: bash
+        run: |
+          echo "Published URL: $PAGE_URL"
+          for attempt in 1 2 3 4 5; do
+            status=$(curl --location --silent --show-error --max-time 15 --output /tmp/geoc-pages.html --write-out '%{http_code}' "$PAGE_URL" || true)
+            if [ "$status" = 200 ] && grep -q "GeoCebada" /tmp/geoc-pages.html; then
+              echo "HTTP 200: public GeoCebada homepage verified."
+              exit 0
+            fi
+            echo "Attempt $attempt: HTTP $status; retrying after propagation delay."
+            sleep 10
+          done
+          echo "::warning::Pages deployment succeeded, but the public URL could not be verified. Check Settings > Pages, domain routing and GitHub Pages status."
