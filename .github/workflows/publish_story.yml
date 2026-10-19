@@ -111,7 +111,6 @@ jobs:
           node --check site/native_map.js
           node --check site/field_charts.js
           node --check site/parcel_core.js
-          node --check site/predictor.js
           node --check site/inference_client.js
           node --check site/reference26_engine.js
           node --check site/browser_inference.js

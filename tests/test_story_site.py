@@ -26,27 +26,27 @@ class StorySiteTest(unittest.TestCase):
         self.assertAlmostEqual(row["rmse"], 0.4624789693727327)
         self.assertAlmostEqual(row["r2"], 0.6971349735771638)
 
-    def test_teaching_values_are_not_parcel_predictions(self):
-        html = (SITE / "index.html").read_text(encoding="utf-8")
-        js = (SITE / "model.js").read_text(encoding="utf-8")
-        self.assertIn("simulación educativa", html)
-        self.assertIn("inventado", html)
-        self.assertIn("uniform: [30,30,30,30,30,30,30]", js)
-        self.assertIn("concentrated: [10,10,10,20,140,10,10]", js)
-        self.assertIn("aria-pressed", js)
-        self.assertIn("LOOCV", html)
-        self.assertIn("Parcela de clima", (SITE / "predictor.js").read_text(encoding="utf-8"))
-        self.assertIn("PREDICCIÓN REAL · EN TU NAVEGADOR", html)
-        self.assertIn("id=\"predict-real\"", html)
-        self.assertIn("id=\"ensamble\"", html)
-        self.assertIn("data-ensemble-tab=\"Compact14\"", html)
-        self.assertIn("id=\"reference26-view\"", html)
-        self.assertIn("id=\"predicciones-59\"", html)
-        self.assertIn("id=\"pred59-rows\"", html)
-        self.assertIn("id=\"pred59-plot\"", html)
-        self.assertIn("id=\"pred59-export\"", html)
-        self.assertIn("cosechas reales siguen siendo desconocidas", (SITE / "predictions59.js").read_text(encoding="utf-8"))
-        self.assertIn("prefers-reduced-motion", (SITE / "model.css").read_text(encoding="utf-8"))
+    def test_only_source_backed_results_are_published(self):
+        html=(SITE/"index.html").read_text(encoding="utf-8")
+        model=(SITE/"model.js").read_text(encoding="utf-8")
+        self.assertIn('id="ensamble"',html)
+        self.assertIn('id="reference26-view"',html)
+        self.assertIn('id="predicciones-59"',html)
+        self.assertIn('id="pred59-export"',html)
+        self.assertIn('id="datos-reales"',html)
+        self.assertIn('id="real-rainfall"',html)
+        self.assertIn('id="real-ndvi"',html)
+        self.assertIn('id="mapa-interactivo"',html)
+        for tag in ("simulador","fictitious-mode","own-mode","rain-chart",
+                    "example-climate","parcel-estimate","yield-reference"):
+            self.assertNotIn('id="'+tag+'"',html)
+        for token in ("simulación educativa","parcelas inventadas",
+                      "data-rain=","parcel-climate","fictitious-presets"):
+            self.assertNotIn(token,html.lower())
+        self.assertNotIn("showRain",model)
+        self.assertNotIn("function example()",model)
+        self.assertNotIn('src="./predictor.js"',html)
+        self.assertIn("LOOCV",html)
 
 
 if __name__ == "__main__":

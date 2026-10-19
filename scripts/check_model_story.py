@@ -80,21 +80,21 @@ def check() -> None:
     page = Page()
     page.feed(html)
     assert page.lang == "es"
-    for target in ("contenido", "datos", "variables", "preparacion", "arquitectura",
-                   "geologia", "faltantes", "ajuste", "resultados", "pruebas",
-                   "limites", "preguntas", "rain-chart", "cluster-list",
-                   "feature-rows", "performance-chart", "r3-comparison",
-                   "association-chart", "distribution-quantiles", "interval-results",
-                   "expert-weights", "hhi-forest", "simulador", "fictitious-mode", "own-mode",
-                   "parcel-input-groups", "parcel-export", "parcel-estimate", "yield-reference",
-                   "predicciones-59", "pred59-status", "pred59-summary", "pred59-examples",
-                   "pred59-plot", "pred59-search", "pred59-state", "pred59-sort", "pred59-rows",
-                   "pred59-detail", "pred59-export"):
+    for target in ("contenido","datos","variables","preparacion","arquitectura",
+                   "geologia","faltantes","ajuste","resultados","pruebas",
+                   "limites","preguntas","cluster-list","feature-rows",
+                   "performance-chart","r3-comparison","association-chart",
+                   "distribution-quantiles","interval-results","expert-weights",
+                   "hhi-forest","datos-reales","real-rainfall","real-ndvi",
+                   "predicciones-59","pred59-status","pred59-summary",
+                   "pred59-examples","pred59-plot","pred59-search",
+                   "pred59-state","pred59-sort","pred59-rows",
+                   "pred59-detail","pred59-export","mapa-interactivo"):
         assert target in page.ids, target
     assert all(a in page.ids for a in page.anchors), "Broken internal navigation"
     for asset in page.assets:
         assert (SITE / asset).is_file(), ("missing site asset", asset)
-    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./parcel_core.js", "./predictor.js", "./reference26_engine.js", "./predictions59.js", "./ensemble_contract.js", "./ensemble_story.js", "./browser_inference.js"]
+    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./ensemble_contract.js", "./ensemble_story.js", "./browser_inference.js"]
     for forbidden in ("B1</", "Local04D"):
         assert forbidden not in html, forbidden
     for required in ("Regresión local con mezcla geológica", "K-means",
@@ -108,7 +108,7 @@ def check() -> None:
     assert "11.84 %" in html and "468.186 kilogramos por hectárea" in html
     assert "no es el porcentaje de error esperado" in html.lower() or "no es el porcentaje de error esperado" in html
     assert "No se calcula un rendimiento real desde esta página" not in html
-    assert "PREDICCIÓN REAL · EN TU NAVEGADOR" in html
+    assert 'id="simulador"' not in html
     assert "id=\"ensamble\"" in html
     assert html.index('id="ensamble"') < html.index('id="datos"')
     assert html.index('data-ensemble-tab="Ensemble"') < html.index('data-ensemble-tab="Reference26"') < html.index('data-ensemble-tab="Compact14"')
@@ -122,8 +122,7 @@ def check() -> None:
     assert (SITE / "predictions59.js").is_file()
     assert (SITE / "predictions59.css").is_file()
     assert "No se ofrecen pronósticos individuales" not in html
-    assert "parcel_core.js" in html and "predictor.js" in html
-    assert (SITE / "parcel_core.js").is_file() and (SITE / "predictor.js").is_file()
+    assert "predictor.js" not in html and "parcel_core.js" not in html
     loocv = data["loocv"]
     assert loocv["model"] == "Reference26" and loocv["folds"] == 138
     assert loocv["training_labels_per_fold"] == 137 and loocv["held_out_per_fold"] == 1

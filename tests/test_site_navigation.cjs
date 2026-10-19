@@ -23,12 +23,12 @@ assert.match(js, /aria-current/);
 assert.match(css, /prefers-reduced-motion/);
 assert.doesNotMatch(html, /src="\.\/portal\.js"/);
 assert.doesNotMatch(html, /href="\.\/portal\.css"/);
-for(const id of ["ensamble","datos","variables","preparacion","datos-reales","arquitectura","ajuste","resultados","pruebas","limites","predicciones-59","simulador","mapa-interactivo","recorrido","reference26-view","ensemble-dynamic-view","real-rainfall","real-ndvi","real-loocv","pred59-plot","predict-real"]) {
+for(const id of ["ensamble","datos","variables","preparacion","datos-reales","arquitectura","ajuste","resultados","pruebas","limites","predicciones-59","mapa-interactivo","recorrido","reference26-view","ensemble-dynamic-view","real-rainfall","real-ndvi","real-loocv","pred59-plot"]) {
   assert.ok(ids.includes(id), "Protected model/chart/map section missing: #"+id);
 }
 assert.ok(html.indexOf('id="recorrido"') < html.indexOf('id="ensamble"'), "Editorial index must be before the full study");
 assert.ok(html.indexOf('id="recorrido"') < html.indexOf('id="datos"'), "Reading guide must precede data");
-assert.ok(html.indexOf('id="mapa-interactivo"') > html.indexOf('id="simulador"'), "Collaborator map should be final");
+assert.ok(html.indexOf('id="mapa-interactivo"') > html.indexOf('id="preguntas"'), "Collaborator map should be final");
 for(const source of ["./ensemble_story.js","./ensemble_contract.js","./field_charts.js","./predictions59.js"]) {
   assert.ok(html.includes('src="'+source+'"'), "Protected runtime missing: "+source);
 }

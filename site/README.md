@@ -378,3 +378,26 @@ La aparición al hacer scroll usa un intervalo de ~1.3 s; los aumentos al
 pasar el cursor duran ~0.8 s y aplican sombras grises tenues. El visor
 cartográfico permanece sin escalado para no obstaculizar Leaflet. Se sigue
 respetando `prefers-reduced-motion`.
+
+## Página pública sin simulaciones — actualización del 19 de octubre de 2026
+
+La página pública dejó de incluir las parcelas inventadas, la gráfica
+hipotética de precipitación de 210 mm, el deslizador ilustrativo de mezcla,
+la demostración binaria de corrección residual y el formulario de predicción
+para nuevas parcelas. También se retiró la escala hipotética del RMSE.
+Ninguna de esas cifras se presenta como observación o predicción del estudio.
+
+Permanecen: los 138 rendimientos reportados; las series observadas de
+precipitación y NDVI de 2025; las figuras y métricas calculadas a partir
+de archivos de resultados documentados; las 59 estimaciones de Reference26
+verificadas contra Python; y los 197 polígonos del mapa. **Las 59
+estimaciones no son cosechas medidas.** La combinación Reference26 y
+Compact14 continúa pendiente de pesos y resultados verificados.
+
+`site/browser_inference.js` conserva solo la carga y comprobación
+numérica de los 59 resultados publicados. El antiguo código de parcelas
+inventadas no se ejecuta ni está enlazado desde la página. El archivo
+`parcel_core.js` puede permanecer como módulo de pruebas matemáticas en el
+repositorio, pero no se carga en el sitio público. Las gráficas sin
+observaciones individuales auténticas comunican expresamente la
+ausencia de esos datos, sin construir residuos artificiales.

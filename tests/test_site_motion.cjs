@@ -31,11 +31,11 @@ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(ids.length,new Set(ids).size);
 for(const id of ["recorrido","ensamble","datos","variables","preparacion",
  "arquitectura","geologia","faltantes","ajuste","resultados","pruebas",
- "limites","simulador","mapa-interactivo","predicciones-59","real-rainfall",
- "real-ndvi","reference26-view","predict-real"]){
+ "limites","mapa-interactivo","predicciones-59","real-rainfall",
+ "real-ndvi","reference26-view"]){
  assert.ok(ids.includes(id),"Original research area lost: #"+id);
 }
-assert.ok(html.indexOf('id="mapa-interactivo"')>html.indexOf('id="simulador"'));
+assert.ok(html.indexOf('id="mapa-interactivo"')>html.indexOf('id="preguntas"'));
 assert.ok(html.includes("andrea-hh.github.io/todoseboso/explorador/mapa.html"));
 assert.match(html,/id="geo-leaflet-map"/);
 assert.match(html,/src="\.\/native_map\.js"/);

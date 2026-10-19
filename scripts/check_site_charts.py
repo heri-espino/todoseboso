@@ -60,14 +60,14 @@ def main():
     parser = PageHTML()
     parser.feed(html)
     for name in ("parcel-coverage", "real-rainfall", "real-ndvi", "real-loocv", "performance-chart", "association-chart",
-                 "hhi-forest", "interval-results", "rain-chart",
+                 "hhi-forest", "interval-results",
                  "distribution-quantiles", "r3-comparison", "expert-weights"):
         assert name in parser.ids
-    assert parser.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./parcel_core.js", "./predictor.js", "./reference26_engine.js", "./predictions59.js", "./ensemble_contract.js", "./ensemble_story.js", "./browser_inference.js"]
+    assert parser.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./ensemble_contract.js", "./ensemble_story.js", "./browser_inference.js"]
     assert (SITE / "charts.css").is_file()
     assert "originales del estudio" in html or "curvas acumuladas originales" in html.lower()
 
-    for path in ("charts.js", "model.js", "field_charts.js", "parcel_core.js", "predictor.js", "reference26_engine.js", "predictions59.js", "ensemble_contract.js", "ensemble_story.js", "browser_inference.js"):
+    for path in ("charts.js", "model.js", "field_charts.js", "reference26_engine.js", "predictions59.js", "ensemble_contract.js", "ensemble_story.js", "browser_inference.js"):
         text = (SITE / path).read_text(encoding="utf-8")
         assert "https://cdn." not in text
         if path != "field_charts.js":
@@ -78,7 +78,7 @@ def main():
     assert "GeoCharts.r3" in (SITE / "model.js").read_text(encoding="utf-8")
     assert "GeoCharts.coefficients" in (SITE / "model.js").read_text(encoding="utf-8")
     assert "GeoCharts.performance" in (SITE / "model.js").read_text(encoding="utf-8")
-    print("PASS: all 8 distribution rows and 12 chart mounts match their published sources.")
+    print("PASS: all 8 distribution rows and source-backed chart mounts match their published sources.")
 
 
 if __name__ == "__main__":

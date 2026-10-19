@@ -9,13 +9,13 @@ assert.equal(ids.length,new Set(ids).size,"Every HTML ID is unique");
 assert.equal((html.match(/class="chapter-card"/g)||[]).length,4,"Exactly four index chapters");
 assert.ok(html.indexOf('id="recorrido"') < html.indexOf('id="ensamble"'),"Index must precede scientific story");
 assert.ok(html.indexOf('id="ensamble"') < html.indexOf('id="datos"'),"Ensemble still leads detailed research");
-assert.ok(html.indexOf('id="mapa-interactivo"') > html.indexOf('id="simulador"'),"Map remains last");
+assert.ok(html.indexOf('id="mapa-interactivo"') > html.indexOf('id="preguntas"'),"Map remains last");
 const sections=["ensamble","datos","variables","preparacion","arquitectura","geologia",
- "faltantes","ajuste","resultados","pruebas","limites","preguntas","simulador","mapa-interactivo"];
+ "faltantes","ajuste","resultados","pruebas","limites","preguntas","mapa-interactivo"];
 for(const id of sections)assert.match(html,new RegExp('<section[^>]*id="'+id+'"'),
  "Full-length research section removed: #"+id);
 for(const id of ["predicciones-59","reference26-view","ensemble-dynamic-view","real-rainfall",
- "real-ndvi","real-loocv","parcel-coverage","pred59-plot","predict-real","cluster-list"]){
+ "real-ndvi","real-loocv","parcel-coverage","pred59-plot","cluster-list"]){
  assert.ok(ids.includes(id),"Interactive content missing: #"+id);
 }
 for(const src of ["./navigation.js","./ensemble_story.js","./ensemble_contract.js",
@@ -30,7 +30,7 @@ const contents=html.match(/<section class="reading-guide"[\s\S]*?<\/section>/)?.
 assert.ok(contents,"Introductory index missing");
 for(const id of ["datos","variables","preparacion","datos-reales","ensamble","arquitectura",
  "geologia","faltantes","ajuste","resultados","pruebas","limites","preguntas",
- "predicciones-59","simulador","mapa-interactivo"]){
+ "predicciones-59","mapa-interactivo"]){
  assert.ok(contents.includes('href="#'+id+'"'),"Index does not describe/link: #"+id);
 }
 assert.equal((contents.match(/class="chapter-readmore"/g)||[]).length,4);

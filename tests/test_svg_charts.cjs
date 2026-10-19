@@ -148,17 +148,6 @@ test("All regional distribution medians are sourced, never reconstructed", () =>
   for(const row of data.rows) assert.ok(points(node).some(p =>
     p.getAttribute("aria-label").includes(row.median.toFixed(3))));
 });
-test("Rainfall demo is explicitly synthetic and preserves total rainfall", () => {
-  const values = [10,10,10,20,140,10,10];
-  const node = new MockNode("div");
-  charts.rainfall(node, values);
-  const canvas = svg(node);
-  const marks = all(canvas, "rect").filter(p => p.getAttribute("role") === "img");
-  assert.equal(marks.length, 7);
-  assert.equal(values.reduce((a,b)=>a+b,0),210);
-  assert.equal(marks.filter(n => n.getAttribute("aria-label").includes("ficticia")).length,7);
-});
-
 test("Real parcel inventory reflects all 197 source-backed state counts", () => {
   const data = read("distribution.json");
   const node = new MockNode("div");
