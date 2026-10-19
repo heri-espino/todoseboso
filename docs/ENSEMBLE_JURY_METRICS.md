@@ -50,6 +50,48 @@ coordenadas ni predicciones de las 59 parcelas.
 
 Revisar manualmente este JSON antes de publicarlo.
 
+## Galería verificada de las 59 parcelas
+
+Además del panel de métricas LOOCV, el sitio muestra una sección
+de tres predicciones para cada parcela del conjunto reservado,
+**únicamente después** de que el equipo ejecute el ajuste final.
+La página `site/ensemble_predictions59.js` carga
+`site/data/ensemble_predictions59.json`, no accesible
+hasta que el exportador lo cree explícitamente.
+
+Después de los dos `joblib` finales:
+
+```powershell
+python tools/export_reference26_compact14_predictions59.py --check
+python tools/export_reference26_compact14_predictions59.py --stage
+# Revisar las 59 filas, los IDs y las condiciones de divulgación del reto.
+python tools/export_reference26_compact14_predictions59.py --publish
+```
+
+El exportador coteja las dos fuentes ajustadas con sus huellas SHA256,
+la tabla de 197 entradas, la matriz de distancias, la tabla privada
+de 59 predicciones, y comprueba numéricamente sus dos pronósticos
+y la mezcla. El JSON contiene 59 **identificadores y estimaciones
+calculadas**, pero **no** cosechas observadas del conjunto reservado.
+
+**`--publish` hace públicos los IDs y las estimaciones**: no debe
+ejecutarse sin autorización del equipo y revisión de las bases
+de la competencia. Ningún joblib, etiqueta observada,
+matriz de distancias o geolocalización se envía a GitHub
+mediante este procedimiento.
+
+La galería no pretende recalcular en JavaScript cada predicción
+de los dos modelos; muestra los valores calculados y
+reproducidos por Python. La inferencia interactiva de parcelas
+nuevas sigue siendo una tarea separada que requiere portar
+y validar ambos modelos en el motor web, o servirlos por API.
+
+Prueba adicional:
+
+```powershell
+node --test tests/test_ensemble_predictions59.cjs
+```
+
 ## Tres predicciones para las 59 parcelas
 
 La sección implementada **solo compara las estadísticas de validación**.
