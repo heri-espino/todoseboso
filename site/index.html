@@ -346,6 +346,85 @@
       </figure>
     </div>
 
+    <section class="r26a-extended" aria-labelledby="r26a-extended-title">
+      <div class="r26a-extended-heading">
+        <div>
+          <p class="r26a-equation-label">MÉTRICAS LOOCV · 138 PARCELAS</p>
+          <h3 id="r26a-extended-title">Error, extremos e incertidumbre</h3>
+        </div>
+        <p>Resultados adicionales del <strong>selector anidado</strong>. Todos los errores se calcularon sobre las mismas 138 cosechas reales excluidas una por una; no son errores de las 59 parcelas desconocidas.</p>
+      </div>
+
+      <details class="r26a-detail r26a-metric-detail">
+        <summary>Explorar las 12 métricas disponibles del modelo</summary>
+        <div class="r26a-metric-grid">
+          <div class="r26a-metric-group">
+            <h4>Magnitud del error</h4>
+            <table class="r26a-metric-table">
+              <caption>Errores y normas del selector anidado</caption>
+              <thead><tr><th scope="col">Métrica</th><th scope="col">Valor</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">RMSE</th><td data-r26a-extra="rmse_t_ha">0.462892 t/ha</td></tr>
+                <tr><th scope="row">MAE</th><td data-r26a-extra="mae_t_ha">0.331956 t/ha</td></tr>
+                <tr><th scope="row">MSE</th><td data-r26a-extra="mse_t_ha2">0.214269 (t/ha)²</td></tr>
+                <tr><th scope="row">Norma L₁</th><td data-r26a-extra="l1_t_ha">45.809975 t/ha</td></tr>
+                <tr><th scope="row">Norma L₂</th><td data-r26a-extra="l2_t_ha">5.437752 t/ha</td></tr>
+                <tr><th scope="row">Norma L∞ (máximo error absoluto)</th><td data-r26a-extra="linf_t_ha">2.119565 t/ha</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="r26a-metric-group">
+            <h4>Colas, ajuste y sesgo</h4>
+            <table class="r26a-metric-table">
+              <caption>Extremos de error y calidad del ajuste</caption>
+              <thead><tr><th scope="col">Métrica</th><th scope="col">Valor</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">P95 del error absoluto</th><td data-r26a-extra="p95_absolute_error_t_ha">0.782014 t/ha</td></tr>
+                <tr><th scope="row">P99 del error absoluto</th><td data-r26a-extra="p99_absolute_error_t_ha">1.687373 t/ha</td></tr>
+                <tr><th scope="row">R² predictivo</th><td data-r26a-extra="r2_cv">0.702083</td></tr>
+                <tr><th scope="row">Sesgo (estimado − real)</th><td data-r26a-extra="bias_t_ha">−0.005062 t/ha</td></tr>
+                <tr><th scope="row">WAPE</th><td data-r26a-extra="wape_pct">8.392565 %</td></tr>
+                <tr><th scope="row">Pérdida Huber, δ = 0.5 t/ha</th><td data-r26a-extra="huber_mean_delta_0p5">0.082625 (t/ha)²</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="r26a-metric-note">L₁ suma los errores absolutos; L₂ es la raíz de la suma de errores cuadrados; L∞ es el mayor error absoluto. Los percentiles P95 y P99 son cuantiles de |estimado − real|. WAPE expresa la suma de errores absolutos respecto de la suma de rendimientos observados. No se informa R² ajustado porque el modelo compuesto no tiene un número único y justificable de parámetros.</p>
+      </details>
+
+      <div class="r26a-ci" aria-labelledby="r26a-ci-title">
+        <div class="r26a-ci-header">
+          <div>
+            <h4 id="r26a-ci-title">Intervalo bootstrap del cambio en RMSE</h4>
+            <p>Comparación pareada con Reference26 sin corrección. El signo negativo indica menor RMSE para el selector.</p>
+          </div>
+          <div class="r26a-ci-estimate">
+            <small>Cambio observado</small>
+            <strong data-r26a-paired="estimate_t_ha">−0.005246 <span>t/ha</span></strong>
+          </div>
+        </div>
+        <div class="r26a-ci-plot" role="img" aria-label="Intervalo bootstrap pareado al 95 por ciento desde menos 0.011068 hasta más 0.000282 toneladas por hectárea; estimación menos 0.005246. El intervalo cruza el cero.">
+          <div class="r26a-ci-track">
+            <span class="r26a-ci-band" aria-hidden="true"></span>
+            <span class="r26a-ci-zero" aria-hidden="true"></span>
+            <span class="r26a-ci-point" aria-hidden="true"></span>
+          </div>
+          <div class="r26a-ci-scale"><span>−0.012</span><span>0</span><span>+0.002 t/ha</span></div>
+        </div>
+        <div class="r26a-ci-interval">
+          <span>IC bootstrap pareado del 95 %</span>
+          <strong><span data-r26a-paired="ci_low">−0.011068</span> a <span data-r26a-paired="ci_high">+0.000282</span> t/ha</strong>
+        </div>
+        <p class="r26a-ci-caveat"><strong>Interpretación:</strong> el intervalo incluye cero; la mejora observada no es concluyente bajo este análisis. Se usaron 10 000 remuestreos de pares de errores LOOCV, sin reentrenar Reference26. Este es un intervalo para <em>la diferencia de RMSE</em>, no para el RMSE absoluto de 0.462892 t/ha.</p>
+      </div>
+
+      <details class="r26a-detail r26a-inference-detail">
+        <summary>Prueba estadística, supuestos y métricas aún no publicadas</summary>
+        <p>La prueba exploratoria de cambios de signo sobre mejoras del MSE, con ajuste maxT entre las seis alternativas de esta familia, obtuvo <strong data-r26a-paired="maxT_p">p = 0.052895</strong> para el selector anidado. No se trata de una prueba confirmatoria: las cinco correcciones se eligieron anteriormente al estudiar los mismos datos, y tanto la prueba como el bootstrap simple pueden verse afectados por la dependencia espacial entre parcelas.</p>
+        <p>El informe completo de GeoC también calcula mediana del error, otros percentiles, pérdidas robustas y porcentuales, correlaciones, intervalos de otras métricas e influencia de observaciones. Sus valores numéricos <strong>no aparecen en el resumen compartido</strong> y no se inventan aquí. El intervalo bootstrap del <strong>RMSE absoluto</strong> requiere el archivo agregado <code>bootstrap_95ci_7.csv</code>; el intervalo publicado arriba corresponde exclusivamente al <strong>cambio pareado de RMSE</strong>.</p>
+      </details>
+    </section>
+
     <div class="r26a-more">
       <h3>Detalle de las métricas y del alcance</h3>
       <details class="r26a-detail">
@@ -354,7 +433,7 @@
       </details>
       <details class="r26a-detail">
         <summary>Definiciones estadísticas de las cuatro métricas</summary>
-        <p>Con residuos firmados <strong>eᵢ = predicciónᵢ − cosechaᵢ</strong> y 138 predicciones excluidas, RMSE = raíz del promedio de eᵢ²; MAE = promedio de |eᵢ|; sesgo = promedio de eᵢ; R² = 1 − suma(eᵢ²) / suma[(cosechaᵢ − media observada)²]. RMSE, MAE y sesgo se expresan en toneladas por hectárea; R² no tiene unidades. No se ha calculado aquí un R² ajustado, intervalo de confianza ni valor p para este nuevo selector.</p>
+        <p>Con residuos firmados <strong>eᵢ = predicciónᵢ − cosechaᵢ</strong> y 138 predicciones excluidas, RMSE = raíz del promedio de eᵢ²; MAE = promedio de |eᵢ|; sesgo = promedio de eᵢ; R² = 1 − suma(eᵢ²) / suma[(cosechaᵢ − media observada)²]. RMSE, MAE y sesgo se expresan en toneladas por hectárea; R² no tiene unidades. No se informa R² ajustado para este predictor compuesto. El intervalo bootstrap de la diferencia de RMSE y la prueba exploratoria se muestran en el apartado de incertidumbre anterior.</p>
       </details>
       <details class="r26a-detail">
         <summary>Qué cambia en el entrenamiento final de las 59 parcelas</summary>
