@@ -63,7 +63,7 @@ def main():
                  "hhi-forest", "interval-results",
                  "distribution-quantiles", "r3-comparison", "expert-weights"):
         assert name in parser.ids
-    assert parser.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./reference26_residuals.js", "./browser_inference.js"]
+    assert parser.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./reference26_residuals.js", "./final_model.js", "./final_predictor.js", "./browser_inference.js"]
     assert (SITE / "charts.css").is_file()
     assert "originales del estudio" in html or "curvas acumuladas originales" in html.lower()
 
