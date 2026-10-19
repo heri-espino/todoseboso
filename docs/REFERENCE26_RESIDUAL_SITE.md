@@ -112,8 +112,17 @@ es *alternativo*, no una dependencia obligatoria para quien sólo tenga GeoC.
 El capítulo `#estadisticas-finales` es una sección HTML independiente,
 **posterior a la sección histórica `#pruebas` y anterior al mapa final**.
 Tiene enlaces desde el menú principal, el índice y la portada, además de
-navegación interna propia. No cambia las pruebas previas de asociaciones,
-ablación HHI o comparaciones históricas de arquitecturas.
+un **selector horizontal de siete pestañas**. Solamente se muestra el panel
+seleccionado; las otras seis vistas quedan ocultas sin eliminar sus datos.
+Se utiliza el patrón accesible `tablist`/`tab`/`tabpanel`, compatibilidad
+con flechas izquierda/derecha, Inicio/Fin, activación mediante clic, y enlaces
+directos como `#r26-espacial`. En móvil la barra se desplaza horizontalmente.
+Las tablas densas de influencia, normalidad y significancia espacial se
+despliegan bajo demanda mediante `details/summary`. No se cambia ninguna
+prueba, resultado, agregación ni ajuste de hipótesis.
+
+No cambia las pruebas previas de asociaciones, ablación HHI o
+comparaciones históricas de arquitecturas.
 
 1. Magnitud: errores absolutos, mediana, P95 y máximo.
 2. Influencia: fracciones de SSE y exclusiones descriptivas sin reentrenamiento.
