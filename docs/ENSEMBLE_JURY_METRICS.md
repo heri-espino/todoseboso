@@ -136,3 +136,66 @@ espaciales y emparejadas sobre datos sintéticos solo de prueba.
 4. No se inventan métricas probabilísticas como cobertura
    de intervalos o AIC/BIC sin especificar distribuciones y
    protocolos apropiados.
+
+
+## Interpretación basada en el informe ya completado de 138 parcelas
+
+**Datos confirmados:** el usuario compartió la salida completa de
+tools/report_reference26_compact14_final.py --summary del 2026-10-19.
+El análisis numérico **sí existe**, aunque el archivo de agregados
+site/data/ensemble_evaluation.json todavía no se haya publicado.
+
+La sección «Qué significan los resultados» incorpora una **síntesis
+editorial de los valores realmente obtenidos**. Su panel de seis
+apartados es desplegable, minimalista, sin animaciones decorativas.
+Cuando se publica el JSON completo y verificado, el texto se vuelve a
+calcular desde los datos y responde a los selectores espaciales;
+si falta el JSON, siguen visibles solo las conclusiones respaldadas
+por los registros previamente compartidos (nunca cifras simuladas).
+
+Resultados centrales:
+
+| Métrica | Reference26 media | Compact14 | Ensamble |
+|---|---:|---:|---:|
+| RMSE (t/ha) | 0.468138 | 0.469673 | 0.467811 |
+| MAE (t/ha) | 0.333786 | 0.333044 | 0.332489 |
+| R² predictivo | 0.695292 | 0.693291 | 0.695717 |
+| L∞ (t/ha) | 2.139958 | 2.146351 | 2.141844 |
+| Shapiro–Wilk p | 1.401988e−7 | 1.644084e−7 | 1.306209e−7 |
+
+Ensamble: sesgo −0.000617 t/ha, asimetría +1.439436,
+curtosis excesiva +4.467670, mediana error absoluto 0.247911 t/ha,
+P95 0.779594 t/ha. Anderson–Darling también rechaza normalidad.
+La evidencia es de colas de error pronunciadas, sin invalidar el RMSE
+ni atribuir el comportamiento a una causa específica.
+
+La prueba auxiliar Koenker–Breusch–Pagan del ensamble da p=0.373155;
+Brown–Forsythe p=0.855512. No se detectó señal con estos
+contrastes; **no se demuestra homocedasticidad**.
+
+Para Moran I global sobre residuos firmados del ensamble:
+k=4: −0.051225/p=0.4150; k=8: −0.074302/p=0.0720;
+k=12: −0.060552/p=0.0670; k=24: −0.040814/p=0.0735.
+Después de Holm para toda la familia espacial, esas filas tienen
+p=1.0; **no hay evidencia bilateral al 5%, pero tampoco prueba de
+independencia geográfica**.
+
+La mezcla reduce error en 77/138 parcelas (55.7971%) frente a Reference26
+media. Wilcoxon exploratorio con Holm: 0.715473 para error absoluto
+y 0.759932 para cuadrático. Ninguna comparación permite afirmar
+superioridad estadística independiente después de que los pesos
+se eligieran con los mismos rendimientos. La búsqueda anterior
+mostró además una mejora sensible a una sola parcela.
+
+**Informe académico completo (GeoC):**
+results/peer_models/REFERENCE26_COMPACT14_STATISTICAL_INTERPRETATION_138_2026-10-19.md,
+rama experiment/nuria-champions-loocv.
+
+### Precisión numérica en el frontend
+
+Los p-valores menores que 0.00001 se expresan en notación científica;
+nunca se redondean a «0». Los demás indicadores muestran unidades
+y su interpretación, y se pueden buscar por nombre o familia.
+No se presenta un p no ajustado como prueba causal ni se convierte
+R² en «porcentaje de aciertos».
+
