@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "model_name": "Reference26 con corrección adaptativa por parcelas análogas",
+  "model_identifier": "Reference26_mean_plus_nested_analog_choice",
+  "evaluated_on": "138 genuine outer LOOCV heldouts",
+  "n_original_parcels": 197,
+  "n_labeled": 138,
+  "n_unknown": 59,
+  "n_outer_folds": 138,
+  "n_real_train_per_outer_fold": 137,
+  "n_inner_folds_per_outer": 4,
+  "outer_inner_native_reference26_fits": 552,
+  "metrics": {
+    "rmse_t_ha": 0.462892,
+    "mae_t_ha": 0.331956,
+    "bias_pred_minus_observed_t_ha": -0.005062,
+    "r2_predictive": 0.702083
+  },
+  "correction_selection": {
+    "selection_criterion": "Four-fold inner OOF MSE on 137 training labels; correction requires >=1% relative MSE gain",
+    "candidate_corrections": 5,
+    "fallback": "Reference26 mean, unchanged",
+    "selection_counts": [
+      {
+        "method": "robust26__k3__blend0.25__supported",
+        "outer_folds": 128
+      },
+      {
+        "method": "pca8__k3__blend0.25__supported",
+        "outer_folds": 5
+      },
+      {
+        "method": "Reference26_mean_unchanged",
+        "outer_folds": 5
+      }
+    ],
+    "dominant_correction": {
+      "features": 26,
+      "neighbors": 3,
+      "blend": 0.25,
+      "max_abs_correction_t_ha": 0.5,
+      "normalized_feature_space": "robust scaled 26 feature dimensions",
+      "neighbor_weight": "inverse-distance",
+      "support_gate": "Feature-distance support times neighbor yield agreement"
+    }
+  },
+  "interpretation": "Conditional nested LOOCV within a family of five variants already chosen post-hoc on these 138 known yields; cannot claim independent confirmation.",
+  "hidden_59_y_evaluated": false,
+  "hidden_59_corrected_y_published_on_page": false,
+  "source": {
+    "repository": "https://github.com/heri-espino/GeoC",
+    "branch": "experiment/reference26-top5-final59",
+    "protocol_document": "docs/REFERENCE26_TOP5_NESTED_LOOCV.md",
+    "date": "2026-10-19"
+  }
+}
