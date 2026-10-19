@@ -8,7 +8,7 @@
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./ensemble_metrics.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css">
 <script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script><script src="./parcel_core.js" defer></script><script src="./predictor.js" defer></script>
-<script src="./reference26_engine.js" defer></script><script src="./ensemble_metrics.js" defer></script>
+<script src="./reference26_engine.js" defer></script><script src="./ensemble_metrics.js" defer></script><script src="./ensemble_predictions59.js" defer></script>
 <script src="./predictions59.js" defer></script>
 <script src="./browser_inference.js" defer></script>
 </head>
@@ -340,6 +340,36 @@
         <tbody id="ensemble-paired-body"></tbody></table>
     </div>
     <p class="ensemble-note ensemble-disclaimer"><strong>Limitaciones.</strong> Ningún rendimiento real de las 59 parcelas ocultas se conoce. El R² ajustado no tiene grados de libertad efectivos bien definidos para esta receta y se informa como no aplicable. Las pruebas de normalidad, heterocedasticidad y dependencia espacial son diagnósticos, con posibles desviaciones de sus hipótesis de independencia. El RMSE del ensamble no constituye una validación independiente del procedimiento que seleccionó sus pesos.</p>
+  </div>
+</section>
+
+<section class="section ensemble-jury" id="estimaciones-finales">
+  <div class="shell" id="ensemble-predictions59">
+    <div class="section-heading"><div><p class="eyebrow">RESULTADOS DE LAS 59 PARCELAS SIN ETIQUETA</p>
+      <h2>Dos modelos y una estimación combinada</h2></div>
+      <p>Comparación de Reference26 reentrenado con imputación por media, Compact14 reentrenado con su receta original y el ensamble ponderado. Son estimaciones, no rendimientos observados.</p>
+    </div>
+    <p>El ensamble se calcula como <strong>0.704946 × Reference26 (media) + 0.295054 × Compact14</strong>.
+      Para publicarse, ambos modelos deben reproducir en Python las 59 estimaciones guardadas y superar la verificación de sus huellas digitales.</p>
+    <p id="ensemble-predictions59-status" role="status" aria-live="polite">Esperando la exportación final verificada de los dos modelos…</p>
+    <div class="ensemble-controls">
+      <label for="ensemble-predictions59-search">Buscar parcela por su identificador
+        <input id="ensemble-predictions59-search" type="search" placeholder="ID_POLIGONO">
+      </label>
+    </div>
+    <p id="ensemble-predictions59-count" aria-live="polite">Pendiente de generar las 59 predicciones nuevas.</p>
+    <div class="ensemble-table-wrap" role="region" tabindex="0" aria-label="Tres pronósticos de las 59 parcelas sin rendimiento conocido">
+      <table><thead><tr><th scope="col">Identificador</th>
+        <th scope="col">Reference26 con media (t/ha)</th>
+        <th scope="col">Compact14 (t/ha)</th>
+        <th scope="col">Ensamble sugerido (t/ha)</th></tr></thead>
+        <tbody id="ensemble-predictions59-body"></tbody></table>
+    </div>
+    <p class="ensemble-note ensemble-disclaimer"><strong>Advertencia:</strong>
+      las 59 cosechas verdaderas no se conocen; no hay RMSE real en estas parcelas.
+      La selección de los pesos del ensamble se basó previamente en las 138 cosechas
+      observadas y su ventaja predictiva aún no cuenta con confirmación independiente.
+      Este listado no reemplaza el motor interactivo antiguo de Reference26 con mediana.</p>
   </div>
 </section>
 </main><footer class="model-footer"><div class="shell"><strong>GeoCebada · AgroCebada FIRA 2026</strong><span>Regresión local con mezcla geológica · Código: Reference26 · Investigación retrospectiva del ciclo 2025</span><a href="#inicio">Volver al inicio ↑</a></div></footer>
