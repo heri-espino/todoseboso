@@ -51,6 +51,28 @@
         s.some((r,i) => r.k !== allowed[i] || !finite(r.I) ||
           !finite(r.p_two_sided) || r.p_two_sided < 0 || r.p_two_sided > 1))
       throw Error("Moran I debe corresponder a los cuatro grafos verificados.");
+    // Each optional spatial series, if published, must belong to the four
+    // verified neighborhoods. Fail closed rather than graph incomplete data.
+    for (const field of ["absolute_error_moran","squared_error_moran"]) {
+      const rows=data.spatial[field];
+      if (rows !== null && (!Array.isArray(rows) || rows.length !== allowed.length ||
+          rows.some((r,i)=>r.k!==allowed[i] || ![r.I,r.p_two_sided,r.p_holm_all,r.p_fdr_bh_all].every(finite) ||
+            [r.p_two_sided,r.p_holm_all,r.p_fdr_bh_all].some(p=>p<0||p>1))))
+        throw Error("Moran de pérdidas no coincide con el reporte espacial.");
+    }
+    const geary=data.spatial.geary_c, variogram=data.spatial.semivariogram;
+    if (geary !== null && (!Array.isArray(geary) || geary.length!==12 ||
+        geary.some((r,i)=>r.k!==allowed[i%4] ||
+          r.spatial_variable!==["signed_residual","absolute_error","squared_error"][Math.floor(i/4)] ||
+          ![r.C,r.p_two_sided,r.p_holm_all,r.p_fdr_bh_all].every(finite) ||
+          [r.p_two_sided,r.p_holm_all,r.p_fdr_bh_all].some(p=>p<0||p>1))))
+      throw Error("Geary C no coincide con la familia de pruebas verificada.");
+    if (variogram !== null && (!Array.isArray(variogram) || variogram.length<2 ||
+        variogram.some((r,i)=>r.bin!==i+1 || !Number.isInteger(r.pairs) || r.pairs<=0 ||
+          ![r.distance_km,r.semivariance_t2_ha2,r.distance_min_km,r.distance_max_km].every(finite) ||
+          r.distance_km<0 || r.semivariance_t2_ha2<0 || r.distance_max_km<r.distance_min_km) ||
+        variogram.reduce((n,r)=>n+r.pairs,0)!==138*137/2))
+      throw Error("Semivariograma no coincide con los pares únicos de parcelas.");
     return data;
   }
 
@@ -189,7 +211,41 @@
     }
     chart.append(create("p","Moran I · escala "+fmt(low,3)+" a "+fmt(high,3)+
       " (centrada en los resultados).","r26-axis"));
+    renderGeary(data);
     updateSpatial(data);
+  }
+  function renderGeary(data){
+    const variable=$("r26-spatial-target").value;
+    const rows=Array.isArray(data.spatial.geary_c)?
+      data.spatial.geary_c.filter(r=>r.spatial_variable===variable):null;
+    const chart=$("r26-geary-chart");
+    chart.replaceChildren();
+    if(!rows || !rows.length){
+      chart.append(create("p","Geary C todavía no disponible para esta definición de error.","r26-note"));
+      return;
+    }
+    const values=rows.map(r=>r.C);
+    const span=Math.max(Math.max(...values,1)-Math.min(...values,1),.06);
+    const lower=Math.floor((Math.min(...values,1)-.15*span)*20)/20;
+    const upper=Math.ceil((Math.max(...values,1)+.15*span)*20)/20;
+    const scale=x=>100*(x-lower)/(upper-lower);
+    for(const row of rows){
+      const group=create("div",undefined,"r26-moran-row");
+      group.append(create("span","k = "+row.k));
+      const track=create("div",undefined,"r26-moran-track");
+      track.setAttribute("role","img");
+      track.setAttribute("aria-label","k "+row.k+": Geary C "+fmt(row.C)+
+        "; p bilateral "+fmt(row.p_two_sided)+"; p Holm "+fmt(row.p_holm_all));
+      const one=create("span",undefined,"r26-zero");
+      one.style.left=scale(1).toFixed(2)+"%";
+      const dot=create("span",undefined,"r26-moran-dot r26-geary-dot");
+      dot.style.left=scale(row.C).toFixed(2)+"%";
+      track.append(one,dot);
+      group.append(track,create("strong",fmt(row.C)));
+      chart.append(group);
+    }
+    chart.append(create("p","Geary C · escala "+fmt(lower,2)+" a "+fmt(upper,2)+
+      "; referencia C = 1.","r26-axis"));
   }
   function updateSpatial(data){
     const chosen=Number($("r26-moran-k").value);
@@ -213,31 +269,60 @@
       ["p bilateral sin ajustar",fmt(row.p_two_sided,6)],
       ["p Holm",finite(row.p_holm_all)?fmt(row.p_holm_all):"No publicado en el extracto disponible"],
       ["p FDR-BH",finite(row.p_fdr_bh_all)?fmt(row.p_fdr_bh_all):"No publicado en el extracto disponible"],
-      ["Geary C",g?fmt(g.C):"No publicado en el extracto disponible"]
+      ["Geary C",g?fmt(g.C):"No disponible"],
+      ["Geary p bilateral",g?fmt(g.p_two_sided):"No disponible"],
+      ["Geary p Holm",g?fmt(g.p_holm_all):"No disponible"],
+      ["Geary p FDR-BH",g?fmt(g.p_fdr_bh_all):"No disponible"]
     ];
     for(const [label,value] of content){
       const tr=create("tr");
       tr.append(create("th",label),create("td",value));
       tbody.append(tr);
     }
-    const p=finite(row.p_holm_all)?row.p_holm_all:row.p_two_sided;
+    const pm=finite(row.p_holm_all)?row.p_holm_all:row.p_two_sided;
+    const pg=g?(finite(g.p_holm_all)?g.p_holm_all:g.p_two_sided):null;
     $("r26-moran-reading").textContent=
-      "Para "+kind.label+" con k = "+chosen+": Moran I = "+fmt(row.I)+
-      ", p bilateral sin ajustar = "+fmt(row.p_two_sided)+
-      (finite(row.p_holm_all)?", p Holm = "+fmt(row.p_holm_all):" (ajuste Holm pendiente)")+
-      ". "+(p<.05?"Existe una señal exploratoria para este grafo.":
-      "No se detectó autocorrelación al 5% con este contraste.")+
-      " No se demuestra independencia geográfica ni se garantizan resultados para municipios no observados.";
+      "Para "+kind.label+" y k = "+chosen+": Moran I = "+fmt(row.I)+
+      " (p = "+fmt(row.p_two_sided)+", Holm = "+fmt(pm)+")"+
+      (g?"; Geary C = "+fmt(g.C)+" (p = "+fmt(g.p_two_sided)+
+        ", Holm = "+fmt(pg)+")": "; Geary no disponible")+
+      ". "+(pm<.05 || (pg!==null && pg<.05)?
+        "Existe una señal estadística exploratoria tras ajuste en al menos un contraste.":
+        "Ninguno de los dos contrastes rechaza tras Holm al 5% con este vecindario.")+
+      " Esto no demuestra independencia espacial ni garantiza extrapolación.";
   }
   function renderSemivariogram(data){
     const table=$("r26-variogram-body");
     table.replaceChildren();
     const rows=data.spatial.semivariogram;
     const status=$("r26-variogram-status");
+    const chart=$("r26-variogram-chart");
+    chart.replaceChildren();
     if(!Array.isArray(rows)||!rows.length){
-      status.textContent="Semivariograma agregado no disponible. Debe importarse del reporte privado sin publicar centroides ni errores por parcela.";
+      status.textContent="Semivariograma no disponible; no se generan datos inventados.";
+      chart.append(create("p","No hay puntos de semivarianza publicables.","r26-note"));
       return;
     }
+    const maxDistance=Math.max(...rows.map(r=>r.distance_km));
+    const maxVariance=Math.max(...rows.map(r=>r.semivariance_t2_ha2));
+    const xMax=Math.ceil(maxDistance*1.12/5)*5;
+    const yMax=Math.ceil(maxVariance*1.12*20)/20;
+    const plot=create("div",undefined,"r26-variogram-plot");
+    const guide=create("span",undefined,"r26-variogram-guide");
+    plot.append(guide);
+    for(const r of rows){
+      const dot=create("span",undefined,"r26-variogram-dot");
+      dot.style.left=(100*r.distance_km/xMax).toFixed(3)+"%";
+      dot.style.bottom=(100*r.semivariance_t2_ha2/yMax).toFixed(3)+"%";
+      dot.title="Intervalo "+r.bin+": mediana "+fmt(r.distance_km,2)+
+        " km; semivarianza "+fmt(r.semivariance_t2_ha2,6)+
+        " (t/ha)²; "+r.pairs+" pares";
+      dot.setAttribute("role","img");dot.setAttribute("aria-label",dot.title);
+      plot.append(dot);
+    }
+    chart.append(create("div","Semivarianza residual (t/ha)² · 0 a "+fmt(yMax,2),"r26-axis"));
+    chart.append(plot);
+    chart.append(create("div","Distancia mediana (km) · 0 a "+fmt(xMax,0),"r26-axis r26-variogram-x"));
     for(const row of rows){
       const tr=create("tr");
       for(const value of [fmt(row.distance_km,3)+" km",
@@ -247,7 +332,8 @@
       }
       table.append(tr);
     }
-    status.textContent="Semivarianza empírica por distancia; los pares de parcelas no son observaciones independientes. No se ajustó un modelo de kriging.";
+    status.textContent="Seis intervalos reales, "+rows.reduce((n,r)=>n+r.pairs,0).toLocaleString("es-MX")+
+      " pares únicos; los pares comparten parcelas y no son observaciones independientes. No se ajustó un modelo de kriging.";
   }
   function renderBootstrap(data){
     const bootstrap=data.spatial_bootstrap;
