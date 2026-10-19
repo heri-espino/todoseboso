@@ -55,7 +55,14 @@
       "p95_ae": 0.782014,
       "wape": 8.394137,
       "pearson": 0.838282,
-      "spearman": 0.77581
+      "spearman": 0.77581,
+      "error_sd": 0.4624,
+      "max_overprediction": 2.115301,
+      "max_underprediction": 0.839128,
+      "explained_variance": 0.702717,
+      "nrmse_mean_pct": 11.690915,
+      "nrmse_sd_pct": 54.525847,
+      "mae_skill_mean": 0.556678
     },
     {
       "id": "NestedSelection",
@@ -77,7 +84,14 @@
       "p95_ae": 0.782014,
       "wape": 8.392565,
       "pearson": 0.837927,
-      "spearman": 0.77428
+      "spearman": 0.77428,
+      "error_sd": 0.462864,
+      "max_overprediction": 2.119565,
+      "max_underprediction": 0.839128,
+      "explained_variance": 0.702119,
+      "nrmse_mean_pct": 11.702902,
+      "nrmse_sd_pct": 54.581753,
+      "mae_skill_mean": 0.556761
     },
     {
       "id": "Reference26_mean",
@@ -99,7 +113,14 @@
       "p95_ae": 0.779618,
       "wape": 8.438822,
       "pearson": 0.833884,
-      "spearman": 0.766091
+      "spearman": 0.766091,
+      "error_sd": 0.468136,
+      "max_overprediction": 2.139958,
+      "max_underprediction": 0.866301,
+      "explained_variance": 0.695295,
+      "nrmse_mean_pct": 11.835531,
+      "nrmse_sd_pct": 55.200329,
+      "mae_skill_mean": 0.554318
     }
   ],
   "moran": [
