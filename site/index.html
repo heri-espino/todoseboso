@@ -332,7 +332,7 @@
       <div>
         <h3 id="r26a-selection-title">La elección también se valida</h3>
         <p>En cada una de las <strong>138 exclusiones externas</strong>, se aparta una parcela real. Sólo con las otras 137 cosechas se hacen cuatro particiones internas: allí se evalúan cinco formas de corrección y la posibilidad de conservar la predicción original.</p>
-        <p>Se elige la opción con menor MSE interno, siempre que una corrección mejore el MSE original al menos <strong>1 %</strong>. La receta elegida predice después la parcela externa sin utilizar su rendimiento. Así se construyen las 138 predicciones utilizadas para calcular las métricas superiores.</p>
+        <p>Se realizan <strong>552 ajustes internos de Reference26</strong> a lo largo de los 138 folds externos. Se elige la opción con menor MSE interno, siempre que una corrección mejore el MSE original al menos <strong>1 %</strong>. La receta elegida predice después la parcela externa sin utilizar su rendimiento. Así se construyen las 138 predicciones utilizadas para calcular las métricas superiores.</p>
       </div>
       <figure class="r26a-choices" aria-labelledby="r26a-choices-title">
         <h4 id="r26a-choices-title">Qué decidió la selección interna · 138 folds</h4>
@@ -348,6 +348,10 @@
 
     <div class="r26a-more">
       <h3>Detalle de las métricas y del alcance</h3>
+      <details class="r26a-detail">
+        <summary>Fórmula del promedio local y del factor de confianza</summary>
+        <p>Para las tres parcelas elegidas, la media análoga pondera cada rendimiento observado con el inverso de su distancia: <strong>wⱼ ∝ 1/max(dⱼ, 10⁻⁵)</strong>, normalizando los tres pesos para que sumen uno. Las distancias se calculan sobre las 26 variables escaladas robustamente. El factor de confianza es <strong>g(x) = exp[−½(dₘᵢₙ/s)²] / [1 + (σᵥₑc/σₑₙₜ)²]</strong>, donde <strong>s</strong> es la distancia mediana al vecino más próximo entre parcelas de entrenamiento, <strong>σᵥₑc</strong> es la dispersión ponderada de rendimientos de los vecinos y <strong>σₑₙₜ</strong> es la desviación estándar del rendimiento de entrenamiento. Así una consulta poco representada o con vecinos discordantes recibe una corrección menor.</p>
+      </details>
       <details class="r26a-detail">
         <summary>Definiciones estadísticas de las cuatro métricas</summary>
         <p>Con residuos firmados <strong>eᵢ = predicciónᵢ − cosechaᵢ</strong> y 138 predicciones excluidas, RMSE = raíz del promedio de eᵢ²; MAE = promedio de |eᵢ|; sesgo = promedio de eᵢ; R² = 1 − suma(eᵢ²) / suma[(cosechaᵢ − media observada)²]. RMSE, MAE y sesgo se expresan en toneladas por hectárea; R² no tiene unidades. No se ha calculado aquí un R² ajustado, intervalo de confianza ni valor p para este nuevo selector.</p>
