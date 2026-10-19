@@ -308,43 +308,50 @@
 <div class="source-index"><strong>Documentación técnica original</strong><a href="https://github.com/heri-espino/todoseboso/blob/main/documentation/models/Reference26/README.md" target="_blank" rel="noopener noreferrer">Fórmula, 26 variables y ajuste final ↗</a><a href="https://github.com/heri-espino/todoseboso/blob/main/results/reference26_component_evidence/v1/README.md" target="_blank" rel="noopener noreferrer">Pruebas de cada componente ↗</a><a href="https://github.com/heri-espino/todoseboso/blob/main/results/four_final_checks/v1/README.md" target="_blank" rel="noopener noreferrer">Soporte, sensibilidad e intervalos ↗</a></div></div></section>
 <section class="section reference26-residuals" id="estadisticas-finales" aria-labelledby="r26-residual-title">
 <div class="shell" id="reference26-residuals">
-  <div class="section-heading">
-    <div><p class="eyebrow">CAPÍTULO INDEPENDIENTE · NUEVAS PRUEBAS · 2026</p><h2 id="r26-residual-title">Análisis de residuos <em>de Reference26.</em></h2></div>
-    <p>Este capítulo reúne <strong>exclusivamente los diagnósticos nuevos de los 138 errores LOOCV</strong>. Se conserva intacta la sección anterior de <a href="#pruebas">pruebas de asociaciones y arquitectura</a>: son análisis y preguntas diferentes.</p>
+  <div class="r26-section-head">
+    <p class="eyebrow">REFERENCE26 · DIAGNÓSTICO DE RESIDUOS</p>
+    <h2 id="r26-residual-title">Una pregunta. <em>Un análisis a la vez.</em></h2>
+    <p class="r26-introduction">Explora los resultados nuevos de los 138 errores LOOCV. Elige qué quieres estudiar; las pruebas estadísticas históricas permanecen en <a href="#pruebas">su propia sección</a>.</p>
+    <details class="r26-method-detail"><summary>¿Cómo se obtuvieron estos residuos?</summary><p>Cada una de las 138 parcelas se excluyó una vez: Reference26 se ajustó con las otras 137 y predijo la parcela excluida. La imputación se hizo por media dentro del entrenamiento; el residuo es la predicción menos el rendimiento observado. No se conocen los 59 rendimientos reservados y este estudio no mide su error.</p></details>
   </div>
-  <div class="r26-chapter-intro">
-    <p><strong>Qué se evaluó.</strong> Para cada una de las 138 parcelas etiquetadas, Reference26 se ajustó con las otras 137 y predijo la excluida. Imputación por media calculada dentro del entrenamiento; definición del residuo: predicción menos cosecha observada.</p>
-    <p><strong>Qué no se evaluó.</strong> No se midió el error real de las 59 parcelas ocultas ni se hizo un experimento de extrapolación hacia municipios enteros no vistos.</p>
-  </div>
-  <nav class="r26-local-nav" aria-label="Apartados del nuevo análisis de residuos">
-    <a href="#r26-magnitud">01 Magnitud</a><a href="#r26-influencia">02 Influencia</a><a href="#r26-supuestos">03 Supuestos</a><a href="#r26-espacial">04 Moran y Geary</a><a href="#r26-semivariograma">05 Semivariograma</a><a href="#r26-bootstrap">06 Bootstrap</a><a href="#r26-alcance">07 Conclusiones</a>
-  </nav>
-  <p id="r26-residual-status" class="r26-status" role="status" aria-live="polite">Cargando las estadísticas agregadas verificadas…</p>
-  <div class="r26-kpis" id="r26-summary-cards" aria-label="Métricas predictivas del nuevo estudio LOOCV"></div>
+  <div class="r26-explorer" aria-label="Explorador de pruebas estadísticas de residuos">
+    <div class="r26-explorer-heading"><span>EXPLORAR LOS RESULTADOS</span><span>Selecciona una categoría</span></div>
+    <div class="r26-local-nav" role="tablist" aria-label="Elegir un análisis de residuos">
+      <button type="button" role="tab" id="r26-tab-magnitud" aria-controls="r26-magnitud" aria-selected="true" tabindex="0"><span class="r26-tab-num">01</span>Magnitud del error</button>
+      <button type="button" role="tab" id="r26-tab-influencia" aria-controls="r26-influencia" aria-selected="false" tabindex="-1"><span class="r26-tab-num">02</span>Observaciones influyentes</button>
+      <button type="button" role="tab" id="r26-tab-supuestos" aria-controls="r26-supuestos" aria-selected="false" tabindex="-1"><span class="r26-tab-num">03</span>Normalidad y varianza</button>
+      <button type="button" role="tab" id="r26-tab-espacial" aria-controls="r26-espacial" aria-selected="false" tabindex="-1"><span class="r26-tab-num">04</span>Moran y Geary</button>
+      <button type="button" role="tab" id="r26-tab-semivariograma" aria-controls="r26-semivariograma" aria-selected="false" tabindex="-1"><span class="r26-tab-num">05</span>Semivariograma</button>
+      <button type="button" role="tab" id="r26-tab-bootstrap" aria-controls="r26-bootstrap" aria-selected="false" tabindex="-1"><span class="r26-tab-num">06</span>Bootstrap espacial</button>
+      <button type="button" role="tab" id="r26-tab-alcance" aria-controls="r26-alcance" aria-selected="false" tabindex="-1"><span class="r26-tab-num">07</span>Interpretación</button>
+    </div>
+    <p id="r26-residual-status" class="r26-status" role="status" aria-live="polite">Verificando las estadísticas agregadas…</p>
   <div class="r26-panel-grid">
-    <article class="r26-panel" id="r26-magnitud" aria-labelledby="r26-magnitud-title">
+    <article class="r26-panel" id="r26-magnitud" role="tabpanel" aria-labelledby="r26-tab-magnitud" aria-labelledby="r26-magnitud-title">
       <p class="r26-eyebrow">01 · DISTRIBUCIÓN DEL ERROR</p><h3 id="r26-magnitud-title">¿Qué tan grandes son los errores?</h3>
       <p>La mediana y el percentil 95 describen el error absoluto. La escala se concentra en 0–1 t/ha; el error extremo aparece por separado para no comprimir el resto de las barras.</p>
+      <div class="r26-kpis" id="r26-summary-cards" aria-label="Desempeño predictivo LOOCV"></div>
       <div id="r26-error-scale" class="r26-chart" aria-label="Mediana y percentil 95 de errores absolutos"></div>
       <p class="r26-axis">Valores en t/ha; barras con origen en cero y límite de visualización en 1 t/ha.</p>
       <div class="r26-maximum"><span>Mayor error absoluto</span><strong id="r26-maximum-error">—</strong></div>
       <p class="r26-note">Estos cuantiles resumen exclusiones LOOCV. No son límites de predicción para las 59 parcelas desconocidas.</p>
     </article>
-    <article class="r26-panel" id="r26-influencia" aria-labelledby="r26-influencia-title">
+    <article class="r26-panel" id="r26-influencia" role="tabpanel" aria-labelledby="r26-tab-influencia" hidden aria-labelledby="r26-influencia-title">
       <p class="r26-eyebrow">02 · SENSIBILIDAD A OBSERVACIONES</p><h3 id="r26-influencia-title">¿Cuánto pesan las parcelas difíciles?</h3>
       <p id="r26-influence-lead">Leyendo la concentración de la suma de errores cuadrados…</p>
       <div class="r26-influence-bar" id="r26-influence-bar" role="group" aria-label="Concentración del error cuadrático total"></div>
       <div class="r26-influence-legend"><span>Mayor error</span><span>Segundo mayor</span><span>Otras 136</span></div>
-      <div class="r26-tablescroll"><table><thead><tr><th scope="col">Evaluación con predicciones guardadas</th><th scope="col">RMSE (t/ha)</th></tr></thead><tbody id="r26-deletion-body"></tbody></table></div>
+      <details class="r26-detail"><summary>Ver el RMSE al excluir los mayores errores</summary><div class="r26-tablescroll"><table><thead><tr><th scope="col">Evaluación con predicciones guardadas</th><th scope="col">RMSE (t/ha)</th></tr></thead><tbody id="r26-deletion-body"></tbody></table></div></details>
       <p class="r26-note">Eliminar los errores extremos <strong>después de calcularlos</strong> no reentrena Reference26 y no equivale a un segundo LOOCV. Tampoco demuestra que las etiquetas sean incorrectas.</p>
     </article>
-    <article class="r26-panel r26-panel-full" id="r26-supuestos" aria-labelledby="r26-supuestos-title">
+    <article class="r26-panel r26-panel-full" id="r26-supuestos" role="tabpanel" aria-labelledby="r26-tab-supuestos" hidden aria-labelledby="r26-supuestos-title">
       <p class="r26-eyebrow">03 · PRUEBAS DISTRIBUCIONALES NUEVAS</p><h3 id="r26-supuestos-title">Normalidad y heterocedasticidad</h3>
       <p>Contrastamos la forma marginal de los residuos y la estabilidad de su dispersión frente a las predicciones. Estas pruebas <strong>no son</strong> las regresiones de asociaciones de la sección anterior.</p>
-      <div class="r26-tablescroll"><table><thead><tr><th scope="col">Prueba / estadístico</th><th scope="col">Resultado</th><th scope="col">Interpretación</th></tr></thead><tbody id="r26-tests-body"></tbody></table></div>
+      
       <div class="r26-reading-pair"><p class="r26-note"><strong>Normalidad:</strong> Shapiro–Wilk, D’Agostino–Pearson y Anderson–Darling rechazan la referencia normal con las especificaciones reportadas.</p><p class="r26-note"><strong>Varianza:</strong> Koenker–BP y Brown–Forsythe no rechazan sus hipótesis nulas; esto no prueba homocedasticidad. Interpretación exploratoria por solapamiento entre folds LOOCV.</p></div>
+      <details class="r26-detail"><summary>Desplegar las siete pruebas y sus resultados</summary><div class="r26-tablescroll"><table><thead><tr><th scope="col">Prueba / estadístico</th><th scope="col">Resultado</th><th scope="col">Interpretación</th></tr></thead><tbody id="r26-tests-body"></tbody></table></div></details>
     </article>
-    <article class="r26-panel r26-panel-full" id="r26-espacial" aria-labelledby="r26-espacial-title">
+    <article class="r26-panel r26-panel-full" id="r26-espacial" role="tabpanel" aria-labelledby="r26-tab-espacial" hidden aria-labelledby="r26-espacial-title">
       <p class="r26-eyebrow">04 · PRUEBAS ESPACIALES NUEVAS</p><h3 id="r26-espacial-title">Moran I y Geary C: ¿están agrupados los errores?</h3>
       <p>Se analizaron residuos firmados, errores absolutos y errores cuadráticos con grafos geográficos kNN (distancia Haversine, pesos 1/k, excluyendo el propio punto), con <strong>1,999 permutaciones por contraste</strong>. Se conservan las correcciones de Holm y FDR-BH calculadas sobre la familia completa de pruebas del reporte original.</p>
       <div class="r26-controls">
@@ -355,11 +362,11 @@
         <div><h4>Moran I por tamaño de vecindario</h4><p class="r26-axis">I = 0 como referencia visual; el eje se ajusta al rango observado.</p><div class="r26-chart" id="r26-moran-chart" aria-label="Moran I para los cuatro vecindarios"></div></div>
         <div><h4>Geary C por tamaño de vecindario</h4><p class="r26-axis">C = 1 como referencia de permutación aproximada; el eje se ajusta a los datos.</p><div class="r26-chart" id="r26-geary-chart" aria-label="Geary C para los cuatro vecindarios"></div></div>
       </div>
-      <div class="r26-tablescroll"><table class="r26-compact-table"><caption>Estadísticos y pruebas del vecindario seleccionado</caption><tbody id="r26-moran-body"></tbody></table></div>
+      <details class="r26-detail"><summary>Ver la tabla de estadísticos, valores p y correcciones</summary><div class="r26-tablescroll"><table class="r26-compact-table"><caption>Estadísticos y pruebas del vecindario seleccionado</caption><tbody id="r26-moran-body"></tbody></table></div></details>
       <p id="r26-moran-reading" class="r26-note" aria-live="polite"></p>
       <p class="r26-note"><strong>Ejemplo de lectura:</strong> Geary C para residuos firmados con k = 12 tiene p sin ajustar de 0,0065, pero p Holm de 0,468. No se debe anunciar como resultado significativo después de la corrección.</p>
     </article>
-    <article class="r26-panel r26-panel-full" id="r26-semivariograma" aria-labelledby="r26-semivariograma-title">
+    <article class="r26-panel r26-panel-full" id="r26-semivariograma" role="tabpanel" aria-labelledby="r26-tab-semivariograma" hidden aria-labelledby="r26-semivariograma-title">
       <p class="r26-eyebrow">05 · ESTRUCTURA POR DISTANCIA</p><h3 id="r26-semivariograma-title">Semivariograma empírico de residuos</h3>
       <p>Cada punto representa un intervalo de distancias entre dos parcelas, con su semivarianza media de residuos. El eje horizontal utiliza la distancia mediana real del intervalo; el vertical, la semivarianza en (t/ha)². No se suavizaron ni ajustaron los puntos.</p>
       <div id="r26-variogram-chart" class="r26-variogram-chart" role="group" aria-label="Semivariograma agregado por distancia"></div>
@@ -369,7 +376,7 @@
       </details>
       <p class="r26-note">Los 9.453 pares no son independientes: una parcela participa en muchos pares. Gráfico descriptivo, no interpolación por kriging ni prueba de ausencia de dependencia espacial.</p>
     </article>
-    <article class="r26-panel r26-panel-full" id="r26-bootstrap" aria-labelledby="r26-bootstrap-title">
+    <article class="r26-panel r26-panel-full" id="r26-bootstrap" role="tabpanel" aria-labelledby="r26-tab-bootstrap" hidden aria-labelledby="r26-bootstrap-title">
       <p class="r26-eyebrow">06 · ROBUSTEZ ESPACIAL</p><h3 id="r26-bootstrap-title">Bootstrap por municipios y bloques geográficos</h3>
       <p>Se remuestrearon grupos espaciales completos usando los 138 errores LOOCV ya guardados. Los rangos percentiles de RMSE son <strong>exploratorios</strong>; no son intervalos de confianza independientes ni bandas para predecir los 59 rendimientos desconocidos.</p>
       <div class="r26-chart" id="r26-bootstrap-chart" aria-label="Rangos de RMSE para dos particiones con suficientes grupos"></div>
@@ -377,7 +384,7 @@
       <details class="r26-detail"><summary>Mostrar los siete esquemas y las particiones descartadas</summary><div class="r26-tablescroll"><table><thead><tr><th scope="col">Partición</th><th scope="col">Grupos</th><th scope="col">Estado</th><th scope="col">Rango RMSE</th></tr></thead><tbody id="r26-block-body"></tbody></table></div></details>
     </article>
   </div>
-  <div class="r26-evidence" id="r26-alcance">
+  <div class="r26-evidence" id="r26-alcance" role="tabpanel" aria-labelledby="r26-tab-alcance" hidden>
     <p class="r26-eyebrow">07 · INTERPRETACIÓN Y REPRODUCIBILIDAD</p><h3>¿Qué conclusiones permiten estos diagnósticos?</h3>
     <p>La distribución marginal de residuos se aparta de la normal. Las pruebas de heterocedasticidad no detectaron evidencia con sus especificaciones, y las señales espaciales no sobreviven la corrección de Holm sobre la familia analizada. <strong>No rechazar no equivale a demostrar independencia espacial ni varianza constante.</strong> Los errores más grandes concentran una fracción apreciable de la pérdida cuadrática.</p>
     <p>Las pruebas p son exploratorias: los ajustes LOOCV comparten gran parte de sus datos y la arquitectura fue estudiada con las mismas parcelas. No se infieren efectos causales, capacidad de extrapolar municipios nuevos ni cobertura probabilística para las 59 parcelas sin rendimiento.</p>
@@ -385,6 +392,7 @@
     <p id="r26-unavailable" class="r26-note">No se publican histogramas o Q–Q individuales sin los respectivos agregados comprobables.</p>
     <p><a href="https://github.com/heri-espino/GeoC/blob/experiment/nuria-champions-loocv/results/peer_models/REFERENCE26_COMPACT14_STATISTICAL_INTERPRETATION_138_2026-10-19.md" target="_blank" rel="noopener noreferrer">Valores y pruebas originales (GeoC) ↗</a> · <a href="https://github.com/heri-espino/GeoC/blob/analysis/reference26-inferential-sensitivity-20261019/docs/REFERENCE26_INFERENTIAL_SENSITIVITY.md" target="_blank" rel="noopener noreferrer">Método del bootstrap e influencia ↗</a></p>
   </div>
+</div>
 </div>
 </section>
 
