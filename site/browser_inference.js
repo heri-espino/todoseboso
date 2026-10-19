@@ -14,7 +14,16 @@
     }catch(error){
       window.GeoCebadaPredictions.unavailable(error.message);
       window.GeoCebadaEnsemble.rejectReference(error.message);
-      console.error("Estimaciones archivadas no disponibles:",error);
+      // A missing optional frozen-runtime JSON must never hide the current
+      // corrected-model evaluation. Offer a working in-page destination.
+      const status=document.getElementById("pred59-status");
+      if(status){
+        const link=document.createElement("a");
+        link.href="#reference26-analog-cv";
+        link.textContent=" Ver el modelo corregido y sus métricas LOOCV.";
+        status.append(link);
+      }
+      console.warn("Archivo opcional de inferencia no disponible:",error);
     }
   }
   initialize();
