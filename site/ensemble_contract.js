@@ -20,7 +20,8 @@
        !SHA.test(sources.Compact14?.artifact_sha256||"") ||
        sources.Reference26.artifact_sha256===sources.Compact14.artifact_sha256)
       error("Se requieren los hashes SHA-256 de los dos modelos entrenados.");
-    const archived=reference.hashes?.["final_train138.joblib"];
+    const archived=reference.artifact_sha256 ||
+      reference.hashes?.[reference.model_artifact_filename || "final_train138.joblib"];
     if(!archived || sources.Reference26.artifact_sha256!==archived)
       error("La versión de Reference26 no coincide con la exportación activa del navegador.");
     const blend=payload.ensemble;
