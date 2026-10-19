@@ -1,262 +1,275 @@
-/* The 59 study-parcel predictions are not invented examples.
-   This gallery is populated only AFTER the exact Reference26 JS runtime has
-   passed its independent 59/59 Python numerical parity audit.
-   All entries have unknown observed yield.
-*/
+/* 59 REAL final candidate yields: corrected agrospatial ensemble, never legacy median.
+ * Input is an exact published GeoC CSV, independent of unavailable old JS runtime.
+ * No observed yield for these 59 parcels; the table never suggests otherwise. */
 "use strict";
 (() => {
-  const $ = (q) => document.querySelector(q);
-  const make = (tag, className, value) => {
+  const $ = selector => document.querySelector(selector);
+  const make = (tag, className="", content) => {
     const e = document.createElement(tag);
-    if (className) e.className = className;
-    if (value !== undefined) e.textContent = String(value);
+    if (className) e.className=className;
+    if (content !== undefined) e.textContent=String(content);
     return e;
   };
-  const f = (value, digits = 3) => Number(value).toFixed(digits);
-  let all = [];
-  let chosen = null;
-  let geography = [];
-  const root = $("#pred59-data");
-  const status = $("#pred59-status");
+  const fmt = (number,digits=3) => Number(number).toLocaleString("es-MX",{
+    minimumFractionDigits:digits,maximumFractionDigits:digits
+  });
+  let rows59=[],selectedId="",places=new Map();
+  const name = "Modelo de expertos agroespaciales con corrección por parcelas análogas";
+  const status = $("#pred59-status"), root=$("#pred59-data");
 
-  function prepare(runtime) {
-    if (runtime?.model !== "Reference26" || runtime.existing_59?.length !== 59)
-      throw Error("Las 59 parcelas deben provenir de Reference26 entrenado.");
-    const ids = new Set();
-    const data = runtime.existing_59.map((entry) => {
-      if (typeof entry.id !== "string" || !entry.id.trim() || ids.has(entry.id))
-        throw Error("Identificador de parcela ausente o repetido.");
-      ids.add(entry.id);
-      if (typeof entry.state !== "string" || !entry.state.trim() ||
-          typeof entry.municipality !== "string" || !entry.municipality.trim())
-        throw Error("Faltan las entidades geográficas originales.");
-      const prediction = window.Reference26Browser.run(runtime,entry.x,entry.distances);
-      if (!Number.isFinite(entry.expected) ||
-          Math.abs(prediction.predicted_t_ha-entry.expected) > 1e-7)
-        throw Error("Una predicción difiere del resultado original de Python.");
-      return {
-        id:entry.id, state:entry.state, municipality:entry.municipality,
-        estimate:prediction.predicted_t_ha,
-        r3:prediction.has_r3_support,
-        climate:prediction.climate, expert:prediction.expert,
-        localWeight:prediction.local_weight, geoGroup:prediction.geology_group,
-        residual:prediction.residual_adjustment, x:entry.x
-      };
+  function prepare(entries,metadata) {
+    if (!Array.isArray(entries) || entries.length!==59 ||
+        metadata?.schema_version!==1 ||
+        metadata?.final_fit_selected!=="robust26_3_neighbors_supported_0p25")
+      throw Error("El archivo no representa las 59 predicciones finales verificadas.");
+    const ids=new Set();
+    const rows=entries.map(item=>{
+      const id=String(item.id||"");
+      const estimate=Number(item.estimate);
+      if(!/^AGC_\d+$/.test(id)||ids.has(id)||!Number.isFinite(estimate)||
+         estimate<=0||estimate>25)
+        throw Error("Predicción o ID duplicado, incompleto o inválido.");
+      ids.add(id);
+      return {id,estimate,state:"Sin estado publicado",municipality:""};
     });
-    const ordered=[...data].sort((a,b)=>a.estimate-b.estimate || a.id.localeCompare(b.id));
-    const mean=data.reduce((sum,x)=>sum+x.estimate,0)/59;
-    if (!Number.isFinite(runtime.aggregate_parity?.mean) ||
-        Math.abs(mean-runtime.aggregate_parity.mean)>1e-7)
-      throw Error("La media de las 59 estimaciones no coincide con el resultado original.");
-    return data;
-  }
-
-  function createSummary() {
-    const ordered=[...all].sort((a,b)=>a.estimate-b.estimate || a.id.localeCompare(b.id));
-    const mean=all.reduce((acc,x)=>acc+x.estimate,0)/all.length;
-    const info=[
-      ["Parcelas por estimar","59","Sin rendimientos observados"],
-      ["Media estimada",f(mean,4)+" t/ha","Media aritmética de las 59"],
-      ["Menor estimación",f(ordered[0].estimate,3)+" t/ha","No implica una cosecha real baja"],
-      ["Mayor estimación",f(ordered.at(-1).estimate,3)+" t/ha","No implica una cosecha real alta"]
-    ];
-    const holder=$("#pred59-summary");
-    holder.replaceChildren();
-    for(const [caption,value,desc] of info){
-      const item=make("div","pred59-summary-item");
-      item.append(make("span","",caption),make("strong","",value),make("small","",desc));
-      holder.append(item);
+    const numeric=rows.map(x=>x.estimate).sort((a,b)=>a-b);
+    const summary=metadata.prediction59_aggregate;
+    const mean=numeric.reduce((sum,value)=>sum+value,0)/59;
+    const median=numeric[29];
+    for(const [field,value] of Object.entries({
+      selected_mean:mean,selected_median:median,
+      selected_min:numeric[0],selected_max:numeric[58]
+    })){
+      if(!Number.isFinite(Number(summary?.[field])) ||
+         Math.abs(value-summary[field])>1e-8)
+        throw Error("Los agregados públicos no coinciden con las 59 predicciones finales: "+field);
     }
+    return rows;
   }
 
-  function select(id,scroll=false){
-    const row=all.find(x=>x.id===id);
-    if(!row)return;
-    chosen=id;
+  function choose(id,scroll=false) {
+    const record=rows59.find(x=>x.id===id);
+    if(!record)return;
+    selectedId=id;
     document.querySelectorAll("[data-pred59-id]").forEach(button=>{
-      const selected=button.dataset.pred59Id===chosen;
-      button.classList.toggle("active",selected);
-      button.setAttribute("aria-pressed",String(selected));
+      const active=button.dataset.pred59Id===id;
+      button.classList.toggle("active",active);
+      button.setAttribute("aria-pressed",String(active));
     });
-    document.querySelectorAll("[data-pred59-row-id]").forEach(tableRow=>{
-      tableRow.classList.toggle("selected",tableRow.dataset.pred59RowId===chosen);
+    document.querySelectorAll("[data-pred59-row-id]").forEach(tr=>{
+      tr.classList.toggle("selected",tr.dataset.pred59RowId===id);
     });
-    const detail=$("#pred59-detail");
-    detail.replaceChildren();
-    const head=make("div","pred59-detail-head");
-    const label=make("div");
-    label.append(make("span","pred59-eyebrow","PARCELA DEL ESTUDIO · COSECHA AÚN DESCONOCIDA"),
-      make("h4","",row.id),make("p","",row.state+" · "+row.municipality));
-    const yieldBox=make("div","pred59-yield");
-    yieldBox.append(make("strong","",f(row.estimate,4)),make("span","","t/ha estimadas"));
-    head.append(label,yieldBox);
-    const explanation=make("p","pred59-detail-intro",
-      "Este valor es una estimación de Reference26, no un dato de cosecha. Se obtuvo con los "+
-      "138 rendimientos conocidos y las variables disponibles para esta parcela.");
+    const pane=$("#pred59-detail");pane.replaceChildren();
+    const header=make("div","pred59-detail-head");
+    const title=make("div");
+    title.append(make("span","pred59-eyebrow","PARCELA DEL RETO · SIN COSECHA OBSERVADA"),
+      make("h4","",record.id),
+      make("p","",record.state+(record.municipality?" · "+record.municipality:"")));
+    const measure=make("div","pred59-yield");
+    measure.append(make("strong","",fmt(record.estimate,4)),
+      make("span","","t/ha estimadas"));
+    header.append(title,measure);
+    const intro=make("p","pred59-detail-intro",
+      "Estimación final con el ensamble agroespacial ajustado en 138 parcelas y " +
+      "corrección acotada basada en 3 parcelas análogas por sus 26 indicadores.");
     const grid=make("div","pred59-parts");
-    for(const [labelText,value] of [
-      ["Regresión climática",f(row.climate,3)+" t/ha"],
-      ["Experto local",f(row.expert,3)+" t/ha"],
-      ["Peso del componente local",f(row.localWeight*100,1)+" %"],
-      ["Grupo geológico",String(row.geoGroup)],
-      ["Ajuste residual",f(row.residual,3)+" t/ha"],
-      ["Soporte del corrector",row.r3?"Completo":"Incompleto: se desactivó"]
+    for(const [key,value] of [
+      ["Método","Expertos climáticos, geográficos y geológicos"],
+      ["Corrección","3 vecinos en espacio robusto de 26 variables"],
+      ["Mezcla","25 % × soporte y concordancia"],
+      ["Máximo cambio permitido","±0.5 t/ha"],
+      ["Rendimiento real","Todavía desconocido"],
+      ["Error de esta parcela","No evaluable sin cosecha real"]
     ]){
-      const item=make("div","");item.append(make("span","",labelText),make("strong","",value));grid.append(item);
+      const part=make("div");
+      part.append(make("span","",key),make("strong","",value));
+      grid.append(part);
     }
-    const note=make("p","pred59-detail-note",
-      "La diferencia entre esta estimación y el rendimiento real no puede calcularse hasta conocer la cosecha de esta parcela.");
-    detail.append(head,explanation,grid,note);
-    if(scroll) detail.scrollIntoView({block:"nearest",behavior:"smooth"});
+    pane.append(header,intro,grid,make("p","pred59-detail-note",
+      "El valor mostrado proviene del CSV de predicciones finales publicado en GeoC. " +
+      "No se reconstruye a partir del antiguo modelo con mediana. " +
+      "El ajuste numérico particular frente a la predicción anterior no está disponible en este CSV."));
+    if(scroll)pane.scrollIntoView({block:"nearest",behavior:"smooth"});
   }
 
-  function viewButton(item,label,className){
-    const button=make("button",className,label);
-    button.type="button";
-    button.dataset.pred59Id=item.id;
-    button.setAttribute("aria-pressed",String(chosen===item.id));
-    button.addEventListener("click",()=>select(item.id,true));
-    return button;
+  function button(item,label,className){
+    const element=make("button",className,label);
+    element.type="button";
+    element.dataset.pred59Id=item.id;
+    element.setAttribute("aria-pressed",String(item.id===selectedId));
+    element.addEventListener("click",()=>choose(item.id,true));
+    return element;
   }
 
-  function examples(){
-    const ordered=[...all].sort((a,b)=>a.estimate-b.estimate || a.id.localeCompare(b.id));
+  function renderSummary(){
+    const sorted=[...rows59].sort((a,b)=>a.estimate-b.estimate);
+    const mean=rows59.reduce((x,r)=>x+r.estimate,0)/59;
+    const cells=[
+      ["Parcelas estimadas","59","Cosechas de las 59 aún desconocidas"],
+      ["Media",fmt(mean,4)+" t/ha","Media de las predicciones finales"],
+      ["Mínimo",fmt(sorted[0].estimate,3)+" t/ha","Estimación, no cosecha medida"],
+      ["Máximo",fmt(sorted[58].estimate,3)+" t/ha","Estimación, no cosecha medida"]
+    ];
+    const mount=$("#pred59-summary");mount.replaceChildren();
+    for(const [label,value,note] of cells){
+      const div=make("div","pred59-summary-item");
+      div.append(make("span","",label),make("strong","",value),
+        make("small","",note));
+      mount.append(div);
+    }
+  }
+
+  function renderExamples(){
+    const ordered=[...rows59].sort((a,b)=>a.estimate-b.estimate);
     const picks=[
       ["Menor estimación",ordered[0]],
       ["Estimación mediana",ordered[29]],
       ["Mayor estimación",ordered[58]]
     ];
-    const holder=$("#pred59-examples");holder.replaceChildren();
-    for(const [title,item] of picks){
-      const button=viewButton(item,undefined,"pred59-example");
-      button.append(make("span","pred59-eyebrow",title),
-        make("strong","",f(item.estimate,3)+" t/ha"),
-        make("span","",item.id),
-        make("small","",item.state+" · "+item.municipality),
-        make("span","pred59-example-link","Ver cómo se obtuvo →"));
-      holder.append(button);
+    const mount=$("#pred59-examples");mount.replaceChildren();
+    for(const [label,entry] of picks){
+      const b=button(entry,undefined,"pred59-example");
+      b.append(make("span","pred59-eyebrow",label),
+        make("strong","",fmt(entry.estimate,3)+" t/ha"),
+        make("span","",entry.id),
+        make("small","",entry.state),
+        make("span","pred59-example-link","Consultar parcela →"));
+      mount.append(b);
     }
   }
 
-  function chart(){
-    const holder=$("#pred59-plot");holder.replaceChildren();
-    const ordered=[...all].sort((a,b)=>a.estimate-b.estimate);
-    const min=Math.floor(ordered[0].estimate*2)/2;
-    const max=Math.ceil(ordered[ordered.length-1].estimate*2)/2;
-    const upper=max>min?max:min+1;
-    const offset=value=>2+(value-min)/(upper-min)*96;
-    geography=[...new Set(all.map(x=>x.state))].sort((a,b)=>a.localeCompare(b,"es"));
-    for(const [index,state] of geography.entries()){
-      const parent=make("div","pred59-plot-row");
-      const label=make("span","pred59-plot-state",state);
-      const track=make("div","pred59-track");
-      const samples=all.filter(x=>x.state===state).sort((a,b)=>a.estimate-b.estimate);
-      samples.forEach((item,j)=>{
-        const button=viewButton(item,"","pred59-dot tone-"+index%3);
-        button.title=item.id+" · "+f(item.estimate,3)+" t/ha (estimación)";
-        button.setAttribute("aria-label",button.title);
-        button.style.left=f(offset(item.estimate),4)+"%";
-        button.style.top=(14+(j%3)*19)+"px";
-        track.append(button);
-      });
-      parent.append(label,track);
-      holder.append(parent);
+  function renderPlot(){
+    const mount=$("#pred59-plot");mount.replaceChildren();
+    const ys=rows59.map(x=>x.estimate);
+    const min=Math.floor(Math.min(...ys)*2)/2;
+    const max=Math.ceil(Math.max(...ys)*2)/2;
+    const groups=[...new Set(rows59.map(x=>x.state))].sort((a,b)=>a.localeCompare(b,"es"));
+    for(const [i,state] of groups.entries()){
+      const r=make("div","pred59-plot-row");
+      const area=make("div","pred59-track");
+      const group=rows59.filter(x=>x.state===state).sort((a,b)=>a.estimate-b.estimate);
+      for(const [index,entry] of group.entries()){
+        const b=button(entry,"","pred59-dot tone-"+(i%3));
+        b.style.left=(2+96*(entry.estimate-min)/(max-min))+"%";
+        b.style.top=(14+19*(index%3))+"px";
+        b.title=entry.id+" · "+fmt(entry.estimate,3)+" t/ha";
+        b.setAttribute("aria-label",b.title);
+        area.append(b);
+      }
+      r.append(make("span","pred59-plot-state",state),area);
+      mount.append(r);
     }
     const axis=make("div","pred59-axis");
     axis.append(make("span","pred59-plot-state",""));
     const ticks=make("div","pred59-ticks");
     for(let i=0;i<=4;i++){
-      const tick=make("span","",f(min+(upper-min)*i/4,2));
-      tick.style.left=f(2+96*i/4,2)+"%";ticks.append(tick);
+      const value=make("span","",fmt(min+(max-min)*i/4,2));
+      value.style.left=(2+96*i/4)+"%";
+      ticks.append(value);
     }
-    axis.append(ticks);holder.append(axis);
-    holder.append(make("p","pred59-axis-name","Rendimiento estimado (toneladas por hectárea). Cada punto es una parcela, no una observación de cosecha."));
+    axis.append(ticks);mount.append(axis);
+    mount.append(make("p","pred59-axis-name",
+      "t/ha · Cada punto es una estimación; ninguna de las 59 tiene rendimiento real observado."));
   }
 
-  function rows(){
-    const search=$("#pred59-search").value.trim().toLocaleLowerCase("es");
-    const state=$("#pred59-state").value;
+  function renderTable(){
+    const term=$("#pred59-search").value.trim().toLocaleLowerCase("es");
+    const region=$("#pred59-state").value;
     const sort=$("#pred59-sort").value;
-    const matched=all.filter(x=>
-      (state==="all"||x.state===state) &&
-      (!search||[x.id,x.municipality,x.state].some(t=>t.toLocaleLowerCase("es").includes(search)))
+    const chosen=rows59.filter(r=>
+      (region==="all"||r.state===region) &&
+      (!term||[r.id,r.state,r.municipality].some(s=>
+        s.toLocaleLowerCase("es").includes(term)))
     );
-    if(sort==="value-asc")matched.sort((a,b)=>a.estimate-b.estimate || a.id.localeCompare(b.id));
-    else if(sort==="id-asc")matched.sort((a,b)=>a.id.localeCompare(b.id));
-    else matched.sort((a,b)=>b.estimate-a.estimate || a.id.localeCompare(b.id));
-    $("#pred59-count").textContent=matched.length+" de 59 parcelas mostradas";
+    chosen.sort((a,b)=>sort==="id-asc"
+      ?a.id.localeCompare(b.id)
+      :sort==="value-asc"
+      ?a.estimate-b.estimate
+      :b.estimate-a.estimate);
+    $("#pred59-count").textContent=chosen.length+" de 59 parcelas mostradas";
     const body=$("#pred59-rows");body.replaceChildren();
-    if(!matched.length){
-      const tr=make("tr"),td=make("td","","No hay parcelas que coincidan con la búsqueda.");
+    if(!chosen.length){
+      const tr=make("tr"),td=make("td","","Sin resultados para los filtros actuales.");
       td.colSpan=5;tr.append(td);body.append(tr);return;
     }
-    const values=all.map(x=>x.estimate),min=Math.min(...values),max=Math.max(...values);
-    for(const item of matched){
-      const tr=make("tr","");
-      tr.dataset.pred59RowId=item.id;
-      if(item.id===chosen)tr.classList.add("selected");
-      const id=make("td","",item.id);
-      const loc=make("td","");
-      loc.append(make("strong","",item.state),make("small","",item.municipality));
-      const metric=make("td","pred59-value-cell");
-      const bar=make("span","pred59-meter");
-      const fill=make("span");
-      fill.style.width=f(12+88*(item.estimate-min)/(max-min||1),1)+"%";
-      bar.append(fill);
-      metric.append(make("strong","",f(item.estimate,3)+" t/ha"),bar);
-      const support=make("td","",item.r3?"Aplicada":"No aplicada");
-      const buttonCell=make("td");
-      buttonCell.append(viewButton(item,"Ver detalle","pred59-row-button"));
-      tr.append(id,loc,metric,support,buttonCell);body.append(tr);
+    const min=Math.min(...rows59.map(r=>r.estimate));
+    const max=Math.max(...rows59.map(r=>r.estimate));
+    for(const r of chosen){
+      const tr=make("tr");
+      tr.dataset.pred59RowId=r.id;
+      if(r.id===selectedId)tr.classList.add("selected");
+      const loc=make("td");
+      loc.append(make("strong","",r.state),
+        make("small","",r.municipality||"Localización opcional en el mapa"));
+      const value=make("td","pred59-value-cell");
+      const track=make("span","pred59-meter"), fill=make("span");
+      fill.style.width=(12+88*(r.estimate-min)/(max-min||1))+"%";
+      track.append(fill);
+      value.append(make("strong","",fmt(r.estimate,3)+" t/ha"),track);
+      const action=make("td");action.append(button(r,"Ver detalle","pred59-row-button"));
+      tr.append(make("td","",r.id),loc,value,
+        make("td","","3 análogos · soporte"),action);
+      body.append(tr);
     }
   }
-
-  function exportCsv(){
-    if(all.length!==59)return;
-    const header=["ID_POLIGONO","Estado","Municipio","Reference26_estimado_t_ha","Correccion_R3"];
-    const rows=all.map(x=>[x.id,x.state,x.municipality,f(x.estimate,6),x.r3?"aplicada":"no_aplicada"]);
-    const safe=x=>{
-      let value=String(x).replace(/[\r\n]+/g," ");
-      if(/^[=+\-@\t]/.test(value))value="'"+value;
-      return '"'+value.replace(/"/g,'""')+'"';
-    };
-    const csv="\uFEFF"+[header,...rows].map(row=>row.map(safe).join(",")).join("\r\n")+"\r\n";
-    const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
-    const anchor=make("a");
-    anchor.href=url;anchor.download="reference26_59_estimaciones_no_observadas.csv";
-    document.body.append(anchor);anchor.click();anchor.remove();URL.revokeObjectURL(url);
+  function renderFilters(){
+    const states=[...new Set(rows59.map(r=>r.state))].sort((a,b)=>a.localeCompare(b,"es"));
+    const select=$("#pred59-state"),previous=select.value;
+    select.replaceChildren();
+    const first=make("option","","Todos los estados");
+    first.value="all";select.append(first);
+    if(states.length>1||states[0]!=="Sin estado publicado"){
+      for(const state of states){
+        const option=make("option","",state);option.value=state;
+        select.append(option);
+      }
+    }
+    select.value=states.includes(previous)?previous:"all";
   }
-  function render(runtime){
-    // The caller has already verified 59/59 Python-JS parity. Recompute every
-    // displayed value with the native JS engine, checking each again.
-    const rows59=prepare(runtime);
-    all=rows59;
+  function render(entries,meta) {
+    rows59=prepare(entries,meta);
     root.hidden=false;
-    status.textContent="59 estimaciones individuales verificadas · Reference26 entrenado con 138 rendimientos. Las 59 cosechas reales siguen siendo desconocidas.";
-    createSummary();examples();chart();
-    const states=[...new Set(all.map(x=>x.state))].sort((a,b)=>a.localeCompare(b,"es"));
-    const filter=$("#pred59-state");filter.replaceChildren();
-    const first=make("option","","Todos los estados");first.value="all";filter.append(first);
-    for(const state of states){const option=make("option","",state);option.value=state;filter.append(option);}
+    status.textContent="59 estimaciones finales verificadas contra el CSV de GeoC. "+
+      "Modelo agroespacial con 3 parcelas análogas; las cosechas reales son desconocidas.";
     $("#pred59-search").value="";
     $("#pred59-sort").value="value-desc";
-    rows();
-    selectedInitial();
+    const median=[...rows59].sort((a,b)=>a.estimate-b.estimate)[29];
+    selectedId=median.id;
+    renderFilters();renderSummary();renderExamples();renderPlot();
+    renderTable();choose(selectedId);
+    window.dispatchEvent(new CustomEvent("geoc:final59-ready",{detail:{n:59}}));
   }
-  function selectedInitial(){
-    const sorted=[...all].sort((a,b)=>a.estimate-b.estimate);
-    // Middle observed *prediction*, not median of known yields.
-    select(sorted[29].id,false);
-    rows();
+  function setGeography(info) {
+    if(!rows59.length||!info||typeof info!=="object")return;
+    places=new Map(Object.entries(info));
+    for(const row of rows59){
+      const location=places.get(row.id);
+      if(location&&["Hidalgo","Puebla","Tlaxcala"].includes(location.state)){
+        row.state=location.state;
+        row.municipality=String(location.municipality||"");
+      }
+    }
+    renderFilters();renderExamples();renderPlot();renderTable();
+    if(selectedId)choose(selectedId);
   }
-  function unavailable(message){
-    all=[];chosen=null;root.hidden=true;
-    status.textContent="Las 59 predicciones no están disponibles: "+message+
-      " No se mostrarán cifras sin comprobar primero la coincidencia con Python.";
+  function unavailable(message) {
+    rows59=[];root.hidden=true;
+    status.textContent="No se pudo verificar el archivo final de 59 predicciones: "+
+      message+". No se muestran pronósticos no comprobados.";
   }
-  for(const name of ["pred59-search","pred59-state","pred59-sort"]){
-    $("#"+name).addEventListener(name==="pred59-search"?"input":"change",rows);
+  function exportCsv(){
+    if(rows59.length!==59)return;
+    const payload="ID_POLIGONO,RENDIMIENTO_T_HA\r\n"+
+      rows59.map(r=>r.id+","+r.estimate.toString()).join("\r\n")+"\r\n";
+    const url=URL.createObjectURL(new Blob([payload],{type:"text/csv;charset=utf-8"}));
+    const anchor=make("a");anchor.href=url;
+    anchor.download="submission59_final.csv";
+    document.body.append(anchor);anchor.click();anchor.remove();
+    URL.revokeObjectURL(url);
+  }
+  for(const id of ["pred59-search","pred59-state","pred59-sort"]){
+    $("#"+id).addEventListener(id==="pred59-search"?"input":"change",renderTable);
   }
   $("#pred59-export").addEventListener("click",exportCsv);
-  window.GeoCebadaPredictions=Object.freeze({prepare,render,unavailable});
+  window.GeoCebadaPredictions=Object.freeze({prepare,render,unavailable,setGeography});
 })();
