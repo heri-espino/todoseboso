@@ -15,8 +15,7 @@ services:
         value: "1"
       - key: OMP_NUM_THREADS
         value: "1"
-      # Deliberately not invented:
-      # GEOCEBADA_MEAN_MODEL_PATH: must point to the verified mean-trained joblib
-      # GEOCEBADA_MEAN_MODEL_SHA256: must match that exact local joblib's SHA256
-      # Without the artifact and fingerprint API returns HTTP 503, never
-      # the obsolete median-imputed Reference26 prediction.
+      - key: GEOCEBADA_MEAN_MODEL_SHA256
+        sync: false
+      - key: GEOCEBADA_MEAN_MODEL_PATH
+        value: deployment/model_artifacts/reference26_mean_train138.joblib
