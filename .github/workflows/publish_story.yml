@@ -96,6 +96,8 @@ jobs:
         run: node tests/test_site_navigation.cjs
       - name: Validate scrollable editorial index and all protected content
         run: node tests/test_site_portal.cjs
+      - name: Verify full article HTML nesting and all links
+        run: node tests/test_site_structure.cjs
       - name: Validate subtle scroll motion and matching geographic section
         run: node tests/test_site_motion.cjs
       - name: Validate integrated native map
