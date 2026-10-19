@@ -25,7 +25,7 @@ La normalidad marginal se rechaza: Shapiro–Wilk p=1.401988e-7; D’Agostino–
 | 12 | -0.062976 | 0.0640 |
 | 24 | -0.041802 | 0.0645 |
 
-Ninguno rechaza al 5% sin ajuste. No equivale a demostrar independencia, y no se debe inferir que Moran de errores absolutos/cuadráticos también carece de señal.
+Ninguno rechaza al 5% sin ajuste. No equivale a demostrar independencia. **El reporte agregado de GeoC incorporado posteriormente** incluye además Moran I para errores absolutos y cuadráticos, Geary C para las tres definiciones de error, correcciones de Holm/FDR-BH y un semivariograma descriptivo de seis intervalos. La página los representa ahora con sus propios gráficos y controles.
 
 **Influencia:** la parcela con mayor error cuadrático aporta el 15.1420% de SSE y las dos mayores, el 28.1996%. Al excluirlas de las predicciones YA guardadas (sin reajustar el modelo), el RMSE pasa descriptivamente de 0.468138 a 0.432812 y 0.399583 t/ha, respectivamente.
 
@@ -39,7 +39,7 @@ Ninguno rechaza al 5% sin ajuste. No equivale a demostrar independencia, y no se
 
 site/data/reference26_residuals.json contiene agregados verificados, no observaciones por parcela, IDs, coordenadas, etiquetas ni errores individuales. El JavaScript exclusivamente visualiza ese JSON. Las barras tienen ejes explícitos enfocados en valores útiles. No se generan histogramas sintéticos.
 
-Geary C, Moran de errores absolutos/cuadráticos, semivariograma e histograma exacto no se incluyeron en la transcripción y no deben inventarse: podrán incorporarse cuando los agregados de los CSV privados de GeoC hayan sido auditados para publicación.
+Los valores de Geary C, Moran I de errores absolutos/cuadráticos y semivariograma **sí están publicados desde la importación verificada de los CSV agregados privados de GeoC**. El histograma exacto y el gráfico Q–Q de residuos individuales no se incluyeron y no se reconstruyen artificialmente. Los controles de origen y la auditoría de los 9.453 pares siguen vigentes.
 
 ## Importante: versión distinta del modelo
 
@@ -59,15 +59,15 @@ Ejecutar: node tests/test_site_portal.cjs
 El trabajo se entrega en PR de revisión, sin entrenamientos nuevos, sin publicación automática y sin usar objetivos ocultos.
 
 
-## Importación opcional de Geary, Moran de pérdidas y semivariograma
+## Reimportación reproducible de Geary, Moran de pérdidas y semivariograma
 
-Para completar los diagnósticos espaciales que faltan en la transcripción, ejecutar desde el repositorio Todoseboso con acceso a los CSV privados de GeoC:
+Para regenerar o verificar los agregados espaciales ya incorporados a la PR, ejecutar desde Todoseboso con acceso a los CSV privados de GeoC:
 
     python scripts/export_reference26_residual_aggregates.py --analysis-dir ../GeoC/reports/reference26_compact14_fresh138/analysis
 
 El resultado se guarda fuera de la página pública en outputs/reference26_residuals_staged.json. El importador exige un total de 24 tests (4 vecindarios, 3 variables y 2 estadísticos) únicamente para Reference26, sus 1,999 permutaciones, correcciones Holm/FDR obtenidas del conjunto original de pruebas, coherencia con Moran firmado ya publicado y 9,453 pares en los seis intervalos del semivariograma. Rechaza explícitamente archivos con columnas de IDs, etiquetas, coordenadas o errores individuales.
 
-Tras examinar el JSON agregado de staging y autorizar su difusión, se puede ejecutar de nuevo con --publish y revisar git diff antes de hacer commit. La página detecta automáticamente los resultados auténticos de Geary C, Moran de |e|, Moran de e² y el semivariograma. No se necesita entrenamiento y el ajuste estadístico no altera las 59 predicciones.
+Los valores publicados en la PR se importaron desde la VM con --publish, sin exportar registros por parcela. Para futuras reimportaciones se recomienda revisar la versión en staging, después --publish y el git diff antes de cada commit. La página muestra directamente los resultados auténticos de Geary C, Moran de |e|, Moran de e² y el semivariograma. No se necesita entrenamiento y la revisión estadística no altera las 59 predicciones.
 
 No presentar un histograma o Q–Q parcelario a partir de las estadísticas resumidas si no existe una exportación agregada separada autorizada.
 
@@ -104,4 +104,36 @@ El agente verifica contenido y consistencia, actualiza
 `site/data/reference26_residuals.json` en PR #20, y deja constancia de las
 pruebas. El camino local `scripts/export_reference26_residual_aggregates.py`
 es *alternativo*, no una dependencia obligatoria para quien sólo tenga GeoC.
+
+
+
+## Capítulo público autónomo
+
+El capítulo `#estadisticas-finales` es una sección HTML independiente,
+**posterior a la sección histórica `#pruebas` y anterior al mapa final**.
+Tiene enlaces desde el menú principal, el índice y la portada, además de
+navegación interna propia. No cambia las pruebas previas de asociaciones,
+ablación HHI o comparaciones históricas de arquitecturas.
+
+1. Magnitud: errores absolutos, mediana, P95 y máximo.
+2. Influencia: fracciones de SSE y exclusiones descriptivas sin reentrenamiento.
+3. Diagnósticos distribucionales: Shapiro–Wilk, D’Agostino–Pearson,
+   Anderson–Darling, Koenker–BP y Brown–Forsythe.
+4. Dependencia espacial: Moran I y Geary C para residuos firmados, absolutos
+   y cuadrados; k=4,8,12,24; valores p crudos, Holm y FDR-BH.
+5. Semivariograma: seis intervalos y los 9.453 pares, gráfica no suavizada
+   de semivarianza frente a distancia mediana.
+6. Bootstrap: municipios y bloques espaciales, particiones aceptadas/omitidas.
+7. Alcance y reproducibilidad: limitaciones, fuentes y separación de los
+   59 resultados antiguos imputados por mediana.
+
+**Interpretación crítica:** para Geary C con k=12 sobre residuos firmados,
+p=0.0065 sin ajuste, pero p_Holm=0.468 y p_FDR-BH=0.27 en la familia del
+reporte original. No se declara significativo tras correcciones. Estas
+pruebas son exploratorias, no validación inferencial independiente.
+
+Los paneles residen únicamente en `site/reference26_residuals.js`,
+`site/reference26_residuals.css` y
+`site/data/reference26_residuals.json`; no reutilizan ni reescriben
+`#pruebas`. Los tests de navegación y estadísticas comprueban esa separación.
 
