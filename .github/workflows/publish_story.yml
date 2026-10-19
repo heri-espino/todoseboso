@@ -11,6 +11,7 @@ on:
       - "scripts/export_reference26_browser.py"
       - "tests/test_reference26_browser.cjs"
       - "tests/test_predictions59.cjs"
+      - "tests/test_ensemble_story.cjs"
       - "scripts/sync_story_data.py"
       - "scripts/check_site_charts.py"
       - "scripts/check_model_story.py"
@@ -79,9 +80,11 @@ jobs:
             python scripts/export_reference26_browser.py
             node --test tests/test_reference26_browser.cjs
             node --test tests/test_predictions59.cjs
+            node --test tests/test_ensemble_story.cjs
           else
             echo "No binary assets yet. Browser inference stays disabled."
             node --test tests/test_reference26_browser.cjs
+            node --test tests/test_ensemble_story.cjs
           fi
       - name: Validate SVG chart rendering and data fidelity
         run: node --test tests/test_svg_charts.cjs
@@ -97,6 +100,8 @@ jobs:
           node --check site/reference26_engine.js
           node --check site/browser_inference.js
           node --check site/predictions59.js
+          node --check site/ensemble_contract.js
+          node --check site/ensemble_story.js
 
   deploy:
     needs: validate
