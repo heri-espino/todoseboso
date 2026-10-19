@@ -31,7 +31,7 @@
   "diagnostics": {
     "normality": {
       "shapiro_w": 0.910171,
-      "shapiro_p": 1.401988e-7,
+      "shapiro_p": 1.401988e-07,
       "dagostino_p": 8.411629e-12,
       "anderson_reject_at_5pct": true,
       "warning": "Exploratory p values: LOOCV training sets overlap and errors may be dependent."
@@ -51,30 +51,243 @@
     "signed_residual_moran": [
       {
         "k": 4,
-        "I": -0.055864,
-        "p_two_sided": 0.3455
+        "I": -0.05586384188315004,
+        "p_two_sided": 0.3455,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.5922857142857142
       },
       {
         "k": 8,
-        "I": -0.076861,
-        "p_two_sided": 0.063
+        "I": -0.07686050092993227,
+        "p_two_sided": 0.063,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.324
       },
       {
         "k": 12,
-        "I": -0.062976,
-        "p_two_sided": 0.064
+        "I": -0.06297566497171632,
+        "p_two_sided": 0.064,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.324
       },
       {
         "k": 24,
-        "I": -0.041802,
-        "p_two_sided": 0.0645
+        "I": -0.04180173136301144,
+        "p_two_sided": 0.0645,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.324
       }
     ],
-    "absolute_error_moran": null,
-    "squared_error_moran": null,
-    "geary_c": null,
-    "semivariogram": null,
-    "reason_missing": "The source script computed these values, but verified aggregate numbers were not included in the supplied VM output; no values have been reconstructed or invented."
+    "absolute_error_moran": [
+      {
+        "k": 4,
+        "I": 0.04451244100032722,
+        "p_two_sided": 0.283,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.5362105263157894
+      },
+      {
+        "k": 8,
+        "I": 0.02218937509256973,
+        "p_two_sided": 0.4225,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.6333061224489795
+      },
+      {
+        "k": 12,
+        "I": 0.00542123450268348,
+        "p_two_sided": 0.6345,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.7859076923076923
+      },
+      {
+        "k": 24,
+        "I": 0.003551237352929704,
+        "p_two_sided": 0.565,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.7218947368421054
+      }
+    ],
+    "squared_error_moran": [
+      {
+        "k": 4,
+        "I": 0.03747584942206698,
+        "p_two_sided": 0.205,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.423
+      },
+      {
+        "k": 8,
+        "I": 0.003531515451092406,
+        "p_two_sided": 0.6825,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.7859076923076923
+      },
+      {
+        "k": 12,
+        "I": -0.01119772535883692,
+        "p_two_sided": 0.848,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.8929014084507041
+      },
+      {
+        "k": 24,
+        "I": -0.00684198408679372,
+        "p_two_sided": 0.985,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.985
+      }
+    ],
+    "geary_c": [
+      {
+        "k": 4,
+        "C": 0.9509974198418076,
+        "p_two_sided": 0.526,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.7086666666666667,
+        "spatial_variable": "signed_residual"
+      },
+      {
+        "k": 8,
+        "C": 1.096535441339143,
+        "p_two_sided": 0.0735,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.324,
+        "spatial_variable": "signed_residual"
+      },
+      {
+        "k": 12,
+        "C": 1.137146403285878,
+        "p_two_sided": 0.0065,
+        "p_holm_all": 0.468,
+        "p_fdr_bh_all": 0.27,
+        "spatial_variable": "signed_residual"
+      },
+      {
+        "k": 24,
+        "C": 1.09992780817394,
+        "p_two_sided": 0.0245,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.324,
+        "spatial_variable": "signed_residual"
+      },
+      {
+        "k": 4,
+        "C": 0.8662193621237807,
+        "p_two_sided": 0.118,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.3539999999999999,
+        "spatial_variable": "absolute_error"
+      },
+      {
+        "k": 8,
+        "C": 1.024451951478592,
+        "p_two_sided": 0.705,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.7859076923076923,
+        "spatial_variable": "absolute_error"
+      },
+      {
+        "k": 12,
+        "C": 1.103673726033137,
+        "p_two_sided": 0.1095,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.3427826086956522,
+        "spatial_variable": "absolute_error"
+      },
+      {
+        "k": 24,
+        "C": 1.062020059007513,
+        "p_two_sided": 0.322,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.5796,
+        "spatial_variable": "absolute_error"
+      },
+      {
+        "k": 4,
+        "C": 0.8095144004600247,
+        "p_two_sided": 0.2115,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.423,
+        "spatial_variable": "squared_error"
+      },
+      {
+        "k": 8,
+        "C": 1.101072817983436,
+        "p_two_sided": 0.383,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.6248,
+        "spatial_variable": "squared_error"
+      },
+      {
+        "k": 12,
+        "C": 1.232021064169616,
+        "p_two_sided": 0.0515,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.324,
+        "spatial_variable": "squared_error"
+      },
+      {
+        "k": 24,
+        "C": 1.156217791872918,
+        "p_two_sided": 0.18,
+        "p_holm_all": 1.0,
+        "p_fdr_bh_all": 0.423,
+        "spatial_variable": "squared_error"
+      }
+    ],
+    "semivariogram": [
+      {
+        "bin": 1,
+        "pairs": 946,
+        "distance_km": 1.585448521315157,
+        "distance_min_km": 0.0382733722762011,
+        "distance_max_km": 2.433655119079454,
+        "semivariance_t2_ha2": 0.3073156302629753
+      },
+      {
+        "bin": 2,
+        "pairs": 945,
+        "distance_km": 3.269495444074868,
+        "distance_min_km": 2.433655119079454,
+        "distance_max_km": 4.0686229438813,
+        "semivariance_t2_ha2": 0.2765718783232667
+      },
+      {
+        "bin": 3,
+        "pairs": 1890,
+        "distance_km": 5.903091494563419,
+        "distance_min_km": 4.0686229438813,
+        "distance_max_km": 9.98055672463608,
+        "semivariance_t2_ha2": 0.2083333301086777
+      },
+      {
+        "bin": 4,
+        "pairs": 1891,
+        "distance_km": 17.01956328370762,
+        "distance_min_km": 9.98055672463608,
+        "distance_max_km": 22.60006641945755,
+        "semivariance_t2_ha2": 0.215855213178082
+      },
+      {
+        "bin": 5,
+        "pairs": 1890,
+        "distance_km": 41.10609866605093,
+        "distance_min_km": 22.60006641945755,
+        "distance_max_km": 44.56152299849422,
+        "semivariance_t2_ha2": 0.1637452483009159
+      },
+      {
+        "bin": 6,
+        "pairs": 1891,
+        "distance_km": 47.57789437646028,
+        "distance_min_km": 44.56152299849422,
+        "distance_max_km": 57.683997217201,
+        "semivariance_t2_ha2": 0.2238316165045624
+      }
+    ],
+    "reason_missing": "Only confidential parcel-level histogram/QQ data remain unpublished. All public spatial tests and semivariogram are verified aggregates.",
+    "expanded_from_private_geoc_aggregate_report": true
   },
   "influence": {
     "full_rmse_t_ha": 0.468138,
