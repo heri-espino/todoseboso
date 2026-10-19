@@ -345,6 +345,19 @@
     </div>
     <p id="ensemble-metrics-status" role="status" aria-live="polite">Comprobando si ya están disponibles los resultados estadísticos reentrenados…</p>
     <div class="ensemble-top-line" id="ensemble-top-line" aria-label="Comparación de errores RMSE entre los tres modelos"></div>
+    <div class="ensemble-statistical-reading" id="ensemble-statistical-reading" aria-label="Interpretación académica de la validación">
+      <h3>Qué significan los resultados</h3>
+      <p class="ensemble-note">Estas interpretaciones se generan a partir de las métricas reales de los 138 folds. Se distingue entre error predictivo, diagnósticos estadísticos exploratorios y el proceso previo de selección del ensamble.</p>
+      <p id="ensemble-interpretation-overview" role="status" aria-live="polite">Interpretación pendiente del informe numérico verificado.</p>
+      <div class="ensemble-reading-grid">
+        <details class="ensemble-reading-item" open><summary>01 · Precisión y valor práctico</summary><p id="ensemble-reading-accuracy">Pendiente de los errores observados.</p></details>
+        <details class="ensemble-reading-item" open><summary>02 · Distribución y valores extremos</summary><p id="ensemble-reading-tails">Pendiente de cuantiles y errores extremos.</p></details>
+        <details class="ensemble-reading-item"><summary>03 · Sesgo y calibración</summary><p id="ensemble-reading-calibration">Pendiente de los diagnósticos.</p></details>
+        <details class="ensemble-reading-item"><summary>04 · Normalidad y heterocedasticidad</summary><p id="ensemble-reading-normality">Pendiente de las pruebas sobre residuos.</p></details>
+        <details class="ensemble-reading-item"><summary>05 · Autocorrelación geográfica</summary><p id="ensemble-reading-spatial">Pendiente de las pruebas de permutación.</p></details>
+        <details class="ensemble-reading-item"><summary>06 · Comparación emparejada y evidencia</summary><p id="ensemble-reading-paired">Pendiente del contraste entre modelos.</p></details>
+      </div>
+    </div>
     <div class="ensemble-controls">
       <label for="ensemble-metrics-search">Buscar por nombre o interpretación
         <input id="ensemble-metrics-search" type="search" placeholder="Ej. error absoluto, sesgo, normalidad, R²">
