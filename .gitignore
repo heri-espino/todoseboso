@@ -37,3 +37,7 @@ Thumbs.db
 # Explicitly permitted three-file publication for the Reference26 API only.
 # This .joblib exception applies only to the exact vetted deployment path.
 !/deployment/model_artifacts/final_train138.joblib
+
+# Operator-approved, SHA-verified new mean-imputation model artifact only.
+# Must be explicitly reviewed before publishing in the public repository.
+!/deployment/model_artifacts/reference26_mean_train138.joblib
