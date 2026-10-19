@@ -112,7 +112,7 @@ test("renders Reference26 alone and accessible numerical charts",async()=>{
  assert.match(nodes["r26-moran-reading"].textContent,/errores cuadrados/);
  assert.equal(nodes["r26-moran-body"].children.length,8);
  assert.equal(nodes["r26-variogram-body"].children.length,6);
- assert.match(nodes["r26-variogram-status"].textContent,/Semivarianza empírica/);
+ assert.match(nodes["r26-variogram-status"].textContent,/Seis intervalos reales/);
  assert.match(nodes["r26-bootstrap-note"].textContent,/dos de los siete/);
 });
 
