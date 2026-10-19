@@ -1,14 +1,23 @@
-# Página pública: regresión local con mezcla geológica
+# Página pública: ensamble de Reference26 y Compact14
 
-La página principal `site/index.html` describe **un solo modelo**: el modelo
-de 26 entradas registrado como `Reference26` en el código. Su nombre público
-es **Regresión local con mezcla geológica**. No debe presentarse simplemente
-como `KMeans26`: K-means agrupa composiciones geológicas y selecciona pesos
-de mezcla; los rendimientos proceden de regresiones Elastic Net y Ridge.
+La presentación inicial prioriza el **futuro ensamble de dos modelos** y
+después muestra sus componentes por separado: Reference26 (26 variables,
+regresión local con mezcla geológica) y Compact14 (14 variables, regresión
+local compacta). **Los pesos y métricas del ensamble están pendientes**
+hasta recibir los nuevos ajustes del otro agente. No se deben publicar
+combinaciones inventadas.
+
+El estudio metodológico de 26 entradas que se mantiene en las secciones
+posteriores sigue siendo exclusivamente **Reference26**, sin mezclar
+resultados del ensamble con los suyos. K-means agrupa composiciones geológicas
+en Reference26, pero no predice el rendimiento por sí solo.
+
+[Contrato completo para los dos nuevos joblib](./ENSEMBLE_HANDOFF.md).
 
 ## Recorrido del lector
 
-1. Datos de 197 parcelas (138 con rendimiento, 59 por estimar).
+1. Visión de ensamble (pendiente), Reference26 disponible y Compact14 pendiente.
+2. Datos de 197 parcelas (138 con rendimiento, 59 por estimar).
 2. Inventario interactivo completo de las 26 variables, por función
    (4 clima, 7 local, 2 ubicación, 10 geología, 3 residuales).
 3. Construcción, agregaciones temporales, imputación, escalado, raíz
