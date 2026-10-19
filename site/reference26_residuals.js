@@ -148,13 +148,31 @@
     }
   }
 
+  const residualKind = {
+    signed_residual: {field:"signed_residual_moran",label:"residuos firmados"},
+    absolute_error: {field:"absolute_error_moran",label:"errores absolutos"},
+    squared_error: {field:"squared_error_moran",label:"errores cuadrados"}
+  };
   function renderMoran(data) {
-    const rows=data.spatial.signed_residual_moran;
+    const variable=$("r26-spatial-target").value;
+    const chosen=residualKind[variable];
+    const rows=chosen ? data.spatial[chosen.field] : null;
     const chart=$("r26-moran-chart");
     chart.replaceChildren();
-    const low=-.10, high=.02; // Data-centred, fixed for the same four neighborhoods.
+    if(!Array.isArray(rows) || !rows.length){
+      chart.append(create("p",
+        "No se han publicado agregados verificados para "+(chosen?.label||"esta variable")+
+        ". No se dibujan valores simulados.","r26-note"));
+      updateSpatial(data);
+      return;
+    }
+    // Signed Moran is small; the axis is centered on the actual observed range.
+    const min=Math.min(...rows.map(r=>r.I),0),max=Math.max(...rows.map(r=>r.I),0);
+    const span=Math.max(max-min, .015);
+    const low=Math.floor((min-.15*span)/.01)*.01;
+    const high=Math.ceil((max+.15*span)/.01)*.01;
     const scale=x=>100*(x-low)/(high-low);
-    for (const record of rows){
+    for(const record of rows){
       const row=create("div",undefined,"r26-moran-row");
       row.append(create("span","k = "+record.k));
       const track=create("div",undefined,"r26-moran-track");
@@ -169,33 +187,68 @@
       row.append(track,create("strong",fmt(record.I,6)));
       chart.append(row);
     }
-    const axis=create("div","Moran I · escala −0,10 a 0,02 (centrada en los resultados)","r26-axis");
-    chart.append(axis);
+    chart.append(create("p","Moran I · escala "+fmt(low,3)+" a "+fmt(high,3)+
+      " (centrada en los resultados).","r26-axis"));
     updateSpatial(data);
   }
   function updateSpatial(data){
     const chosen=Number($("r26-moran-k").value);
-    const row=data.spatial.signed_residual_moran.find(r=>r.k===chosen);
+    const variable=$("r26-spatial-target").value;
+    const kind=residualKind[variable];
+    const rows=kind && data.spatial[kind.field];
+    const row=Array.isArray(rows)?rows.find(r=>r.k===chosen):null;
     const tbody=$("r26-moran-body");
     tbody.replaceChildren();
-    if(!row)return;
-    for(const [label,value] of [
-      ["Moran I",fmt(row.I)],["p bilateral sin ajustar",fmt(row.p_two_sided,6)],
-      ["p Holm", "No publicado en el extracto disponible"],
-      ["Geary C", "No publicado en el extracto disponible"]
-    ]){
+    if(!row){
+      $("r26-moran-reading").textContent=
+        "Moran I y Geary C de "+(kind?.label||"esta variable")+
+        " aún no están publicados con la evidencia agregada compartida.";
+      return;
+    }
+    const g=Array.isArray(data.spatial.geary_c)?
+      data.spatial.geary_c.find(r=>r.k===chosen &&
+        r.spatial_variable===variable):null;
+    const content=[
+      ["Moran I",fmt(row.I)],
+      ["p bilateral sin ajustar",fmt(row.p_two_sided,6)],
+      ["p Holm",finite(row.p_holm_all)?fmt(row.p_holm_all):"No publicado en el extracto disponible"],
+      ["p FDR-BH",finite(row.p_fdr_bh_all)?fmt(row.p_fdr_bh_all):"No publicado en el extracto disponible"],
+      ["Geary C",g?fmt(g.C):"No publicado en el extracto disponible"]
+    ];
+    for(const [label,value] of content){
       const tr=create("tr");
       tr.append(create("th",label),create("td",value));
       tbody.append(tr);
     }
+    const p=finite(row.p_holm_all)?row.p_holm_all:row.p_two_sided;
     $("r26-moran-reading").textContent=
-      "Con k = "+chosen+", Moran I = "+fmt(row.I)+
-      " y p bilateral = "+fmt(row.p_two_sided)+
-      ". No se detectó autocorrelación de errores firmados al 5% con este contraste; "+
-      "no se demuestra independencia espacial. Existen múltiples tamaños de vecindario y tipos "+
-      "de error, por lo que los valores p sin ajustar no deben interpretarse aisladamente.";
+      "Para "+kind.label+" con k = "+chosen+": Moran I = "+fmt(row.I)+
+      ", p bilateral sin ajustar = "+fmt(row.p_two_sided)+
+      (finite(row.p_holm_all)?", p Holm = "+fmt(row.p_holm_all):" (ajuste Holm pendiente)")+
+      ". "+(p<.05?"Existe una señal exploratoria para este grafo.":
+      "No se detectó autocorrelación al 5% con este contraste.")+
+      " No se demuestra independencia geográfica ni se garantizan resultados para municipios no observados.";
   }
-
+  function renderSemivariogram(data){
+    const table=$("r26-variogram-body");
+    table.replaceChildren();
+    const rows=data.spatial.semivariogram;
+    const status=$("r26-variogram-status");
+    if(!Array.isArray(rows)||!rows.length){
+      status.textContent="Semivariograma agregado no disponible. Debe importarse del reporte privado sin publicar centroides ni errores por parcela.";
+      return;
+    }
+    for(const row of rows){
+      const tr=create("tr");
+      for(const value of [fmt(row.distance_km,3)+" km",
+                          fmt(row.semivariance_t2_ha2,6)+" (t/ha)²",
+                          String(row.pairs)]){
+        tr.append(create("td",value));
+      }
+      table.append(tr);
+    }
+    status.textContent="Semivarianza empírica por distancia; los pares de parcelas no son observaciones independientes. No se ajustó un modelo de kriging.";
+  }
   function renderBootstrap(data){
     const bootstrap=data.spatial_bootstrap;
     const chart=$("r26-bootstrap-chart");
@@ -246,6 +299,8 @@
       populateCards(data);renderErrorScale(data);renderInfluence(data);
       renderNormality(data);renderMoran(data);renderBootstrap(data);
       $("r26-moran-k").addEventListener("change",()=>updateSpatial(data));
+      $("r26-spatial-target").addEventListener("change",()=>renderMoran(data));
+      renderSemivariogram(data);
       $("r26-unavailable").textContent=data.spatial.reason_missing;
       status.textContent="Datos agregados verificados · Reference26 con imputación por media · 138 exclusiones LOOCV";
     }catch(error){
