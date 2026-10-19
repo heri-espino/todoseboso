@@ -57,3 +57,16 @@ Ejecutar: node tests/test_site_navigation.cjs
 Ejecutar: node tests/test_site_portal.cjs
 
 El trabajo se entrega en PR de revisión, sin entrenamientos nuevos, sin publicación automática y sin usar objetivos ocultos.
+
+
+## Importación opcional de Geary, Moran de pérdidas y semivariograma
+
+Para completar los diagnósticos espaciales que faltan en la transcripción, ejecutar desde el repositorio Todoseboso con acceso a los CSV privados de GeoC:
+
+    python scripts/export_reference26_residual_aggregates.py --analysis-dir ../GeoC/reports/reference26_compact14_fresh138/analysis
+
+El resultado se guarda fuera de la página pública en outputs/reference26_residuals_staged.json. El importador exige un total de 24 tests (4 vecindarios, 3 variables y 2 estadísticos) únicamente para Reference26, sus 1,999 permutaciones, correcciones Holm/FDR obtenidas del conjunto original de pruebas, coherencia con Moran firmado ya publicado y 9,453 pares en los seis intervalos del semivariograma. Rechaza explícitamente archivos con columnas de IDs, etiquetas, coordenadas o errores individuales.
+
+Tras examinar el JSON agregado de staging y autorizar su difusión, se puede ejecutar de nuevo con --publish y revisar git diff antes de hacer commit. La página detecta automáticamente los resultados auténticos de Geary C, Moran de |e|, Moran de e² y el semivariograma. No se necesita entrenamiento y el ajuste estadístico no altera las 59 predicciones.
+
+No presentar un histograma o Q–Q parcelario a partir de las estadísticas resumidas si no existe una exportación agregada separada autorizada.
