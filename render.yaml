@@ -1,10 +1,10 @@
 services:
   - type: web
-    name: geoc-reference26-inference
+    name: geoc-agrospatial-analog-inference
     runtime: python
     plan: free
     buildCommand: pip install -r deployment/requirements-api.txt
-    startCommand: uvicorn deployment.inference_api:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn deployment.agrospatial_api:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
     envVars:
       - key: PYTHON_VERSION
@@ -15,3 +15,8 @@ services:
         value: "1"
       - key: OMP_NUM_THREADS
         value: "1"
+      # Deliberately not invented:
+      # GEOCEBADA_MEAN_MODEL_PATH: must point to the verified mean-trained joblib
+      # GEOCEBADA_MEAN_MODEL_SHA256: must match that exact local joblib's SHA256
+      # Without the artifact and fingerprint API returns HTTP 503, never
+      # the obsolete median-imputed Reference26 prediction.
