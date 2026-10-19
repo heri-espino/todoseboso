@@ -7,7 +7,7 @@
 <title>GeoCebada · Ensamble de Reference26 y Compact14</title>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css"><link rel="stylesheet" href="./ensemble_story.css">
-<script src="./navigation.js" defer></script><script src="./scroll_motion.js" defer></script><script src="./native_map.js" defer></script><script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script><script src="./parcel_core.js" defer></script><script src="./predictor.js" defer></script>
+<script src="./navigation.js" defer></script><script src="./scroll_motion.js" defer></script><script src="./native_map.js" defer></script><script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script>
 <script src="./reference26_engine.js" defer></script>
 <script src="./predictions59.js" defer></script>
 <script src="./ensemble_contract.js" defer></script>
@@ -26,7 +26,7 @@
 <details class="nav-group"><summary>El estudio<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">01 · CONTEXTO Y DATOS</p><a href="#datos">El problema y las parcelas</a><a href="#variables">Las 26 variables</a><a href="#preparacion">Preparación de datos</a><a href="#datos-reales">Clima y vegetación reales</a></div></details>
 <details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · MÉTODOS Y ENSAMBLE</p><a href="#ensamble">Ensamble Reference26 + Compact14</a><a href="#arquitectura">Arquitectura Reference26</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a></div></details>
 <details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#resultados">Resultados y métricas</a><a href="#pruebas">Pruebas estadísticas</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
-<details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 estimaciones</a><a href="#simulador">Probar una parcela</a><a href="#mapa-interactivo">Mapa interactivo</a></div></details>
+<details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 estimaciones</a><a href="#mapa-interactivo">Mapa interactivo</a></div></details>
 <a href="#recorrido" class="nav-action">Índice</a>
 </nav>
 </div></header>
@@ -88,11 +88,11 @@
 <li><a href="#preguntas">Preguntas frecuentes</a><span>Interpretación correcta de las cifras y de las partes del modelo.</span></li>
 </ul></article>
 <article class="chapter-card">
-<div class="chapter-intro"><span class="chapter-number">04 / APLICACIÓN</span><h3>Explorar las parcelas</h3><p>Consultar los resultados del estudio y recorrer sus herramientas interactivas.</p><a class="chapter-readmore" href="#predicciones-59">Explorar estimaciones</a></div>
+<div class="chapter-intro"><span class="chapter-number">04 / PARCELAS</span><h3>Resultados por parcela</h3><p>Consultar las estimaciones verificadas de Reference26 y localizar las parcelas en el mapa.</p><a class="chapter-readmore" href="#predicciones-59">Consultar estimaciones</a></div>
 <ul class="chapter-subsections">
 <li><a href="#predicciones-59">Las 59 estimaciones</a><span>Predicciones verificadas de Reference26; los rendimientos reales siguen desconocidos.</span></li>
-<li><a href="#simulador">Laboratorio de predicción</a><span>Ejemplos educativos y entrada de los indicadores de una parcela.</span></li>
-<li><a href="#mapa-interactivo">Mapa geográfico</a><span>Ubicación y filtros interactivos desarrollados por Andrea-HH.</span></li>
+
+<li><a href="#mapa-interactivo">Distribución geográfica</a><span>Ubicación y atributos registrados de las 197 parcelas, con procedencia de Andrea-HH.</span></li>
 </ul></article>
 </div>
 <p class="reading-guide-foot">A continuación se encuentra el contenido íntegro de la investigación. El índice no sustituye las explicaciones, las pruebas ni las visualizaciones.</p>
@@ -131,7 +131,7 @@
 <div class="pred59-status" id="pred59-status" role="status" aria-live="polite">Verificando las 59 estimaciones frente a los resultados originales de Python…</div>
 <div class="pred59-data" id="pred59-data" hidden>
 <div class="pred59-summary" id="pred59-summary" aria-label="Resumen de las 59 estimaciones"></div>
-<div class="pred59-highlights"><div><h3>Tres parcelas como ejemplo</h3><p>Seleccionadas automáticamente por sus valores estimados: menor, mediano y mayor. No son parcelas elegidas por un rendimiento observado.</p></div><div id="pred59-examples" class="pred59-example-grid"></div></div>
+<div class="pred59-highlights"><div><h3>Tres predicciones del conjunto de estudio</h3><p>Parcelas con la estimación menor, mediana y mayor de las 59 predicciones verificadas de Reference26. Sus rendimientos observados todavía son desconocidos.</p></div><div id="pred59-examples" class="pred59-example-grid"></div></div>
 <div class="pred59-viz"><div class="pred59-viz-top"><div><h3>¿Cómo se distribuyen las estimaciones?</h3><p>Cada punto representa una parcela. La posición horizontal indica el rendimiento estimado, en toneladas por hectárea. Selecciona un punto para consultar su predicción.</p></div></div><div id="pred59-plot" class="pred59-plot" role="group" aria-label="Predicciones de las parcelas por estado"></div></div>
 <div class="pred59-explorer"><div class="pred59-explorer-heading"><h3>Consultar las 59 predicciones</h3><p>Busca por identificador o municipio, filtra por estado y ordena los resultados. Todos los valores provienen del mismo ajuste final Reference26.</p></div>
 <div class="pred59-filters">
@@ -193,18 +193,16 @@
 <div class="math-item"><strong>Imputación y escala</strong><div class="math-scroll"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>z</mi><mi>j</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub></mrow><msub><mi>σ</mi><mi>j</mi></msub></mfrac></mrow></math></div><p>La media y escala se calculan únicamente en entrenamiento; antes se imputan los faltantes numéricos.</p></div>
 <div class="math-item"><strong>Peso por distancia</strong><div class="math-scroll"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>∝</mo><mfrac><mn>1</mn><mrow><msub><mi>d</mi><mi>i</mi></msub><mo>+</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow></mfrac></mrow></math></div><p>En igualdad de lo demás, un vecino próximo tiene mayor peso.</p></div>
 </div></details>
-<div class="illustration-lab"><div class="lab-heading"><h3>Igual lluvia total, distinta distribución</h3><p>simulación educativa, con valores inventados: no son datos de las parcelas del estudio.</p></div>
-<div class="buttonset"><button type="button" class="active" data-rain="uniform" aria-pressed="true">30 mm cada mes</button><button type="button" data-rain="concentrated" aria-pressed="false">140 mm en agosto</button></div>
-<div id="rain-chart"></div><div class="rain-metrics"><div><span>Lluvia total</span><strong id="rain-total">210 mm</strong></div><div><span>Fracción temprana</span><strong id="rain-early">42.9 %</strong></div><div><span>Índice HHI</span><strong id="rain-hhi">0.143</strong></div></div>
+<div class="observed-data-panel">
 <div class="real-data-figure" id="datos-reales">
 <h3>El clima y la vegetación observados en 2025</h3>
-<p class="chart-explain">Estas gráficas están reservadas para los datos <strong>reales de las 197 parcelas</strong>. Se generan a partir de las series originales, sin inventar lluvia ni vegetación. Las líneas representan las medianas mensuales y los segmentos verticales delimitan los percentiles 10 y 90; no son intervalos predictivos.</p>
+<p class="chart-explain">Las gráficas utilizan las series originales de las 197 parcelas en 2025. La línea representa la mediana mensual de las observaciones disponibles; los segmentos muestran los percentiles 10 y 90, que describen la variación entre parcelas y no intervalos predictivos.</p>
 <p id="real-chart-status" role="status">Verificando si ya se han publicado los agregados observacionales…</p>
 <div class="detail-pair real-chart-pair">
 <div><h4>Precipitación mensual · 2025</h4><div id="real-rainfall"></div></div>
 <div><h4>NDVI satelital · 2025</h4><div id="real-ndvi"></div></div>
 </div>
-<p class="small-note">La cobertura satelital puede variar por mes. El gráfico indica cuántas parcelas tuvieron mediciones válidas, sin reemplazar valores ausentes por datos simulados. La demostración de 210 mm de arriba sigue siendo una simulación independiente.</p>
+<p class="small-note">El número de observaciones válidas se informa por mes; los datos ausentes no se sustituyen con valores creados para la visualización. Fuente: series mensuales originales de 2025 publicadas como agregados verificables.</p>
 </div></div></section>
 
 <section class="section section-dark" id="arquitectura"><div class="shell">
@@ -227,14 +225,7 @@
 <div class="geo-layout">
 <div><div class="geo-cluster-list" id="cluster-list" role="group" aria-label="Peso aprendido del experto local en cuatro grupos geológicos"></div>
 <p class="small-note">Los números 0–3 son identificadores arbitrarios de K-means. No son municipios, clases de fertilidad ni niveles ordenados de rendimiento. Los porcentajes son los pesos del ajuste final sobre las 138 parcelas conocidas.</p></div>
-<div class="geo-interactive">
-<h3>Ejemplo numérico de la combinación de componentes</h3><p>Ejercicio ilustrativo con valores hipotéticos. Las estimaciones climática y local se mantienen constantes; se modifica el peso asignado según el grupo geológico y se observa el efecto de la corrección residual. Los valores no representan predicciones individuales.</p>
-<label for="example-climate">Estimación climática <output id="climate-number">4.00 t/ha</output></label><input id="example-climate" type="range" min="250" max="550" value="400" step="10">
-<label for="example-local">Estimación local por vecindad <output id="local-number">4.80 t/ha</output></label><input id="example-local" type="range" min="250" max="550" value="480" step="10">
-<label for="example-corrector">Corrección residual ilustrativa <output id="corrector-number">0.00 t/ha</output></label><input id="example-corrector" type="range" min="-25" max="25" value="0" step="5">
-<div class="mix-swatch" id="mix-swatch" aria-label="Mezcla de pesos según el grupo"><span id="mix-climate"></span><span id="mix-local"></span></div>
-<div class="example-total"><span>Estimación ilustrativa resultante</span><strong id="example-result">—</strong><small>t/ha</small></div><p id="example-equation" class="equation-caption" aria-live="polite"></p>
-</div></div>
+</div>
 <div class="note-inline"><strong>La diferencia entre K y k:</strong> en el ajuste final <strong>K = 4 grupos geológicos</strong> y <strong>k = 24 vecinos geográficos</strong>. Son dos operaciones distintas. Los parámetros de Ridge y la agrupación se ajustan sólo con el entrenamiento de cada evaluación.</div>
 </div></section>
 
@@ -245,7 +236,7 @@
 <div class="missing-item"><span>Datos geológicos</span><h3>Representación física</h3><p>Las columnas numéricas no observadas utilizan la mediana del entrenamiento antes de la transformación. Un cero real en la composición no es un dato faltante.</p></div>
 <div class="missing-item"><span>Información para R3</span><h3>Corrección desactivada</h3><p>Si falta cualquiera de los tres indicadores de la corrección, la predicción conserva la mezcla base. En el ajuste final esto ocurre para 8 de las 59 parcelas.</p></div>
 </div>
-<div class="missing-demo"><div><h3>Condiciones de activación de la corrección residual</h3><p>Seleccione la disponibilidad de los tres indicadores necesarios para la corrección. Este ejercicio describe la regla de activación del modelo y no utiliza observaciones individuales.</p></div><div class="buttonset"><button class="active" type="button" data-support="complete" aria-pressed="true">Tres indicadores residuales disponibles</button><button type="button" data-support="missing" aria-pressed="false">Al menos un indicador residual ausente</button></div><div class="support-formula" id="support-formula" aria-live="polite">Combinación de las estimaciones climática y local, con corrección residual acotada</div><p id="support-note">Cuando los tres indicadores están disponibles, la corrección residual puede modificar la estimación hasta en 0.25 t/ha, en sentido positivo o negativo.</p></div>
+
 </div></section>
 
 <section class="section" id="ajuste"><div class="shell">
@@ -288,7 +279,7 @@
 <div class="loocv-head"><p class="eyebrow">VALIDACIÓN DEJANDO UNA PARCELA FUERA</p><h3>138 parcelas evaluadas, una a la vez</h3><p>En cada repetición se entrena el modelo con 137 cosechas conocidas y se predice la cosecha de la parcela restante. Así se obtienen 138 predicciones para medir el error conjunto. Este procedimiento se conoce como LOOCV.</p></div>
 <div class="loocv-metrics"><div><span>Parcelas evaluadas</span><strong>138</strong></div><div><span>RMSE</span><strong>0.468186</strong><small>toneladas por hectárea</small></div><div><span>R²</span><strong>≈ 0.6952</strong><small>ajuste estadístico, no porcentaje de aciertos</small></div></div>
 <div class="loocv-reading"><div><h4>¿Cuántos kilogramos representa el error?</h4><p>Un RMSE de 0.468186 toneladas por hectárea equivale a <strong>468.186 kilogramos por hectárea</strong>. Como el RMSE eleva los errores al cuadrado antes de promediarlos, penaliza especialmente las equivocaciones grandes. <strong>No significa que cada parcela tenga un error de 468 kilogramos.</strong></p></div><div><h4>¿Y cómo expresarlo como porcentaje?</h4><p>La media de las 138 cosechas conocidas fue aproximadamente <strong>3.9554 toneladas por hectárea</strong>. El RMSE equivale al <strong>11.84 % de esa media</strong>; sólo es una comparación de escalas. No es el porcentaje de error esperado de una parcela ni un MAPE. Para calcular un error porcentual medio real se necesitan los errores individuales y rendimientos observados correspondientes.</p></div><div><h4>¿Qué nos dice R²?</h4><p>Un R² cercano a 0.6952 indica que, en esta evaluación, el modelo redujo aproximadamente el <strong>69.52 % de la suma de errores cuadrados</strong> respecto a predecir siempre la media observada del conjunto evaluado. <strong>No significa acertar el 69.52 % de las parcelas.</strong></p></div></div>
-<div class="relative-scale"><label for="yield-reference">Comparar el RMSE con un rendimiento de referencia: <output id="yield-reference-value">4.0 t/ha</output></label><input type="range" id="yield-reference" min="200" max="550" step="10" value="400"><p>El RMSE representa el <strong id="yield-scale-percent">11.70 %</strong> de ese rendimiento hipotético. Es una relación de magnitudes, <em>no una estimación del error porcentual individual</em>.</p></div>
+
 <p class="small-note">Procedencia: resultado LOOCV confirmado por el equipo (138 parcelas; RMSE 0.468186; R² aproximado 0.6952). Las predicciones individuales de los 138 turnos todavía no están archivadas en este repositorio público, por lo que no se ofrece aquí una nueva auditoría independiente del cálculo.</p>
 </div>
 <div class="previous-validation-heading"><h3>Otra evaluación utilizada durante el desarrollo</h3><p>Se conserva por separado el experimento de 16 particiones, con 97 parcelas para entrenar y 41 para evaluar. Sus métricas no deben confundirse con las del LOOCV.</p></div>
@@ -334,47 +325,9 @@
 <details><summary>¿Se sustituyen los datos faltantes siempre por la media?</summary><p>No. Las columnas numéricas de los regresores se imputan por mediana de entrenamiento; el escalado utiliza estadísticas de entrenamiento. El corrector final se desactiva si falta alguno de sus tres indicadores requeridos.</p></details>
 <details><summary>¿Qué significa un peso geológico de 0.86?</summary><p>Que, en esa mezcla ajustada, la estimación local recibe un peso cercano a 86 % y la climática el resto. No significa que la geología explique 86 % del rendimiento o que lo cause.</p></details>
 <details><summary>¿Cuánto acierta el modelo?</summary><p>En LOOCV se evaluaron 138 parcelas, dejando fuera una distinta cada vez: RMSE de 0.468186 t/ha y R² aproximado de 0.6952. Otra evaluación de 16 particiones obtuvo RMSE medio de 0.4625 t/ha. Ninguno representa un porcentaje de aciertos ni una garantía para cada parcela.</p></details>
-<details><summary>¿Puedo estimar aquí mi parcela?</summary><p>Sí, puedes introducir las 26 variables y usar el motor Reference26 que funciona en tu navegador. Antes de permitir el cálculo, comprueba que reproduce las 59 estimaciones originales de Python. También puedes explorar directamente esos 59 resultados del estudio. La validez para parcelas nuevas fuera del área o ciclo estudiados no está demostrada.</p></details>
+<details><summary>¿Qué estimaciones puedo consultar?</summary><p>Se publican las 59 predicciones de Reference26 correspondientes a parcelas del estudio cuya cosecha no se conoce. Cada estimación se contrasta con el resultado archivado de Python antes de mostrarse. No se ofrecen cálculos para parcelas nuevas ni resultados obtenidos con valores hipotéticos.</p></details>
 </div>
 <div class="source-index"><strong>Documentación técnica original</strong><a href="https://github.com/heri-espino/todoseboso/blob/main/documentation/models/Reference26/README.md" target="_blank" rel="noopener noreferrer">Fórmula, 26 variables y ajuste final ↗</a><a href="https://github.com/heri-espino/todoseboso/blob/main/results/reference26_component_evidence/v1/README.md" target="_blank" rel="noopener noreferrer">Pruebas de cada componente ↗</a><a href="https://github.com/heri-espino/todoseboso/blob/main/results/four_final_checks/v1/README.md" target="_blank" rel="noopener noreferrer">Soporte, sensibilidad e intervalos ↗</a></div></div></section>
-<section class="section section-soft" id="simulador"><div class="shell">
-<div class="section-heading"><div><p class="eyebrow">12 · LABORATORIO DE PREDICCIÓN</p><h2>Explora la predicción <em>con parcelas inventadas o con tus propios datos.</em></h2></div><p>Puedes experimentar con una simulación o ejecutar el modelo entrenado dentro de tu navegador cuando esté disponible su exportación verificada.</p></div>
-<div class="prediction-mode" role="group" aria-label="Modo de exploración"><button type="button" data-predmode="fictitious" class="active" aria-pressed="true">Parcelas inventadas · simulación</button><button type="button" data-predmode="own" aria-pressed="false">Mi parcela · preparar datos</button></div>
-<div id="fictitious-mode" class="prediction-panel">
-<h3>¿Cómo cambia la estimación entre parcelas imaginarias?</h3>
-<p>Estos casos utilizan estimaciones climáticas, locales y correcciones <strong>inventadas</strong>. Los pesos geológicos corresponden al ajuste final documentado; el cálculo de mezcla es exacto, pero <strong>no equivale a ejecutar el modelo entrenado</strong> sobre los 26 indicadores.</p>
-<div class="fictional-presets" id="fictional-presets" role="group" aria-label="Elegir una parcela inventada"></div>
-<div class="parcel-config">
-<div class="parcel-inputs"><label for="parcel-climate">Estimación climática ficticia (t/ha)<input id="parcel-climate" type="number" min="0" max="12" step="0.05" value="4.10"></label>
-<label for="parcel-local">Estimación local ficticia (t/ha)<input id="parcel-local" type="number" min="0" max="12" step="0.05" value="4.55"></label>
-<label for="parcel-geogroup">Grupo geológico de ejemplo<select id="parcel-geogroup"><option value="0">Grupo 0</option><option value="1">Grupo 1</option><option value="2">Grupo 2</option><option value="3">Grupo 3</option></select></label>
-<label for="parcel-delta">Corrección ficticia (t/ha)<input id="parcel-delta" type="number" min="-0.25" max="0.25" step="0.01" value="0.10"></label>
-<label class="parcel-support"><input type="checkbox" id="parcel-r3" checked> Los tres indicadores residuales están disponibles</label></div>
-<div class="parcel-output"><span class="output-heading">Resultado de la fórmula ilustrativa</span><strong id="parcel-estimate" aria-live="polite">—</strong><small>toneladas por hectárea</small><div id="parcel-mixbar" class="parcel-mixbar" aria-label="Pesos climático y local"><span></span><span></span></div><p id="parcel-breakdown" aria-live="polite"></p><p id="parcel-status" role="status">No se han ejecutado los coeficientes del modelo entrenado.</p></div>
-</div>
-</div>
-<div id="own-mode" class="prediction-panel" hidden>
-<h3>Prepara los indicadores de una parcela</h3>
-<p>Esta herramienta organiza <strong>las mismas 26 variables derivadas</strong> que utiliza el modelo. Algunas proceden de imágenes satelitales, información geológica y series históricas; por eso no basta con escribir la latitud y la longitud. Los valores se introducen ya calculados, con las unidades que se indican en el inventario de variables.</p>
-<p>Los 26 indicadores se utilizan directamente en <strong>Reference26 dentro de tu navegador</strong>, después de comprobar que la exportación conserva los resultados del modelo de Python. Mientras esa comprobación no esté disponible, puedes preparar y descargar el archivo JSON. La simulación anterior es completamente independiente.</p>
-<div class="own-status"><strong id="parcel-completeness" aria-live="polite">0 de 26 variables completadas</strong><span id="own-r3-status">Sin evaluar soporte R3</span></div>
-<div id="parcel-input-groups"></div>
-<div class="own-actions"><button id="parcel-export" type="button">Descargar mis 26 indicadores en JSON</button><button id="parcel-clear" type="button" class="secondary-cta">Limpiar el formulario</button></div>
-<div class="live-inference" id="live-inference"><p class="eyebrow">PREDICCIÓN REAL · EN TU NAVEGADOR</p>
-<h3>Ejecutar Reference26 sin servidor ni cuenta</h3>
-<p>Los coeficientes entrenados, los pesos geológicos y los 138 ejemplos de referencia se descargan una sola vez como un archivo JSON. Todos los cálculos de la regresión climática, Ridge local, K-means y la corrección residual se realizan en tu dispositivo. No se envían tus 26 indicadores a un servidor.</p>
-<div class="live-api-config"><button id="api-check" type="button">Comprobar modelo local</button></div>
-<p id="api-status" role="status" aria-live="polite">Verificando los parámetros exportados y la coincidencia de las 59 predicciones del estudio…</p>
-<div class="live-inference-actions"><button id="predict-real" type="button" disabled>Calcular rendimiento con mis 26 indicadores</button>
-<div id="live-result" class="live-result" aria-live="polite"></div></div>
-<div class="existing-parcel-lookup"><h4>Reproducir la estimación de una de las 59 parcelas originales</h4>
-<p>Introduce el ID exacto de una parcela del conjunto de 59. El navegador reutilizará las características y distancias congeladas de esa parcela, sin necesidad de introducir sus 26 indicadores.</p>
-<label for="existing-id">ID de la parcela</label><input id="existing-id" type="text" placeholder="ID_POLIGONO" autocomplete="off">
-<button id="predict-existing" type="button" disabled>Consultar estimación original</button>
-<div id="existing-result" aria-live="polite"></div></div></div>
-<p class="small-note">Este JSON <strong>no contiene una predicción</strong>. La inferencia exige el modelo ajustado, su preprocesamiento, los centroides geológicos y los 138 ejemplos de entrenamiento, que estarán incluidos en la exportación web verificada. <a href="https://github.com/heri-espino/todoseboso/blob/main/src/current_champions.py" target="_blank" rel="noopener noreferrer">Consultar la implementación de inferencia ↗</a></p>
-</div>
-</div></section>
 <section class="section section-soft collaborator-map" id="mapa-interactivo" aria-labelledby="collaborator-map-title">
 <div class="shell">
 <div class="section-heading collaborator-map-heading"><div>

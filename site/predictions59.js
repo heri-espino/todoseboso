@@ -106,22 +106,7 @@
     }
     const note=make("p","pred59-detail-note",
       "La diferencia entre esta estimación y el rendimiento real no puede calcularse hasta conocer la cosecha de esta parcela.");
-    const action=make("button","pred59-load","Examinar sus 26 variables en el laboratorio");
-    action.type="button";
-    action.addEventListener("click",()=>{
-      const own=document.querySelector('[data-predmode="own"]');
-      if(own) own.click();
-      const fields=[...document.querySelectorAll("#parcel-input-groups input[name]")];
-      for(const field of fields){
-        const v=row.x[field.name];
-        field.value=v==null?"":String(v);
-        field.dispatchEvent(new Event("input",{bubbles:true}));
-      }
-      const input=$("#existing-id");
-      if(input)input.value=row.id;
-      $("#simulador").scrollIntoView({block:"start",behavior:"smooth"});
-    });
-    detail.append(head,explanation,grid,note,action);
+    detail.append(head,explanation,grid,note);
     if(scroll) detail.scrollIntoView({block:"nearest",behavior:"smooth"});
   }
 

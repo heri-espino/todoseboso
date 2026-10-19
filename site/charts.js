@@ -417,25 +417,5 @@
       textContent: "La línea fina marca los percentiles 10 y 90; la gruesa, 25 y 75; el círculo es la mediana. Son grupos de parcelas distintos, no errores de predicción. Eje en t/ha."
     }));
   }
-  function rainfall(target, values) {
-    const {canvas, tip, colors} = start(target, "Distribución ficticia de 210 mm de lluvia entre abril y octubre", 290, 610);
-    const months = ["Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct"];
-    const domain = [0, 150], bottom = 233, top = 26;
-    for(const mm of [0, 50, 100, 150]) {
-      const y = interpolate(mm, domain, [bottom, top]);
-      line(canvas, 83, y, 958, y, {color: colors.rule});
-      textNode(canvas, mm + " mm", 14, y, {size: 11, color: colors.muted});
-    }
-    values.forEach((value, i) => {
-      const x = 116 + i * 122, y = interpolate(value, domain, [bottom, top]);
-      const height = bottom - y;
-      const bar = svg("rect", {x, y, width: 72, height, rx: 4,
-        fill: i < 3 ? colors.jade : colors.gold});
-      canvas.append(bar);
-      interactive(bar, months[i] + ": " + value + " mm de lluvia ficticia.", tip);
-      textNode(canvas, value + " mm", x + 36, Math.max(y - 10, 12), {size: 12, weight: 740, anchor: "middle"});
-      textNode(canvas, months[i], x + 36, 251, {size: 12, anchor: "middle"});
-    });
-  }
-  global.GeoCharts = Object.freeze({models, performance, ablations, r3, expertWeights, coefficients, forest, intervals, parcelCounts, distribution, rainfall});
+  global.GeoCharts = Object.freeze({models, performance, ablations, r3, expertWeights, coefficients, forest, intervals, parcelCounts, distribution});
 })(window);

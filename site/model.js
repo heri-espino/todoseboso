@@ -17,26 +17,6 @@
       button.setAttribute("aria-pressed", String(on));
     });
   };
-  // Both rainfall scenes are fictional, 210 mm in April–October.
-  const RAIN = {
-    uniform: [30,30,30,30,30,30,30],
-    concentrated: [10,10,10,20,140,10,10]
-  };
-  const showRain = (id) => {
-    const mm = RAIN[id], total = mm.reduce((a, b) => a + b, 0);
-    const early = mm.slice(0, 3).reduce((a, b) => a + b, 0) / total;
-    const hhi = mm.reduce((sum, v) => sum + (v / total) ** 2, 0);
-    if (total !== 210) throw Error("La simulación debe conservar 210 mm");
-    window.GeoCharts.rainfall($("#rain-chart"), mm);
-    $("#rain-total").textContent = total + " mm";
-    $("#rain-early").textContent = fmt(early * 100, 1) + " %";
-    $("#rain-hhi").textContent = fmt(hhi, 3);
-    activeButtons("[data-rain]", "rain", id);
-  };
-  $$("[data-rain]").forEach((button) =>
-    button.addEventListener("click", () => showRain(button.dataset.rain)));
-  showRain("uniform");
-
   const featureTabs = $$("[data-feature]");
   let model = null, selectedCluster = 0;
   const showFeatures = (id) => {
@@ -59,31 +39,6 @@
   featureTabs.forEach((button) =>
     button.addEventListener("click", () => showFeatures(button.dataset.feature)));
 
-  function example() {
-    if (!model) return;
-    const c = Number($("#example-climate").value) / 100;
-    const e = Number($("#example-local").value) / 100;
-    const delta = Number($("#example-corrector").value) / 100;
-    const g = model.final_fit.cluster_weights[selectedCluster];
-    if (!(g >= 0 && g <= 1)) throw Error("Peso geológico fuera de [0,1]");
-    const result = c + g * (e - c) + delta;
-    $("#climate-number").textContent = fmt(c) + " t/ha";
-    $("#local-number").textContent = fmt(e) + " t/ha";
-    $("#corrector-number").textContent = fmt(delta) + " t/ha";
-    $("#mix-climate").style.width = (100 * (1 - g)) + "%";
-    $("#mix-local").style.width = (100 * g) + "%";
-    $("#mix-swatch").setAttribute("aria-label",
-      fmt(100 * (1 - g), 1) + " % clima, " + fmt(100 * g, 1) + " % experto local");
-    $("#example-result").textContent = fmt(result);
-    $("#example-equation").textContent =
-      "La contribución climática es de " + fmt(c * (1 - g), 3) +
-      " t/ha y la contribución local es de " + fmt(e * g, 3) +
-      " t/ha. La corrección residual ilustrativa es de " + fmt(delta, 2) +
-      " t/ha. En consecuencia, la estimación ilustrativa resultante es de " +
-      fmt(result, 3) + " t/ha.";
-  }
-  ["example-climate", "example-local", "example-corrector"].forEach((id) =>
-    $("#" + id).addEventListener("input", example));
   function drawClusters() {
     const root = $("#cluster-list");
     root.replaceChildren();
@@ -105,22 +60,10 @@
       button.addEventListener("click", () => {
         selectedCluster = index;
         drawClusters();
-        example();
       });
       root.append(button);
     });
   }
-
-  $$("[data-support]").forEach((button) => button.addEventListener("click", () => {
-    const complete = button.dataset.support === "complete";
-    activeButtons("[data-support]", "support", button.dataset.support);
-    $("#support-formula").textContent = complete ?
-      "Combinación climática y local con corrección residual acotada" :
-      "Combinación climática y local sin corrección residual";
-    $("#support-note").textContent = complete ?
-      "Con los tres indicadores disponibles, la corrección residual puede modificar la estimación en un máximo de 0.25 t/ha, en sentido positivo o negativo." :
-      "Ante la ausencia de cualquiera de los tres indicadores, la corrección residual R3 se desactiva y se conserva la combinación climática y local.";
-  }));
 
   let research = null;
   function showIntervals(level) {
@@ -204,7 +147,6 @@
       model = m;
       showFeatures("clima");
       drawClusters();
-      example();
       showFigures(evidence, results, newResearch, distributions);
     } catch (error) {
       console.error("Error al cargar el modelo documentado:", error);
