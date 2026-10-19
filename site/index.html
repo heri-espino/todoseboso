@@ -25,7 +25,7 @@
 <a href="#inicio" class="nav-home">Inicio</a>
 <details class="nav-group"><summary>El estudio<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">01 · CONTEXTO Y DATOS</p><a href="#datos">El problema y las parcelas</a><a href="#variables">Las 26 variables</a><a href="#preparacion">Preparación de datos</a><a href="#datos-reales">Clima y vegetación reales</a></div></details>
 <details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · MODELO REFERENCE26</p><a href="#ensamble">Modelo Reference26</a><a href="#arquitectura">Arquitectura Reference26</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a></div></details>
-<details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#resultados">Resultados y métricas</a><a href="#pruebas">Pruebas estadísticas</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
+<details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#resultados">Resultados y métricas</a><a href="#pruebas">Pruebas anteriores: asociaciones</a><a href="#estadisticas-finales">Nuevo: diagnóstico de residuos LOOCV</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
 <details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 estimaciones</a><a href="#mapa-interactivo">Mapa interactivo</a></div></details>
 <a href="#recorrido" class="nav-action">Índice</a>
 </nav>
@@ -83,7 +83,8 @@
 <div class="chapter-intro"><span class="chapter-number">03 / EVIDENCIA</span><h3>Resultados y límites</h3><p>Qué tan precisas son las estimaciones y qué conclusiones resisten los diagnósticos.</p><a class="chapter-readmore" href="#resultados">Examinar resultados</a></div>
 <ul class="chapter-subsections">
 <li><a href="#resultados">Desempeño predictivo</a><span>RMSE, MAE, R² y protocolos diferentes de validación.</span></li>
-<li><a href="#pruebas">Pruebas estadísticas</a><span>Asociaciones, sensibilidad e incertidumbre de las comparaciones.</span></li>
+<li><a href="#pruebas">Pruebas originales: asociaciones</a><span>Regresiones diagnósticas y contrastes de arquitectura; se mantienen en su apartado histórico.</span></li>
+<li class="chapter-residual-link"><a href="#estadisticas-finales">Análisis NUEVO de residuos de Reference26 ↗</a><span>Normalidad, heterocedasticidad, Moran, Geary, semivariograma, observaciones influyentes y bootstrap espacial.</span></li>
 <li><a href="#limites">Limitaciones</a><span>Calidad de las etiquetas, falta de cosechas verificadas y alcance del estudio.</span></li>
 <li><a href="#preguntas">Preguntas frecuentes</a><span>Interpretación correcta de las cifras y de las partes del modelo.</span></li>
 </ul></article>
@@ -276,7 +277,7 @@
 </div></section>
 
 <section class="section" id="pruebas"><div class="shell">
-<div class="section-heading"><div><p class="eyebrow">09 · RESPALDO ESTADÍSTICO</p><h2>¿Qué podemos afirmar <em>con las pruebas disponibles?</em></h2></div><p>Relacionar una variable con la cosecha, observar una mejora en el RMSE y demostrar significancia son preguntas diferentes.</p></div>
+<div class="section-heading"><div><p class="eyebrow">09 · PRUEBAS ESTADÍSTICAS ORIGINALES</p><h2>¿Qué podemos afirmar <em>con las pruebas disponibles?</em></h2></div><p>Relacionar una variable con la cosecha, observar una mejora en el RMSE y demostrar significancia son preguntas diferentes.</p></div>
 <div class="significance-summary">
 <div><span>ASOCIACIONES EN UNA REGRESIÓN DE DIAGNÓSTICO</span><strong>3 de 4</strong><p>Lluvia total, fracción temprana y NDVI de mayo mostraron evidencia de asociación después de Holm; HHI no. No son pruebas individuales dentro del modelo final.</p></div>
 <div><span>CONTRASTES HISTÓRICOS DE ARQUITECTURA</span><strong>0 de 952</strong><p>Ninguno superó su corrección de Holm. Esto no demuestra que las arquitecturas sean equivalentes ni que las partes del modelo carezcan de utilidad.</p></div>
@@ -308,60 +309,81 @@
 <section class="section reference26-residuals" id="estadisticas-finales" aria-labelledby="r26-residual-title">
 <div class="shell" id="reference26-residuals">
   <div class="section-heading">
-    <div><p class="eyebrow">ANÁLISIS INFERENCIAL · RESIDUOS LOOCV</p><h2 id="r26-residual-title">Reference26: <em>qué nos dicen sus 138 errores.</em></h2></div>
-    <p>Se examinó una parcela por vez, ajustando Reference26 con las 137 cosechas restantes. La evaluación usa imputación por <strong>media de entrenamiento</strong> y no mide el error real de las 59 parcelas sin rendimiento conocido.</p>
+    <div><p class="eyebrow">CAPÍTULO INDEPENDIENTE · NUEVAS PRUEBAS · 2026</p><h2 id="r26-residual-title">Análisis de residuos <em>de Reference26.</em></h2></div>
+    <p>Este capítulo reúne <strong>exclusivamente los diagnósticos nuevos de los 138 errores LOOCV</strong>. Se conserva intacta la sección anterior de <a href="#pruebas">pruebas de asociaciones y arquitectura</a>: son análisis y preguntas diferentes.</p>
   </div>
+  <div class="r26-chapter-intro">
+    <p><strong>Qué se evaluó.</strong> Para cada una de las 138 parcelas etiquetadas, Reference26 se ajustó con las otras 137 y predijo la excluida. Imputación por media calculada dentro del entrenamiento; definición del residuo: predicción menos cosecha observada.</p>
+    <p><strong>Qué no se evaluó.</strong> No se midió el error real de las 59 parcelas ocultas ni se hizo un experimento de extrapolación hacia municipios enteros no vistos.</p>
+  </div>
+  <nav class="r26-local-nav" aria-label="Apartados del nuevo análisis de residuos">
+    <a href="#r26-magnitud">01 Magnitud</a><a href="#r26-influencia">02 Influencia</a><a href="#r26-supuestos">03 Supuestos</a><a href="#r26-espacial">04 Moran y Geary</a><a href="#r26-semivariograma">05 Semivariograma</a><a href="#r26-bootstrap">06 Bootstrap</a><a href="#r26-alcance">07 Conclusiones</a>
+  </nav>
   <p id="r26-residual-status" class="r26-status" role="status" aria-live="polite">Cargando las estadísticas agregadas verificadas…</p>
-  <div class="r26-kpis" id="r26-summary-cards" aria-label="Métricas predictivas de Reference26"></div>
+  <div class="r26-kpis" id="r26-summary-cards" aria-label="Métricas predictivas del nuevo estudio LOOCV"></div>
   <div class="r26-panel-grid">
-    <article class="r26-panel">
-      <p class="r26-eyebrow">01 · MAGNITUD DEL ERROR</p><h3>Errores típicos y cola extrema</h3>
-      <p>La mediana y el percentil 95 resumen los errores absolutos de las 138 exclusiones. El gráfico se enfoca en 0–1 t/ha para que los valores centrales puedan compararse; el error máximo se informa por separado.</p>
-      <div id="r26-error-scale" class="r26-chart" aria-label="Resumen de cuantiles absolutos"></div>
-      <p class="r26-axis">Escala de las barras: 0–1 t/ha.</p>
-      <div class="r26-maximum"><span>Mayor error absoluto observado</span><strong id="r26-maximum-error">—</strong></div>
-      <p class="r26-note">Un percentil no es una banda predictiva calibrada para una parcela futura. Los histogramas y gráficos Q–Q exactos requieren residuos individuales o agregaciones verificadas adicionales.</p>
+    <article class="r26-panel" id="r26-magnitud" aria-labelledby="r26-magnitud-title">
+      <p class="r26-eyebrow">01 · DISTRIBUCIÓN DEL ERROR</p><h3 id="r26-magnitud-title">¿Qué tan grandes son los errores?</h3>
+      <p>La mediana y el percentil 95 describen el error absoluto. La escala se concentra en 0–1 t/ha; el error extremo aparece por separado para no comprimir el resto de las barras.</p>
+      <div id="r26-error-scale" class="r26-chart" aria-label="Mediana y percentil 95 de errores absolutos"></div>
+      <p class="r26-axis">Valores en t/ha; barras con origen en cero y límite de visualización en 1 t/ha.</p>
+      <div class="r26-maximum"><span>Mayor error absoluto</span><strong id="r26-maximum-error">—</strong></div>
+      <p class="r26-note">Estos cuantiles resumen exclusiones LOOCV. No son límites de predicción para las 59 parcelas desconocidas.</p>
     </article>
-    <article class="r26-panel">
-      <p class="r26-eyebrow">02 · INFLUENCIA DE OBSERVACIONES</p><h3>¿Cuánto pesan las parcelas difíciles?</h3>
-      <p id="r26-influence-lead">Leyendo la concentración del SSE…</p>
-      <div class="r26-influence-bar" id="r26-influence-bar" role="group" aria-label="Participaciones de la suma total de errores cuadrados"></div>
-      <div class="r26-influence-legend"><span>Error mayor</span><span>Segundo mayor</span><span>Otras 136</span></div>
-      <div class="r26-tablescroll"><table><thead><tr><th scope="col">Análisis de supresión</th><th scope="col">RMSE</th></tr></thead><tbody id="r26-deletion-body"></tbody></table></div>
-      <p class="r26-note">Eliminaciones diagnósticas <strong>sin reentrenar</strong>. Se eligen después de observar los errores: no son un nuevo resultado LOOCV ni justifican declarar errónea una etiqueta.</p>
+    <article class="r26-panel" id="r26-influencia" aria-labelledby="r26-influencia-title">
+      <p class="r26-eyebrow">02 · SENSIBILIDAD A OBSERVACIONES</p><h3 id="r26-influencia-title">¿Cuánto pesan las parcelas difíciles?</h3>
+      <p id="r26-influence-lead">Leyendo la concentración de la suma de errores cuadrados…</p>
+      <div class="r26-influence-bar" id="r26-influence-bar" role="group" aria-label="Concentración del error cuadrático total"></div>
+      <div class="r26-influence-legend"><span>Mayor error</span><span>Segundo mayor</span><span>Otras 136</span></div>
+      <div class="r26-tablescroll"><table><thead><tr><th scope="col">Evaluación con predicciones guardadas</th><th scope="col">RMSE (t/ha)</th></tr></thead><tbody id="r26-deletion-body"></tbody></table></div>
+      <p class="r26-note">Eliminar los errores extremos <strong>después de calcularlos</strong> no reentrena Reference26 y no equivale a un segundo LOOCV. Tampoco demuestra que las etiquetas sean incorrectas.</p>
     </article>
-    <article class="r26-panel">
-      <p class="r26-eyebrow">03 · SUPUESTOS DISTRIBUCIONALES</p><h3>Normalidad y varianza de los residuos</h3>
-      <div class="r26-tablescroll"><table><thead><tr><th scope="col">Contraste</th><th scope="col">Resultado</th><th scope="col">Lectura</th></tr></thead><tbody id="r26-tests-body"></tbody></table></div>
-      <p class="r26-note">Shapiro–Wilk, D’Agostino–Pearson y Anderson–Darling rechazan la referencia normal. Koenker–BP y Brown–Forsythe no detectan heterocedasticidad con estas especificaciones; <strong>no demuestran</strong> homocedasticidad. Los valores p son exploratorios por la dependencia entre ajustes LOOCV.</p>
+    <article class="r26-panel r26-panel-full" id="r26-supuestos" aria-labelledby="r26-supuestos-title">
+      <p class="r26-eyebrow">03 · PRUEBAS DISTRIBUCIONALES NUEVAS</p><h3 id="r26-supuestos-title">Normalidad y heterocedasticidad</h3>
+      <p>Contrastamos la forma marginal de los residuos y la estabilidad de su dispersión frente a las predicciones. Estas pruebas <strong>no son</strong> las regresiones de asociaciones de la sección anterior.</p>
+      <div class="r26-tablescroll"><table><thead><tr><th scope="col">Prueba / estadístico</th><th scope="col">Resultado</th><th scope="col">Interpretación</th></tr></thead><tbody id="r26-tests-body"></tbody></table></div>
+      <div class="r26-reading-pair"><p class="r26-note"><strong>Normalidad:</strong> Shapiro–Wilk, D’Agostino–Pearson y Anderson–Darling rechazan la referencia normal con las especificaciones reportadas.</p><p class="r26-note"><strong>Varianza:</strong> Koenker–BP y Brown–Forsythe no rechazan sus hipótesis nulas; esto no prueba homocedasticidad. Interpretación exploratoria por solapamiento entre folds LOOCV.</p></div>
     </article>
-    <article class="r26-panel">
-      <p class="r26-eyebrow">04 · ESTRUCTURA ESPACIAL</p><h3>Índice global de Moran I</h3>
-      <p>Pesos kNN geográficos Haversine (1/k por fila, sin autocercanía), 1,999 permutaciones por prueba. Los puntos muestran Moran I para los residuos <strong>firmados</strong>; el eje se centra en los valores relevantes, no comienza en cero.</p>
-      <label for="r26-spatial-target">Magnitud espacial analizada <select id="r26-spatial-target"><option value="signed_residual">Residuo firmado</option><option value="absolute_error">Error absoluto</option><option value="squared_error">Error cuadrático</option></select></label>
-      <div class="r26-chart" id="r26-moran-chart" aria-label="Valores de Moran I para k = 4, 8, 12 y 24"></div>
-      <label for="r26-moran-k">Inspeccionar tamaño de vecindario
-        <select id="r26-moran-k"><option value="4">4 vecinos</option><option value="8" selected>8 vecinos</option><option value="12">12 vecinos</option><option value="24">24 vecinos</option></select>
-      </label>
-      <div class="r26-tablescroll"><table><tbody id="r26-moran-body"></tbody></table></div>
+    <article class="r26-panel r26-panel-full" id="r26-espacial" aria-labelledby="r26-espacial-title">
+      <p class="r26-eyebrow">04 · PRUEBAS ESPACIALES NUEVAS</p><h3 id="r26-espacial-title">Moran I y Geary C: ¿están agrupados los errores?</h3>
+      <p>Se analizaron residuos firmados, errores absolutos y errores cuadráticos con grafos geográficos kNN (distancia Haversine, pesos 1/k, excluyendo el propio punto), con <strong>1,999 permutaciones por contraste</strong>. Se conservan las correcciones de Holm y FDR-BH calculadas sobre la familia completa de pruebas del reporte original.</p>
+      <div class="r26-controls">
+        <label for="r26-spatial-target">Tipo de error <select id="r26-spatial-target"><option value="signed_residual">Residuo firmado (ŷ − y)</option><option value="absolute_error">Error absoluto |e|</option><option value="squared_error">Error cuadrático e²</option></select></label>
+        <label for="r26-moran-k">Vecinos a inspeccionar <select id="r26-moran-k"><option value="4">k = 4</option><option value="8" selected>k = 8</option><option value="12">k = 12</option><option value="24">k = 24</option></select></label>
+      </div>
+      <div class="r26-spatial-grid">
+        <div><h4>Moran I por tamaño de vecindario</h4><p class="r26-axis">I = 0 como referencia visual; el eje se ajusta al rango observado.</p><div class="r26-chart" id="r26-moran-chart" aria-label="Moran I para los cuatro vecindarios"></div></div>
+        <div><h4>Geary C por tamaño de vecindario</h4><p class="r26-axis">C = 1 como referencia de permutación aproximada; el eje se ajusta a los datos.</p><div class="r26-chart" id="r26-geary-chart" aria-label="Geary C para los cuatro vecindarios"></div></div>
+      </div>
+      <div class="r26-tablescroll"><table class="r26-compact-table"><caption>Estadísticos y pruebas del vecindario seleccionado</caption><tbody id="r26-moran-body"></tbody></table></div>
       <p id="r26-moran-reading" class="r26-note" aria-live="polite"></p>
-      <details><summary>Geary C, Moran de |e| / e² y semivariograma</summary><p id="r26-unavailable">Sus valores agregados no han sido proporcionados. No se generarán cifras ficticias.</p><p>Los resultados espaciales adicionales aparecerán automáticamente cuando se importen los CSV agregados de GeoC. El índice de Moran firmado no descarta conglomerados de pérdidas elevadas.</p><div class="r26-tablescroll"><table><thead><tr><th scope="col">Distancia entre parcelas</th><th scope="col">Semivarianza residual</th><th scope="col">Pares</th></tr></thead><tbody id="r26-variogram-body"></tbody></table></div><p id="r26-variogram-status" class="r26-note"></p></details>
+      <p class="r26-note"><strong>Ejemplo de lectura:</strong> Geary C para residuos firmados con k = 12 tiene p sin ajustar de 0,0065, pero p Holm de 0,468. No se debe anunciar como resultado significativo después de la corrección.</p>
+    </article>
+    <article class="r26-panel r26-panel-full" id="r26-semivariograma" aria-labelledby="r26-semivariograma-title">
+      <p class="r26-eyebrow">05 · ESTRUCTURA POR DISTANCIA</p><h3 id="r26-semivariograma-title">Semivariograma empírico de residuos</h3>
+      <p>Cada punto representa un intervalo de distancias entre dos parcelas, con su semivarianza media de residuos. El eje horizontal utiliza la distancia mediana real del intervalo; el vertical, la semivarianza en (t/ha)². No se suavizaron ni ajustaron los puntos.</p>
+      <div id="r26-variogram-chart" class="r26-variogram-chart" role="group" aria-label="Semivariograma agregado por distancia"></div>
+      <p id="r26-variogram-status" class="r26-note"></p>
+      <details class="r26-detail"><summary>Examinar los seis intervalos y conteos de pares</summary>
+        <div class="r26-tablescroll"><table><thead><tr><th scope="col">Distancia mediana</th><th scope="col">Semivarianza</th><th scope="col">Pares de parcelas</th></tr></thead><tbody id="r26-variogram-body"></tbody></table></div>
+      </details>
+      <p class="r26-note">Los 9.453 pares no son independientes: una parcela participa en muchos pares. Gráfico descriptivo, no interpolación por kriging ni prueba de ausencia de dependencia espacial.</p>
+    </article>
+    <article class="r26-panel r26-panel-full" id="r26-bootstrap" aria-labelledby="r26-bootstrap-title">
+      <p class="r26-eyebrow">06 · ROBUSTEZ ESPACIAL</p><h3 id="r26-bootstrap-title">Bootstrap por municipios y bloques geográficos</h3>
+      <p>Se remuestrearon grupos espaciales completos usando los 138 errores LOOCV ya guardados. Los rangos percentiles de RMSE son <strong>exploratorios</strong>; no son intervalos de confianza independientes ni bandas para predecir los 59 rendimientos desconocidos.</p>
+      <div class="r26-chart" id="r26-bootstrap-chart" aria-label="Rangos de RMSE para dos particiones con suficientes grupos"></div>
+      <p id="r26-bootstrap-note" class="r26-note"></p>
+      <details class="r26-detail"><summary>Mostrar los siete esquemas y las particiones descartadas</summary><div class="r26-tablescroll"><table><thead><tr><th scope="col">Partición</th><th scope="col">Grupos</th><th scope="col">Estado</th><th scope="col">Rango RMSE</th></tr></thead><tbody id="r26-block-body"></tbody></table></div></details>
     </article>
   </div>
-  <article class="r26-panel">
-    <p class="r26-eyebrow">05 · INCERTIDUMBRE GEOGRÁFICA</p><h3>Bootstrap por grupos espaciales: ¿es estable el RMSE?</h3>
-    <p>Se remuestrean municipios y bloques de coordenadas completos, conservando las 138 predicciones LOOCV ya calculadas. Los intervalos dibujados son rangos percentiles exploratorios del RMSE, <strong>no intervalos de confianza independientes ni intervalos predictivos</strong>.</p>
-    <div class="r26-chart" id="r26-bootstrap-chart" aria-label="Rangos de RMSE de dos agrupaciones espaciales"></div>
-    <p id="r26-bootstrap-note" class="r26-note"></p>
-    <details><summary>Mostrar los siete esquemas de agrupación y exclusiones</summary>
-      <div class="r26-tablescroll"><table><thead><tr><th scope="col">Agrupación</th><th scope="col">Grupos</th><th scope="col">Estado</th><th scope="col">Rango RMSE</th></tr></thead><tbody id="r26-block-body"></tbody></table></div>
-    </details>
-  </article>
-  <div class="r26-evidence">
-    <h3>Alcance inferencial y reproducibilidad</h3>
-    <p>Estas métricas describen la reconstrucción de parcelas excluidas <strong>con apoyo de las demás parcelas conocidas</strong>. No prueban efectos causales, normalidad, independencia espacial ni capacidad de extrapolación a municipios enteros no observados. El R² ajustado convencional y AIC/BIC no se reportan para esta arquitectura compuesta sin definir grados de libertad efectivos y una verosimilitud.</p>
-    <p>Los residuos no permiten diagnosticar directamente los 59 rendimientos ocultos. El modelo con imputación por media que produce esta evaluación y las 59 estimaciones archivadas con mediana son versiones distintas: no se presentan como idénticas.</p>
-    <p><a href="https://github.com/heri-espino/GeoC/blob/experiment/nuria-champions-loocv/results/peer_models/REFERENCE26_COMPACT14_STATISTICAL_INTERPRETATION_138_2026-10-19.md" target="_blank" rel="noopener noreferrer">Informe estadístico original (GeoC) ↗</a> · <a href="https://github.com/heri-espino/GeoC/blob/analysis/reference26-inferential-sensitivity-20261019/docs/REFERENCE26_INFERENTIAL_SENSITIVITY.md" target="_blank" rel="noopener noreferrer">Metodología y limitaciones ↗</a></p>
+  <div class="r26-evidence" id="r26-alcance">
+    <p class="r26-eyebrow">07 · INTERPRETACIÓN Y REPRODUCIBILIDAD</p><h3>¿Qué conclusiones permiten estos diagnósticos?</h3>
+    <p>La distribución marginal de residuos se aparta de la normal. Las pruebas de heterocedasticidad no detectaron evidencia con sus especificaciones, y las señales espaciales no sobreviven la corrección de Holm sobre la familia analizada. <strong>No rechazar no equivale a demostrar independencia espacial ni varianza constante.</strong> Los errores más grandes concentran una fracción apreciable de la pérdida cuadrática.</p>
+    <p>Las pruebas p son exploratorias: los ajustes LOOCV comparten gran parte de sus datos y la arquitectura fue estudiada con las mismas parcelas. No se infieren efectos causales, capacidad de extrapolar municipios nuevos ni cobertura probabilística para las 59 parcelas sin rendimiento.</p>
+    <p>Este estudio utiliza <strong>Reference26 con imputación por media</strong> dentro de cada entrenamiento. Las 59 estimaciones históricas del sitio se generaron con <strong>imputación por mediana</strong>: son una versión diferente y aquí no se sustituyen.</p>
+    <p id="r26-unavailable" class="r26-note">No se publican histogramas o Q–Q individuales sin los respectivos agregados comprobables.</p>
+    <p><a href="https://github.com/heri-espino/GeoC/blob/experiment/nuria-champions-loocv/results/peer_models/REFERENCE26_COMPACT14_STATISTICAL_INTERPRETATION_138_2026-10-19.md" target="_blank" rel="noopener noreferrer">Valores y pruebas originales (GeoC) ↗</a> · <a href="https://github.com/heri-espino/GeoC/blob/analysis/reference26-inferential-sensitivity-20261019/docs/REFERENCE26_INFERENTIAL_SENSITIVITY.md" target="_blank" rel="noopener noreferrer">Método del bootstrap e influencia ↗</a></p>
   </div>
 </div>
 </section>
@@ -369,7 +391,7 @@
 <section class="section section-soft collaborator-map" id="mapa-interactivo" aria-labelledby="collaborator-map-title">
 <div class="shell">
 <div class="section-heading collaborator-map-heading"><div>
-<p class="eyebrow">13 · EXPLORACIÓN GEOGRÁFICA</p>
+<p class="eyebrow">14 · EXPLORACIÓN GEOGRÁFICA</p>
 <h2 id="collaborator-map-title">Distribución espacial de <em>las 197 parcelas.</em></h2>
 </div><p>Explore las parcelas de Hidalgo, Puebla y Tlaxcala. El visor distingue los 138 registros de entrenamiento y las 59 parcelas por estimar; permite seleccionar polígonos y consultar las variables ambientales disponibles.</p></div>
 <div id="geoc-native-map" class="geoc-native-map" aria-label="Explorador geográfico integrado">
