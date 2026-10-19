@@ -70,7 +70,8 @@
     if (!research) return;
     activeButtons("[data-level]", "level", level);
     window.GeoCharts.intervals($("#interval-results"),
-      research.intervals.filter(x => x.model === "Reference26" && x.level === Number(level)),
+      research.intervals.filter(x => x.level === Number(level) &&
+        (x.model === "Reference26" || x.model === "Compact14")),
       Number(level));
   }
   $$("[data-level]").forEach((button) =>
