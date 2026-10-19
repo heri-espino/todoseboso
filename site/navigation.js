@@ -56,8 +56,14 @@
     queued = false;
     let active = null;
     const threshold = header.offsetHeight + 55;
+    let closestTop = -Infinity;
     for (const entry of tracked) {
-      if (entry.section.getBoundingClientRect().top <= threshold) active = entry;
+      const top = entry.section.getBoundingClientRect().top;
+      // Find the closest preceding section by on-page position, not menu order.
+      if (top <= threshold && top > closestTop) {
+        closestTop = top;
+        active = entry;
+      }
     }
     for (const link of links) link.removeAttribute("aria-current");
     groups.forEach((group) => group.classList.remove("is-active"));

@@ -1,13 +1,22 @@
-# Página pública: regresión local con mezcla geológica
+# Página pública: ensamble de Reference26 y Compact14
 
-La página principal `site/index.html` describe **un solo modelo**: el modelo
-de 26 entradas registrado como `Reference26` en el código. Su nombre público
-es **Regresión local con mezcla geológica**. No debe presentarse simplemente
-como `KMeans26`: K-means agrupa composiciones geológicas y selecciona pesos
-de mezcla; los rendimientos proceden de regresiones Elastic Net y Ridge.
+La presentación inicial prioriza el **futuro ensamble de dos modelos** y
+después muestra sus componentes por separado: Reference26 (26 variables,
+regresión local con mezcla geológica) y Compact14 (14 variables, regresión
+local compacta). **Los pesos y métricas del ensamble están pendientes**
+hasta recibir los nuevos ajustes del otro agente. No se deben publicar
+combinaciones inventadas.
+
+El estudio metodológico de 26 entradas que se mantiene en las secciones
+posteriores sigue siendo exclusivamente **Reference26**, sin mezclar
+resultados del ensamble con los suyos. K-means agrupa composiciones geológicas
+en Reference26, pero no predice el rendimiento por sí solo.
+
+[Contrato completo para los dos nuevos joblib](./ENSEMBLE_HANDOFF.md).
 
 ## Recorrido del lector
 
+1. Ensamble en preparación y selección entre Reference26 y Compact14.
 1. Datos de 197 parcelas (138 con rendimiento, 59 por estimar).
 2. Inventario interactivo completo de las 26 variables, por función
    (4 clima, 7 local, 2 ubicación, 10 geología, 3 residuales).
@@ -40,6 +49,18 @@ La versión antigua de comparación se conserva en el repositorio
 (`website/`) como material histórico, pero el workflow
 `.github/workflows/publish_story.yml` **no la publica** ni deja un segundo
 sitio alternativo. En Pages sólo se publica `site/`.
+
+## Visualización ensemble-first
+
+El selector principal muestra **Ensamble → Reference26 → Compact14** en ese
+orden. La vista inicial del ensamble queda **pendiente de calibración**:
+no se asignan pesos, métricas ni predicciones antes de recibir ambos
+modelos finales y comprobar las mismas 59 parcelas. La vista de Reference26
+conserva su evaluación y 59 predicciones verificadas; Compact14 todavía
+requiere su exportación. Las secciones metodológicas posteriores siguen
+explicando Reference26 específicamente.
+
+[Contrato y checklist de integración](./ENSEMBLE_HANDOFF.md).
 
 ## Gráficas vinculadas a datos reales
 
@@ -256,6 +277,16 @@ Prueba local sin acceso de red:
 La disponibilidad del iframe y de sus capas remotas se debe verificar
 manualmente en el despliegue después de fusionar la PR.
 
-## Navigation and chapter overview
 
-The published `site/` presentation uses an accessible four-part menu: **El estudio**, **El modelo**, **Evaluación**, **Explorar**. Each contains direct anchors to the original subsections; four reading-guide cards below the introduction mirror the same content. This is a navigation-only improvement: no chart, model, dataset, formula, or prediction behavior changes. The native `<details>` dropdowns and links work without JavaScript; `site/navigation.js` adds mobile-menu toggling, active-section indication, click-outside and Escape behavior. `site/navigation.css` provides responsive styling. Run `node --check site/navigation.js` and `node tests/test_site_navigation.cjs` to verify.
+## Navegación por capítulos, sin pérdida de información
+
+El menú de `site/index.html` agrupa los enlaces existentes en **El estudio**,
+**El modelo**, **Evaluación** y **Explorar**, con submenús accesibles y un
+índice visual de cuatro capítulos (`#recorrido`). **El ensamble precede a
+la guía de lectura y sus vistas Reference26 / Compact14 siguen intactas**.
+No se mueven, sustituyen ni eliminan las secciones originales, los gráficos
+reales de 2025, los datos de evaluación, las 59 predicciones ni el mapa de
+Andrea-HH. La navegación funciona con enlaces HTML, sin dependencia de JS;
+`site/navigation.js` añade cierre por Escape/clic y resaltado según la
+posición real de cada sección. `tests/test_site_navigation.cjs` impide
+perder IDs, enlaces críticos o la ubicación final del mapa.

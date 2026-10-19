@@ -17,7 +17,6 @@
       button.setAttribute("aria-pressed", String(on));
     });
   };
-
   // Both rainfall scenes are fictional, 210 mm in April–October.
   const RAIN = {
     uniform: [30,30,30,30,30,30,30],
