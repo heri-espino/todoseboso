@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Public ensemble-first page preserving the exact frozen Reference26 evidence."""
+"""Public Reference26-only model story with authentic LOOCV residuals."""
 from __future__ import annotations
 import json
 import math
@@ -94,7 +94,7 @@ def check() -> None:
     assert all(a in page.ids for a in page.anchors), "Broken internal navigation"
     for asset in page.assets:
         assert (SITE / asset).is_file(), ("missing site asset", asset)
-    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./ensemble_contract.js", "./ensemble_story.js", "./browser_inference.js"]
+    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./reference26_residuals.js", "./browser_inference.js"]
     for forbidden in ("B1</", "Local04D"):
         assert forbidden not in html, forbidden
     for required in ("Regresión local con mezcla geológica", "K-means",
@@ -111,13 +111,17 @@ def check() -> None:
     assert 'id="simulador"' not in html
     assert "id=\"ensamble\"" in html
     assert html.index('id="ensamble"') < html.index('id="datos"')
-    assert html.index('data-ensemble-tab="Ensemble"') < html.index('data-ensemble-tab="Reference26"') < html.index('data-ensemble-tab="Compact14"')
-    ensemble = json.loads((SITE / "data/ensemble_models.json").read_text(encoding="utf-8"))
-    assert ensemble["status"] == "awaiting_final_models"
-    assert ensemble["ensemble"]["weights"] is None
-    assert ensemble["ensemble"]["method"] is None
-    assert ensemble["presentation_order"] == ["Ensemble","Reference26","Compact14"]
-    assert not (SITE / "data/ensemble_predictions_v1.json").exists()
+    assert "Compact14" not in html
+    assert 'id="estadisticas-finales"' in html
+    assert 'id="reference26-residuals"' in html
+    assert 'id="r26-moran-chart"' in html
+    source = json.loads((SITE / "data/reference26_residuals.json").read_text(encoding="utf-8"))
+    assert source["model"] == "Reference26_mean"
+    assert source["n_labeled"] == 138
+    assert source["protocol"]["training_labels_per_fold"] == 137
+    assert source["influence"]["refitted"] is False
+    assert source["spatial_bootstrap"]["refitted"] is False
+    assert not (SITE / "data/ensemble_models.json").exists()
     assert "COSECHA" in html or "cosecha" in html
     assert (SITE / "predictions59.js").is_file()
     assert (SITE / "predictions59.css").is_file()
@@ -136,7 +140,7 @@ def check() -> None:
     assert "GeoCharts.performance" in js
     assert "GeoCharts.forest" in js
     assert "GeoCharts.distribution" in js
-    print("Ensemble-first page with frozen Reference26 PASS: 26 precise source variables, training settings, labels and public chart contracts.")
+    print("Reference26-only residual page PASS: 26 precise source variables, training settings, labels and public chart contracts.")
 
 
 if __name__ == "__main__":
