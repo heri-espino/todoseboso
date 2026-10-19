@@ -385,13 +385,14 @@
     <article class="r26-panel">
       <p class="r26-eyebrow">04 · ESTRUCTURA ESPACIAL</p><h3>Índice global de Moran I</h3>
       <p>Pesos kNN geográficos Haversine (1/k por fila, sin autocercanía), 1,999 permutaciones por prueba. Los puntos muestran Moran I para los residuos <strong>firmados</strong>; el eje se centra en los valores relevantes, no comienza en cero.</p>
+      <label for="r26-spatial-target">Magnitud espacial analizada <select id="r26-spatial-target"><option value="signed_residual">Residuo firmado</option><option value="absolute_error">Error absoluto</option><option value="squared_error">Error cuadrático</option></select></label>
       <div class="r26-chart" id="r26-moran-chart" aria-label="Valores de Moran I para k = 4, 8, 12 y 24"></div>
       <label for="r26-moran-k">Inspeccionar tamaño de vecindario
         <select id="r26-moran-k"><option value="4">4 vecinos</option><option value="8" selected>8 vecinos</option><option value="12">12 vecinos</option><option value="24">24 vecinos</option></select>
       </label>
       <div class="r26-tablescroll"><table><tbody id="r26-moran-body"></tbody></table></div>
       <p id="r26-moran-reading" class="r26-note" aria-live="polite"></p>
-      <details><summary>Geary C, Moran de |e| / e² y semivariograma</summary><p id="r26-unavailable">Sus valores agregados no han sido proporcionados. No se generarán cifras ficticias.</p><p>La ausencia de autocorrelación firmada significativa no implica independencia ni descarta conglomerados de errores absolutos o cuadráticos.</p></details>
+      <details><summary>Geary C, Moran de |e| / e² y semivariograma</summary><p id="r26-unavailable">Sus valores agregados no han sido proporcionados. No se generarán cifras ficticias.</p><p>Los resultados espaciales adicionales aparecerán automáticamente cuando se importen los CSV agregados de GeoC. El índice de Moran firmado no descarta conglomerados de pérdidas elevadas.</p><div class="r26-tablescroll"><table><thead><tr><th scope="col">Distancia entre parcelas</th><th scope="col">Semivarianza residual</th><th scope="col">Pares</th></tr></thead><tbody id="r26-variogram-body"></tbody></table></div><p id="r26-variogram-status" class="r26-note"></p></details>
     </article>
   </div>
   <article class="r26-panel">
