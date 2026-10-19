@@ -71,3 +71,5 @@ La página independiente [modelo-corregido.html#auditoria-modelo-final](modelo-c
 La regla fija final, el selector anidado y Reference26 sin corrección son predictores distintos; sus variantes fueron elegidas anteriormente usando las mismas 138 etiquetas y la ventaja no tiene confirmación independiente. No se publicaron intervalos bootstrap numéricos, pruebas de normalidad no proporcionadas ni errores de las 59 parcelas desconocidas. Los datos son agregados, sin identificadores ni coordenadas; el motor del navegador y las predicciones anteriores permanecen intactos.
 
 Datos: `site/data/reference26_selected_statistical_audit.json`; código: `site/reference26_selected_audit.css`, `site/reference26_selected_audit.js`; método: `docs/REFERENCE26_SELECTED_STATISTICAL_SITE.md`; test: `node --test tests/test_reference26_selected_audit.cjs`.
+
+El bloque de precisión también contiene un desplegable con **22 métricas agregadas para los tres predictores** sin sobrecargar la vista inicial.
