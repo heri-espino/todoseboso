@@ -129,3 +129,7 @@ identificadores AGC, coordenadas, distancias individuales o salidas de
 los 59 objetivos. La sección de predicción e inferencia anterior no
 se modifica; tampoco se atribuyen resultados nuevos al modelo antiguo.
 La publicación en GitHub Pages depende de merge y deployment del PR.
+
+## Tabla ampliada de métricas
+
+La pestaña de precisión tiene ahora un desplegable con **22 métricas agregadas** para los tres predictores: RMSE, MAE, MSE, SSE, mediana/P90/P95 del error absoluto, L1/L2/L∞, desviación del error, máximas sobre/subestimaciones, sesgo, R² predictivo, varianza explicada, Pearson/Spearman, WAPE, dos normalizaciones de RMSE y habilidad MAE frente a la media. El contenido está expresamente plegado por defecto para no saturar la página. Los valores completos reproducen seis decimales del stdout entregado, almacenados en JSON. No hay R² ajustado.
