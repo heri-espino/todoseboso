@@ -86,6 +86,8 @@ jobs:
             node --test tests/test_reference26_browser.cjs
             node --test tests/test_ensemble_story.cjs
           fi
+      - name: Validate observed-data chart exporter syntax
+        run: python -m py_compile scripts/export_real_chart_data.py
       - name: Validate SVG chart rendering and data fidelity
         run: node --test tests/test_svg_charts.cjs
       - name: Check parcel arithmetic and percentage interpretation
@@ -94,6 +96,7 @@ jobs:
         run: |
           node --check site/charts.js
           node --check site/model.js
+          node --check site/field_charts.js
           node --check site/parcel_core.js
           node --check site/predictor.js
           node --check site/inference_client.js
