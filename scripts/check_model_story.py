@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Public Reference26-only model story with authentic LOOCV residuals."""
+"""Public corrected agrospatial model with historical source-backed diagnostics."""
 from __future__ import annotations
 import json
 import math
@@ -130,7 +130,7 @@ def check() -> None:
     assert (SITE / "predictions59.js").is_file()
     assert (SITE / "predictions59.css").is_file()
     assert "No se ofrecen pronósticos individuales" not in html
-    assert "predictor.js" not in html and "parcel_core.js" not in html
+    assert 'src="./predictor.js"' not in html and 'src="./parcel_core.js"' not in html
     loocv = data["loocv"]
     assert loocv["model"] == "Reference26" and loocv["folds"] == 138
     assert loocv["training_labels_per_fold"] == 137 and loocv["held_out_per_fold"] == 1
@@ -138,6 +138,14 @@ def check() -> None:
     assert math.isclose(loocv["r2_approx"], .6952, abs_tol=1e-12)
     assert math.isclose(loocv["rmse_t_ha"] * 1000, 468.186, abs_tol=1e-9)
     assert "confirmado" in loocv["provenance"] and "no contienen" not in loocv["provenance"]
+    corrected = json.loads((SITE / "data/final_model.json").read_text(encoding="utf-8"))
+    assert corrected["historical_candidate_selection_posthoc"] is True
+    assert corrected["final_fit_selected"] == "robust26_3_neighbors_supported_0p25"
+    assert len(corrected["loocv"]) == 7
+    assert (SITE / "data/submission59_final.csv").is_file()
+    for section in ("modelo-final-analisis", "predecir-parcela",
+                    "final-model-bars", "final-model-selections", "fm-predict-fields"):
+        assert section in page.ids, section
 
     assert "train138.parquet" not in html
     assert "./data/model.json" in js or '"model.json"' in js
