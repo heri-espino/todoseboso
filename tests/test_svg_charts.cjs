@@ -148,6 +148,74 @@ test("All regional distribution medians are sourced, never reconstructed", () =>
   for(const row of data.rows) assert.ok(points(node).some(p =>
     p.getAttribute("aria-label").includes(row.median.toFixed(3))));
 });
+
+test("Both nominal choices focus the scale on sourced observed coverages", () => {
+  const data=read("new_research.json");
+  const modelSource=fs.readFileSync(path.join(root,"site","model.js"),"utf8");
+  assert.ok(modelSource.includes('x.model === "Reference26" || x.model === "Compact14"'),
+    "The interface must display BOTH validated models, not just Reference26");
+  for(const level of [0.8,0.9]){
+    const rows=data.intervals.filter(row=>row.level===level);
+    assert.equal(rows.length,2);
+    const container=new MockNode("div");
+    charts.intervals(container,rows,level);
+    const plot=svg(container);
+    const markers=points(container);
+    assert.equal(markers.length,2);
+    assert.equal(plot.getAttribute("preserveAspectRatio"),"xMidYMin meet");
+    const left=270,right=865;
+    for(const [i,row] of rows.entries()){
+      const p=markers[i];
+      const cx=Number(p.getAttribute("cx"));
+      assert.ok(cx>left+100&&cx<right-65,"Coverage dot should occupy the meaningful plot center");
+      assert.ok(p.getAttribute("aria-label").includes((row.coverage*100).toFixed(2)));
+      assert.ok(p.getAttribute("aria-label").includes(row.width.toFixed(3)));
+    }
+    const axisLabels=all(plot,"text").map(x=>x.textContent)
+      .filter(x=>/^\\d+ %$/.test(x));
+    assert.ok(axisLabels.length>=4&&axisLabels.length<=8,"Use a focused, legible range");
+    const percentages=axisLabels.map(x=>parseInt(x,10));
+    assert.ok(Math.max(...percentages)-Math.min(...percentages)<=14,
+      "Axis must not revert to the broad 50–100 percent range");
+    assert.ok(percentages[0]<=level*100&&percentages.at(-1)>=level*100);
+    const note=container.children.at(-1).textContent;
+    assert.match(note,/no comienza en cero/i);
+    assert.match(note,/59 parcelas/);
+  }
+});
+
+test("State quantile plot focuses the recorded P10–P90 range without cropping", () => {
+  const rows=read("distribution.json").rows;
+  const container=new MockNode("div");
+  charts.distribution(container,rows);
+  const plot=svg(container);
+  const dots=points(container);
+  assert.equal(dots.length,8);
+  assert.equal(plot.getAttribute("preserveAspectRatio"),"xMidYMin meet");
+  const whiskers=all(plot,"line").filter(x=>x.getAttribute("stroke-width")==="3");
+  assert.equal(whiskers.length,8);
+  const plotLeft=269,plotRight=872;
+  for(const w of whiskers){
+    const x1=Number(w.getAttribute("x1")),x2=Number(w.getAttribute("x2"));
+    assert.ok(x1>=plotLeft&&x2<=plotRight,"All P10–P90 values must fit within the plot");
+  }
+  for(const point of dots){
+    const cx=Number(point.getAttribute("cx"));
+    assert.ok(cx>=plotLeft&&cx<=plotRight);
+  }
+  const observedRange=Math.max(...rows.map(r=>r.p90))-Math.min(...rows.map(r=>r.p10));
+  const whiskerExtents=Math.max(...whiskers.map(x=>Number(x.getAttribute("x2"))))-
+    Math.min(...whiskers.map(x=>Number(x.getAttribute("x1"))));
+  assert.ok(observedRange>2);
+  assert.ok(whiskerExtents>(plotRight-plotLeft)*0.67,
+    "P10–P90 spread must dominate the plot rather than distant empty margins");
+  const note=container.children.at(-1).textContent;
+  assert.match(note,/no comienza en cero/i);
+  assert.match(note,/mínimos y máximos individuales/);
+  for(const row of rows)assert.ok(dots.some(p=>
+    p.getAttribute("aria-label").includes(row.median.toFixed(3))));
+});
+
 test("Real parcel inventory reflects all 197 source-backed state counts", () => {
   const data = read("distribution.json");
   const node = new MockNode("div");
