@@ -14,8 +14,8 @@ const ids=[
  "reference26-residuals","r26-residual-status","r26-summary-cards",
  "r26-error-scale","r26-maximum-error","r26-influence-lead",
  "r26-influence-bar","r26-deletion-body","r26-tests-body",
- "r26-moran-chart","r26-moran-k","r26-spatial-target","r26-moran-body","r26-moran-reading",
- "r26-variogram-body","r26-variogram-status",
+ "r26-moran-chart","r26-geary-chart","r26-moran-k","r26-spatial-target","r26-moran-body","r26-moran-reading",
+ "r26-variogram-chart","r26-variogram-body","r26-variogram-status",
  "r26-bootstrap-chart","r26-block-body","r26-bootstrap-note",
  "r26-unavailable"
 ];
@@ -88,6 +88,9 @@ test("renders Reference26 alone and accessible numerical charts",async()=>{
  assert.equal(nodes["r26-error-scale"].children.length,2);
  assert.equal(nodes["r26-influence-bar"].children.length,3);
  assert.equal(nodes["r26-moran-chart"].children.length,5);
+ assert.equal(nodes["r26-geary-chart"].children.length,5);
+ assert.equal(nodes["r26-variogram-chart"].children.length,3);
+ assert.equal(nodes["r26-variogram-chart"].children[1].children.length,7);
  assert.equal(nodes["r26-bootstrap-chart"].children.length,3);
  assert.equal(nodes["r26-block-body"].children.length,7);
  assert.match(nodes["r26-moran-reading"].textContent,/-0,076861|−0,076861|-0.076861/);
@@ -95,17 +98,19 @@ test("renders Reference26 alone and accessible numerical charts",async()=>{
  nodes["r26-moran-k"].value="4";
  nodes["r26-moran-k"].dispatch("change");
  assert.match(nodes["r26-moran-reading"].textContent,/k = 4/);
- assert.equal(nodes["r26-moran-body"].children.length,5);
+ assert.equal(nodes["r26-moran-body"].children.length,8);
  nodes["r26-spatial-target"].value="absolute_error";
  nodes["r26-spatial-target"].dispatch("change");
  assert.match(nodes["r26-moran-reading"].textContent,/errores absolutos/);
- assert.equal(nodes["r26-moran-body"].children.length,5);
+ assert.equal(nodes["r26-moran-body"].children.length,8);
  assert.equal(nodes["r26-moran-chart"].children.length,5);
+ assert.equal(nodes["r26-geary-chart"].children.length,5);
  assert.match(nodes["r26-moran-body"].children[4].children[1].textContent,/0[,.]866219/);
+ assert.match(nodes["r26-moran-body"].children[6].children[1].textContent,/1/);
  nodes["r26-spatial-target"].value="squared_error";
  nodes["r26-spatial-target"].dispatch("change");
  assert.match(nodes["r26-moran-reading"].textContent,/errores cuadrados/);
- assert.equal(nodes["r26-moran-body"].children.length,5);
+ assert.equal(nodes["r26-moran-body"].children.length,8);
  assert.equal(nodes["r26-variogram-body"].children.length,6);
  assert.match(nodes["r26-variogram-status"].textContent,/Semivarianza empírica/);
  assert.match(nodes["r26-bootstrap-note"].textContent,/dos de los siete/);
@@ -138,7 +143,16 @@ test("site ships no external ensemble UI or fabricated private histogram",()=>{
  assert.match(html,/id="estadisticas-finales"/);
  assert.match(html,/id="r26-bootstrap-chart"/);
  assert.match(html,/id="r26-spatial-target"/);
+ assert.match(html,/id="r26-geary-chart"/);
+ assert.match(html,/id="r26-variogram-chart"/);
  assert.match(html,/id="r26-variogram-body"/);
+ assert.match(html,/id="r26-semivariograma"/);
+ assert.match(html,/id="r26-supuestos"/);
+ assert.match(html,/id="r26-alcance"/);
+ assert.match(html,/<a href="#estadisticas-finales">Nuevo: diagnóstico de residuos LOOCV<\/a>/);
+ assert.match(html,/<a href="#pruebas">Pruebas anteriores: asociaciones<\/a>/);
+ assert.ok(html.indexOf('id="pruebas"') < html.indexOf('id="estadisticas-finales"'));
+ assert.ok(html.indexOf('id="estadisticas-finales"') < html.indexOf('id="mapa-interactivo"'));
  assert.match(html,/src="\.\/reference26_residuals\.js"/);
  assert.doesNotMatch(html,/Compact14|Ensamble de dos modelos/);
  assert.doesNotMatch(html,/src="\.\/ensemble_/);
