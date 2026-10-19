@@ -87,6 +87,42 @@ body{margin:0;background:#f4f7f2;color:#26352e}
           </tbody>
         </table>
       </div>
+
+      <details class="tsb-audit-full-detail">
+        <summary>Ver tabla completa de 22 métricas y normas por modelo</summary>
+        <p class="tsb-audit-lede">Mismas 138 parcelas y etiquetas de entrenamiento por fold. Se distinguen normas totales (L₁, L₂, L∞) y errores promediados (MAE, RMSE). Las métricas relativas no sustituyen medidas absolutas.</p>
+        <div class="tsb-audit-table-wrap">
+          <table class="tsb-audit-table">
+            <caption>Valores agregados transcritos del informe LOOCV del 19 de octubre de 2026; seis decimales en consola.</caption>
+            <thead><tr><th scope="col">Medida</th><th scope="col">Regla final</th><th scope="col">Selector anidado</th><th scope="col">Sin corrección</th></tr></thead>
+            <tbody>
+            <tr><th scope="row">RMSE</th><td>0.462418 t/ha</td><td>0.462892 t/ha</td><td>0.468138 t/ha</td></tr>
+            <tr><th scope="row">MAE</th><td>0.332019 t/ha</td><td>0.331956 t/ha</td><td>0.333786 t/ha</td></tr>
+            <tr><th scope="row">MSE</th><td>0.213830 (t/ha)²</td><td>0.214269 (t/ha)²</td><td>0.219153 (t/ha)²</td></tr>
+            <tr><th scope="row">Suma de errores cuadrados (SSE)</th><td>29.508601 (t/ha)²</td><td>29.569144 (t/ha)²</td><td>30.243156 (t/ha)²</td></tr>
+            <tr><th scope="row">Mediana de error absoluto</th><td>0.244838 t/ha</td><td>0.244838 t/ha</td><td>0.244645 t/ha</td></tr>
+            <tr><th scope="row">Percentil 90 de |error|</th><td>0.638737 t/ha</td><td>0.638737 t/ha</td><td>0.679528 t/ha</td></tr>
+            <tr><th scope="row">Percentil 95 de |error|</th><td>0.782014 t/ha</td><td>0.782014 t/ha</td><td>0.779618 t/ha</td></tr>
+            <tr><th scope="row">L₁ = suma de errores absolutos</th><td>45.818556 t/ha</td><td>45.809975 t/ha</td><td>46.062466 t/ha</td></tr>
+            <tr><th scope="row">L₂ = raíz de la suma de errores cuadrados</th><td>5.432182 t/ha</td><td>5.437752 t/ha</td><td>5.499378 t/ha</td></tr>
+            <tr><th scope="row">L∞ = error absoluto máximo</th><td>2.115301 t/ha</td><td>2.119565 t/ha</td><td>2.139958 t/ha</td></tr>
+            <tr><th scope="row">Desviación estándar del error</th><td>0.462400 t/ha</td><td>0.462864 t/ha</td><td>0.468136 t/ha</td></tr>
+            <tr><th scope="row">Mayor sobreestimación</th><td>2.115301 t/ha</td><td>2.119565 t/ha</td><td>2.139958 t/ha</td></tr>
+            <tr><th scope="row">Mayor subestimación</th><td>0.839128 t/ha</td><td>0.839128 t/ha</td><td>0.866301 t/ha</td></tr>
+            <tr><th scope="row">Sesgo firmado</th><td>−0.004103 t/ha</td><td>−0.005062 t/ha</td><td>0.001466 t/ha</td></tr>
+            <tr><th scope="row">R² predictivo</th><td>0.702693</td><td>0.702083</td><td>0.695292</td></tr>
+            <tr><th scope="row">Varianza explicada</th><td>0.702717</td><td>0.702119</td><td>0.695295</td></tr>
+            <tr><th scope="row">Correlación de Pearson</th><td>0.838282</td><td>0.837927</td><td>0.833884</td></tr>
+            <tr><th scope="row">Correlación de Spearman</th><td>0.775810</td><td>0.774280</td><td>0.766091</td></tr>
+            <tr><th scope="row">WAPE</th><td>8.394137 %</td><td>8.392565 %</td><td>8.438822 %</td></tr>
+            <tr><th scope="row">NRMSE sobre media observada</th><td>11.690915 %</td><td>11.702902 %</td><td>11.835531 %</td></tr>
+            <tr><th scope="row">NRMSE sobre desviación estándar</th><td>54.525847 %</td><td>54.581753 %</td><td>55.200329 %</td></tr>
+            <tr><th scope="row">Skill MAE frente a media</th><td>0.556678</td><td>0.556761</td><td>0.554318</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
       <div class="tsb-audit-grid" style="margin-top:19px">
         <div class="tsb-audit-paper"><h3>La cola de errores no desaparece</h3><p>Para la regla final, el percentil 95 del error absoluto es <strong>0.782014 t/ha</strong> y el error máximo absoluto es <strong>2.115301 t/ha</strong>. En la referencia original, el P95 era 0.779618 t/ha: el modelo final mejora el RMSE global, pero <strong>no todos los cuantiles de error</strong>.</p></div>
         <div class="tsb-audit-paper"><h3>Medidas adicionales</h3><p>Regla final: L₁ = <strong>45.818556</strong> t/ha, L₂ = <strong>5.432182</strong> t/ha, MSE = <strong>0.213830</strong> (t/ha)², correlación de Pearson = <strong>0.838282</strong> y WAPE = <strong>8.394137 %</strong>.</p><p>El R² ajustado no se calcula: el modelo regularizado y seleccionado no tiene grados de libertad efectivos fijos defendibles.</p></div>
