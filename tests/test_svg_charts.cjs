@@ -172,7 +172,7 @@ test("Both nominal choices focus the scale on sourced observed coverages", () =>
       assert.ok(p.getAttribute("aria-label").includes(row.width.toFixed(3)));
     }
     const axisLabels=all(plot,"text").map(x=>x.textContent)
-      .filter(x=>/^\\d+ %$/.test(x));
+      .filter(x=>/^\d+ %$/.test(x));
     assert.ok(axisLabels.length>=4&&axisLabels.length<=8,"Use a focused, legible range");
     const percentages=axisLabels.map(x=>parseInt(x,10));
     assert.ok(Math.max(...percentages)-Math.min(...percentages)<=14,
