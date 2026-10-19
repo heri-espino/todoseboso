@@ -14,11 +14,11 @@ const sections=["ensamble","datos","variables","preparacion","arquitectura","geo
  "faltantes","ajuste","resultados","pruebas","limites","preguntas","simulador","mapa-interactivo"];
 for(const id of sections)assert.match(html,new RegExp('<section[^>]*id="'+id+'"'),
  "Full-length research section removed: #"+id);
-for(const id of ["predicciones-59","reference26-view","ensemble-dynamic-view","real-rainfall",
+for(const id of ["predicciones-59","reference26-view","reference26-residuals","real-rainfall",
  "real-ndvi","real-loocv","parcel-coverage","pred59-plot","predict-real","cluster-list"]){
  assert.ok(ids.includes(id),"Interactive content missing: #"+id);
 }
-for(const src of ["./navigation.js","./ensemble_story.js","./ensemble_contract.js",
+for(const src of ["./navigation.js","./reference26_residuals.js",
  "./field_charts.js","./predictions59.js","./browser_inference.js"]){
  assert.ok(html.includes('src="'+src+'"'),"Required source missing: "+src);
 }
@@ -42,4 +42,4 @@ assert.match(css,/@media\(prefers-reduced-motion:reduce\)/);
 assert.match(nav,/revealReferenceFromHash/);
 assert.match(nav,/modelHeading.insertAdjacentElement\("afterend", figure\)/);
 assert.ok(html.includes("andrea-hh.github.io/todoseboso/explorador/mapa.html"));
-console.log("PASS: editorial index, full document, deep links, verified plots, ensemble, and map.");
+console.log("PASS: editorial index, full document, deep links, verified plots, Reference26 residual analysis, and map.");
