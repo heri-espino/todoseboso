@@ -94,10 +94,10 @@ def check() -> None:
     assert all(a in page.ids for a in page.anchors), "Broken internal navigation"
     for asset in page.assets:
         assert (SITE / asset).is_file(), ("missing site asset", asset)
-    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./reference26_residuals.js", "./browser_inference.js"]
+    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./reference26_residuals.js", "./final_model.js", "./final_predictor.js", "./browser_inference.js"]
     for forbidden in ("B1</", "Local04D"):
         assert forbidden not in html, forbidden
-    for required in ("Regresión local con mezcla geológica", "K-means",
+    for required in ("expertos agroespaciales", "K-means",
                      "mediana", "faltantes", "24 vecinas", "α = 30",
                      "0.4625", "0.3387", "0.6971", "952", "3 de 4",
                      "51", "8", "11", "3.9564", "3.9554", "2025"):
@@ -112,6 +112,10 @@ def check() -> None:
     assert "id=\"ensamble\"" in html
     assert html.index('id="ensamble"') < html.index('id="datos"')
     assert "Compact14" not in html
+    assert 'id="modelo-final-analisis"' in html
+    assert 'id="predecir-parcela"' in html
+    assert (SITE / "data/submission59_final.csv").is_file()
+    assert (SITE / "data/final_model.json").is_file()
     assert 'id="estadisticas-finales"' in html
     assert 'id="reference26-residuals"' in html
     assert 'id="r26-moran-chart"' in html
@@ -140,7 +144,7 @@ def check() -> None:
     assert "GeoCharts.performance" in js
     assert "GeoCharts.forest" in js
     assert "GeoCharts.distribution" in js
-    print("Reference26-only residual page PASS: 26 precise source variables, training settings, labels and public chart contracts.")
+    print("Agrospatial corrected final model + retained native Reference26 historical model: site contract PASS.")
 
 
 if __name__ == "__main__":
