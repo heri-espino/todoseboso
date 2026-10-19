@@ -204,3 +204,15 @@ del soporte total de la estimación.
 La comprobación automática `tests/test_predictions59.cjs` asegura 59 IDs
 únicos, 59 predicciones con paridad frente a Python, 51 con R3 y ocho sin
 soporte para R3, y que se rechazan cifras o entradas manipuladas.
+
+
+## Datos observacionales y OOF reales — trabajo simultáneo preservado
+
+La herramienta [`scripts/export_real_chart_data.py`](../scripts/export_real_chart_data.py)
+extrae sólo las columnas mensuales necesarias de los Parquet locales, resume
+lluvia y NDVI sin inventar mediciones, y puede procesar predicciones OOF
+LOOCV genuinas cuando estén disponibles. Escribe el resumen local en
+`outputs/site_extract/real_charts.json` antes de publicarlo como
+`site/data/real_charts.json`. La página muestra un aviso claro si estos datos
+no están disponibles. Véase
+[documentación del exportador](../documentation/real_chart_data_export.md).
