@@ -24,7 +24,7 @@
 <nav id="nav-links" class="nav-links" aria-label="Navegación principal">
 <a href="#inicio" class="nav-home">Inicio</a>
 <details class="nav-group"><summary>El estudio<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">01 · CONTEXTO Y DATOS</p><a href="#datos">El problema y las parcelas</a><a href="#variables">Las 26 variables</a><a href="#preparacion">Preparación de datos</a><a href="#datos-reales">Clima y vegetación reales</a></div></details>
-<details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · MODELO REFERENCE26</p><a href="#ensamble">Modelo Reference26</a><a href="#arquitectura">Arquitectura Reference26</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a><a href="#reference26-analog-cv">Modelo nuevo: corrección adaptativa</a></div></details>
+<details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · MODELO REFERENCE26</p><a href="#ensamble">Modelo Reference26</a><a href="#arquitectura">Arquitectura Reference26</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a><a href="./modelo-corregido.html">Modelo validado y sus métricas</a></div></details>
 <details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#resultados">Resultados y métricas</a><a href="#pruebas">Pruebas anteriores: asociaciones</a><a href="#estadisticas-finales">Nuevo: diagnóstico de residuos LOOCV</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
 <details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 estimaciones</a><a href="#mapa-interactivo">Mapa interactivo</a></div></details>
 <a href="#recorrido" class="nav-action">Índice</a>
@@ -36,8 +36,8 @@
 <p class="eyebrow hero-eyebrow">GEOCEBADA · RETO AGROCEBADA FIRA 2026</p>
 <h1>Estimación del rendimiento <em>de cebada.</em></h1>
 <p class="hero-description">Estudiamos 197 parcelas agrícolas en Hidalgo, Puebla y Tlaxcala. Conocemos el rendimiento reportado de 138 y estimamos el de las 59 restantes. Reference26 combina clima, vegetación satelital, geología e información espacial.</p>
-<p class="hero-description minor-intro">El modelo seleccionado es <strong>Reference26 (Regresión local con mezcla geológica)</strong>. Presentamos sus datos, arquitectura y diagnósticos estadísticos de residuos en evaluación LOOCV.</p>
-<div class="hero-actions"><a class="primary-cta" href="#recorrido">Leer el índice</a><a class="secondary-cta" href="#estadisticas-finales">Ver residuos y pruebas</a></div>
+<p class="hero-description minor-intro">Conoce el <strong>modelo de corrección adaptativa por parcelas análogas</strong>: metodología, 138 predicciones LOOCV auténticas, métricas de error y límites de validación.</p>
+<div class="hero-actions"><a class="primary-cta" href="./modelo-corregido.html">Ver el modelo y sus resultados</a><a class="secondary-cta" href="#recorrido">Explorar el estudio</a></div>
 <p class="hero-metadata">HIDALGO · PUEBLA · TLAXCALA · CICLO 2025</p>
 </div>
 <div class="hero-visual model-visual" aria-label="Esquema de etapas del modelo"><div class="visual-header"><span>INTERIOR DE REFERENCE26 · PRIMER COMPONENTE</span><span>t/ha</span></div>
