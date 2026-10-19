@@ -68,9 +68,9 @@
     ["prediction_error", "Error predictivo"],
     ["association_and_skill", "R², asociación y habilidad"],
     ["relative_and_specialized", "Errores especializados"],
+    ["other_specialized", "Otros diagnósticos y métricas"],
     ["normality", "Normalidad y distribución de residuos"],
-    ["conditional_error", "Heterocedasticidad y calibración"],
-    ["paired_losses", "Pruebas emparejadas"]
+    ["conditional_error", "Heterocedasticidad y calibración"]
   ];
   const head = ["Campo", ...modelNames.map(x => friendly[x]), "Interpretación"];
   function node(tag, text, cls) {
@@ -112,6 +112,19 @@
           map.set(field, {group, title});
       }
     }
+    for (const model of modelNames) {
+      for (const [key, value] of Object.entries(m[model])) {
+        if (key === "source_kind" || key === "adjusted_r2_status" ||
+            key === "model") continue;
+        if (!map.has(key) && (typeof value === "number" ||
+            value === null || typeof value === "boolean"))
+          map.set(key, {group:"other_specialized",
+                        title:"Otros indicadores de evaluación"});
+      }
+    }
+    if (!map.has("adjusted_r2")) map.set("adjusted_r2", {
+      group:"association_and_skill", title:"R² y ajuste estadístico"
+    });
     for (const group of ["normality", "conditional_error"]) {
       for (const row of data.diagnostics?.[group] || []) {
         for (const key of Object.keys(row)) {
@@ -183,6 +196,29 @@
     $("ensemble-spatial-status").textContent =
       spatialBody.children.length + " pruebas de autocorrelación espacial. P-valores de permutación exploratorios, corregidos por multiplicidad.";
   }
+  function renderPaired(data) {
+    const root = $("ensemble-paired-body");
+    root.replaceChildren();
+    for (const row of data.diagnostics?.paired_losses || []) {
+      const tr = node("tr");
+      for (const field of [
+        friendly[row.model] || row.model,
+        row.loss === "squared_error" ? "Error cuadrático" : "Error absoluto",
+        format(row.mean_loss_difference),
+        format(row.fraction_improved),
+        format(row.wilcoxon_p_exploratory),
+        format(row.wilcoxon_p_exploratory_holm_all)
+      ]) tr.append(node("td", field));
+      root.append(tr);
+    }
+    if (!root.children.length) {
+      const tr = node("tr");
+      const td = node("td", "Aún no hay contrastes emparejados calculados.");
+      td.colSpan = 6;
+      tr.append(td);
+      root.append(tr);
+    }
+  }
   async function initialize() {
     try {
       const response = await fetch("./data/ensemble_evaluation.json", {cache:"no-store"});
@@ -208,6 +244,7 @@
       target.addEventListener("change",()=>renderSpatial(data));
       render(data);
       renderSpatial(data);
+      renderPaired(data);
       loading.textContent = "Resultados agregados de 138 parcelas LOOCV cargados. Los pesos del ensamble se seleccionaron usando estas mismas 138 etiquetas.";
     } catch (err) {
       loading.textContent = "Análisis final pendiente de publicar: " + err.message;
