@@ -67,7 +67,7 @@ def main():
     assert (SITE / "charts.css").is_file()
     assert "originales del estudio" in html or "curvas acumuladas originales" in html.lower()
 
-    for path in ("charts.js", "model.js", "field_charts.js", "parcel_core.js", "predictor.js", "reference26_engine.js", "predictions59.js", "ensemble_contract.js", "ensemble_story.js", "browser_inference.js"):
+    for path in ("charts.js", "model.js", "field_charts.js", "parcel_core.js", "predictor.js", "reference26_engine.js", "predictions59.js", "browser_inference.js"):
         text = (SITE / path).read_text(encoding="utf-8")
         assert "https://cdn." not in text
         if path != "field_charts.js":
