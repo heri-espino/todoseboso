@@ -28,6 +28,9 @@ for(const id of ["ensamble","datos","variables","preparacion","datos-reales","ar
 }
 assert.ok(html.indexOf('id="recorrido"') < html.indexOf('id="ensamble"'), "Editorial index must be before the full study");
 assert.ok(html.indexOf('id="recorrido"') < html.indexOf('id="datos"'), "Reading guide must precede data");
+assert.ok(html.indexOf('id="pruebas"') < html.indexOf('id="estadisticas-finales"'), "Legacy and new tests must be independent");
+assert.ok(html.indexOf('id="estadisticas-finales"') < html.indexOf('id="mapa-interactivo"'), "Residual chapter must precede final map");
+assert.ok(html.includes('href="#estadisticas-finales"'), "Residual section must be directly navigable");
 assert.ok(html.indexOf('id="mapa-interactivo"') > html.indexOf('id="preguntas"'), "Collaborator map should be final");
 for(const source of ["./reference26_residuals.js","./field_charts.js","./predictions59.js"]) {
   assert.ok(html.includes('src="'+source+'"'), "Protected runtime missing: "+source);
