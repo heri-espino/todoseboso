@@ -6,9 +6,9 @@
 <meta name="description" content="Cómo funciona la regresión local con mezcla geológica para estimar el rendimiento de cebada: 26 variables, tratamiento de faltantes, K-means, Ridge, Elastic Net, hiperparámetros, resultados y pruebas.">
 <title>Cómo estimamos el rendimiento de cebada · Regresión local con mezcla geológica</title>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css">
+<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./ensemble_metrics.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css">
 <script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script><script src="./parcel_core.js" defer></script><script src="./predictor.js" defer></script>
-<script src="./reference26_engine.js" defer></script>
+<script src="./reference26_engine.js" defer></script><script src="./ensemble_metrics.js" defer></script>
 <script src="./predictions59.js" defer></script>
 <script src="./browser_inference.js" defer></script>
 </head>
@@ -290,5 +290,57 @@
 <p class="small-note">Este JSON <strong>no contiene una predicción</strong>. La inferencia exige el modelo ajustado, su preprocesamiento, los centroides geológicos y los 138 ejemplos de entrenamiento, que estarán incluidos en la exportación web verificada. <a href="https://github.com/heri-espino/todoseboso/blob/main/src/current_champions.py" target="_blank" rel="noopener noreferrer">Consultar la implementación de inferencia ↗</a></p>
 </div>
 </div></section>
+
+<section class="section ensemble-jury" id="estadisticas-finales">
+  <div class="shell" id="ensemble-jury-metrics">
+    <div class="section-heading"><div><p class="eyebrow">ANÁLISIS ESTADÍSTICO DEL MODELO FINAL</p>
+      <h2>Evaluación exhaustiva de los tres pronósticos</h2></div>
+      <p>Consulta normas L¹, L², L∞, RMSE, R², métricas robustas, normalidad y autocorrelación espacial de los residuos. Todos los resultados proceden de 138 parcelas evaluadas una a una con LOOCV.</p>
+    </div>
+    <p id="ensemble-metrics-status" role="status" aria-live="polite">Comprobando si ya están disponibles los resultados estadísticos reentrenados…</p>
+    <div class="ensemble-top-line" id="ensemble-top-line" aria-label="Comparación de errores RMSE entre los tres modelos"></div>
+    <div class="ensemble-controls">
+      <label for="ensemble-metrics-search">Buscar por nombre o interpretación
+        <input id="ensemble-metrics-search" type="search" placeholder="Ej. error absoluto, sesgo, normalidad, R²">
+      </label>
+      <label for="ensemble-metrics-family">Familia estadística
+        <select id="ensemble-metrics-family"><option value="all">Todas las métricas</option></select>
+      </label>
+    </div>
+    <p id="ensemble-metrics-count" class="ensemble-note" aria-live="polite">Esperando las 138 predicciones externas verificadas.</p>
+    <div class="ensemble-table-wrap" role="region" aria-label="Tabla desplazable de métricas predictivas y diagnósticos" tabindex="0">
+      <table><thead><tr><th scope="col">Indicador</th><th scope="col">Reference26 con media</th>
+        <th scope="col">Compact14</th><th scope="col">Ensamble sugerido</th>
+        <th scope="col">Interpretación</th></tr></thead><tbody id="ensemble-metrics-body"></tbody></table>
+    </div>
+    <h3>Dependencia espacial de los residuos</h3>
+    <p>Índice de Moran I y estadístico Geary C, sobre grafos geográficos de k vecinos. Los p-valores provienen de permutaciones; se muestran las correcciones Holm y Benjamini–Hochberg para múltiples pruebas.</p>
+    <div class="ensemble-controls">
+      <label for="ensemble-spatial-k">Número de vecinos
+        <select id="ensemble-spatial-k"><option value="4">4 vecinos</option><option value="8" selected>8 vecinos</option><option value="12">12 vecinos</option><option value="24">24 vecinos</option></select>
+      </label>
+      <label for="ensemble-spatial-target">Variable analizada
+        <select id="ensemble-spatial-target"><option value="signed_residual">Residuo firmado</option>
+          <option value="absolute_error">Error absoluto</option><option value="squared_error">Error cuadrático</option></select>
+      </label>
+    </div>
+    <div class="ensemble-table-wrap" role="region" aria-label="Pruebas espaciales de los tres modelos" tabindex="0">
+      <table><thead><tr><th scope="col">Modelo</th><th scope="col">Estadístico</th>
+        <th scope="col">Valor</th><th scope="col">p sin ajustar</th>
+        <th scope="col">p Holm</th><th scope="col">p FDR-BH</th></tr></thead>
+        <tbody id="ensemble-spatial-body"></tbody></table>
+    </div>
+    <p id="ensemble-spatial-status" class="ensemble-note" aria-live="polite"></p>
+    <h3>Comparación pareada de pérdidas</h3>
+    <p>Contrastes por la misma parcela frente a Reference26 con media. Los pesos del ensamble se determinaron previamente con estas mismas 138 etiquetas; por tanto, las pruebas siguientes son exploratorias, no una confirmación externa de superioridad.</p>
+    <div class="ensemble-table-wrap" role="region" aria-label="Contrastes de pérdidas emparejadas" tabindex="0">
+      <table><thead><tr><th scope="col">Modelo</th><th scope="col">Pérdida</th>
+        <th scope="col">Diferencia media</th><th scope="col">Fracción que mejora</th>
+        <th scope="col">p Wilcoxon</th><th scope="col">p Holm</th></tr></thead>
+        <tbody id="ensemble-paired-body"></tbody></table>
+    </div>
+    <p class="ensemble-note ensemble-disclaimer"><strong>Limitaciones.</strong> Ningún rendimiento real de las 59 parcelas ocultas se conoce. El R² ajustado no tiene grados de libertad efectivos bien definidos para esta receta y se informa como no aplicable. Las pruebas de normalidad, heterocedasticidad y dependencia espacial son diagnósticos, con posibles desviaciones de sus hipótesis de independencia. El RMSE del ensamble no constituye una validación independiente del procedimiento que seleccionó sus pesos.</p>
+  </div>
+</section>
 </main><footer class="model-footer"><div class="shell"><strong>GeoCebada · AgroCebada FIRA 2026</strong><span>Regresión local con mezcla geológica · Código: Reference26 · Investigación retrospectiva del ciclo 2025</span><a href="#inicio">Volver al inicio ↑</a></div></footer>
 </body></html>
