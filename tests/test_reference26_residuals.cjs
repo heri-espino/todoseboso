@@ -59,8 +59,18 @@ test("published figures equal the supplied verified VM transcription",()=>{
  assert.equal(actual.diagnostics.variance.koenker_bp_p,.400797);
  assert.equal(actual.diagnostics.variance.brown_forsythe_p,.929793);
  assert.deepEqual(actual.spatial.signed_residual_moran.map(x=>x.k),[4,8,12,24]);
- assert.deepEqual(actual.spatial.signed_residual_moran.map(x=>x.I),
-   [-.055864,-.076861,-.062976,-.041802]);
+ // The source CSV preserves more precision than the six-decimal VM transcript.
+ const signedI=actual.spatial.signed_residual_moran.map(x=>x.I);
+ [-.055864,-.076861,-.062976,-.041802].forEach((reference,i)=>{
+   assert.ok(Math.abs(signedI[i]-reference)<.0000005,
+     "Source Moran I differs from verified rounded value for k="+[4,8,12,24][i]);
+ });
+ assert.deepEqual(actual.spatial.absolute_error_moran.map(x=>x.k),[4,8,12,24]);
+ assert.deepEqual(actual.spatial.squared_error_moran.map(x=>x.k),[4,8,12,24]);
+ assert.equal(actual.spatial.geary_c.length,12);
+ assert.equal(actual.spatial.semivariogram.length,6);
+ assert.equal(actual.spatial.semivariogram.reduce((n,r)=>n+r.pairs,0),138*137/2);
+ assert.equal(actual.spatial.expanded_from_private_geoc_aggregate_report,true);
  const computed=actual.spatial_bootstrap.groups.filter(x=>x.status==="computed");
  assert.equal(computed.length,2);
  assert.deepEqual(computed.map(x=>x.n_groups),[9,9]);
@@ -88,9 +98,16 @@ test("renders Reference26 alone and accessible numerical charts",async()=>{
  assert.equal(nodes["r26-moran-body"].children.length,5);
  nodes["r26-spatial-target"].value="absolute_error";
  nodes["r26-spatial-target"].dispatch("change");
- assert.match(nodes["r26-moran-reading"].textContent,/aún no están publicados/);
- assert.equal(nodes["r26-moran-body"].children.length,0);
- assert.match(nodes["r26-variogram-status"].textContent,/no disponible/);
+ assert.match(nodes["r26-moran-reading"].textContent,/errores absolutos/);
+ assert.equal(nodes["r26-moran-body"].children.length,5);
+ assert.equal(nodes["r26-moran-chart"].children.length,5);
+ assert.match(nodes["r26-moran-body"].children[4].children[1].textContent,/0[,.]866219/);
+ nodes["r26-spatial-target"].value="squared_error";
+ nodes["r26-spatial-target"].dispatch("change");
+ assert.match(nodes["r26-moran-reading"].textContent,/errores cuadrados/);
+ assert.equal(nodes["r26-moran-body"].children.length,5);
+ assert.equal(nodes["r26-variogram-body"].children.length,6);
+ assert.match(nodes["r26-variogram-status"].textContent,/Semivarianza empírica/);
  assert.match(nodes["r26-bootstrap-note"].textContent,/dos de los siete/);
 });
 
@@ -128,8 +145,10 @@ test("site ships no external ensemble UI or fabricated private histogram",()=>{
  assert.ok(!fs.existsSync(path.join(SITE,"data","ensemble_models.json")));
  assert.ok(!fs.existsSync(path.join(SITE,"data","ensemble_evaluation.json")));
  assert.ok(!fs.existsSync(path.join(SITE,"data","ensemble_predictions59.json")));
- assert.equal(actual.spatial.geary_c,null);
- assert.equal(actual.spatial.absolute_error_moran,null);
- assert.equal(actual.spatial.semivariogram,null);
+ assert.equal(actual.spatial.geary_c.length,12);
+ assert.equal(actual.spatial.absolute_error_moran.length,4);
+ assert.equal(actual.spatial.squared_error_moran.length,4);
+ assert.equal(actual.spatial.semivariogram.length,6);
+ assert.equal(actual.spatial.reason_missing.includes("parcel-level"),true);
  assert.equal(actual.influence.private_ids_published,false);
 });
