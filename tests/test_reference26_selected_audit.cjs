@@ -119,6 +119,6 @@ for (const panel of ["errors","spatial","parameters","limits"]) {
 }
 assert.ok(css.includes(".tsb-stat-audit"));
 assert.ok(js.includes("aria-selected"));
-assert.ok(js.includes('data.moran.filter'));
+assert.ok(js.includes('loaded.moran.filter'));
 assert.ok(!js.includes("Math.random"));
 console.log("Selected analog statistical website: verified all aggregates, tabs, Moran family and disclosure.");
