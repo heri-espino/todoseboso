@@ -260,7 +260,7 @@
         <p class="eyebrow">MODELO ACTUAL · CORRECCIÓN LOCAL VALIDADA</p>
         <h2 id="r26a-title">Reference26 con <em>corrección adaptativa por parcelas análogas.</em></h2>
       </div>
-      <p class="r26a-intro">Una predicción de Reference26 se afina con cosechas reales de parcelas semejantes. La decisión de corregir, o conservar el resultado original, se toma mediante validación interna; nunca con la cosecha que se está prediciendo.</p>
+      <p class="r26a-intro">Una predicción de Reference26 se afina con cosechas reales de parcelas semejantes. La decisión de corregir, o mantener la predicción base, se toma mediante validación interna; nunca con la cosecha que se está prediciendo.</p>
     </header>
 
     <div class="r26a-statboard" aria-label="Métricas del selector de correcciones en 138 predicciones LOOCV">
@@ -324,14 +324,14 @@
             <mo>,</mo><mo>−</mo><mn>0.5</mn><mo>,</mo><mn>0.5</mn><mo>)</mo>
           </mrow>
         </math>
-        <figcaption>El factor <strong>g(x)</strong>, entre 0 y 1, disminuye la corrección cuando los vecinos son lejanos o sus rendimientos difieren mucho. Esta es la variante dominante; el modelo final se define por la regla de selección entre cinco correcciones y Reference26 intacto.</figcaption>
+        <figcaption>El factor <strong>g(x)</strong>, entre 0 y 1, disminuye la corrección cuando los vecinos son lejanos o sus rendimientos difieren mucho. Esta es la variante dominante; el modelo final se define por la regla que selecciona una de las cinco correcciones o mantiene la predicción base.</figcaption>
       </figure>
     </div>
 
     <div class="r26a-validation" aria-labelledby="r26a-selection-title">
       <div>
         <h3 id="r26a-selection-title">La elección también se valida</h3>
-        <p>En cada una de las <strong>138 exclusiones externas</strong>, se aparta una parcela real. Sólo con las otras 137 cosechas se hacen cuatro particiones internas: allí se evalúan cinco formas de corrección y la posibilidad de conservar la predicción original.</p>
+        <p>En cada una de las <strong>138 exclusiones externas</strong>, se aparta una parcela real. Sólo con las otras 137 cosechas se hacen cuatro particiones internas: allí se evalúan cinco formas de corrección y la posibilidad de mantener la predicción base.</p>
         <p>Se realizan <strong>552 ajustes internos de Reference26</strong> a lo largo de los 138 folds externos. Se elige la opción con menor MSE interno, siempre que una corrección mejore el MSE original al menos <strong>1 %</strong>. La receta elegida predice después la parcela externa sin utilizar su rendimiento. Así se construyen las 138 predicciones utilizadas para calcular las métricas superiores.</p>
       </div>
       <figure class="r26a-choices" aria-labelledby="r26a-choices-title">
@@ -392,36 +392,10 @@
         <p class="r26a-metric-note">L₁ suma los errores absolutos; L₂ es la raíz de la suma de errores cuadrados; L∞ es el mayor error absoluto. Los percentiles P95 y P99 son cuantiles de |estimado − real|. WAPE expresa la suma de errores absolutos respecto de la suma de rendimientos observados. No se informa R² ajustado porque el modelo compuesto no tiene un número único y justificable de parámetros.</p>
       </details>
 
-      <div class="r26a-ci" aria-labelledby="r26a-ci-title">
-        <div class="r26a-ci-header">
-          <div>
-            <h4 id="r26a-ci-title">Intervalo bootstrap del cambio en RMSE</h4>
-            <p>Comparación pareada con Reference26 sin corrección. El signo negativo indica menor RMSE para el selector.</p>
-          </div>
-          <div class="r26a-ci-estimate">
-            <small>Cambio observado</small>
-            <strong data-r26a-paired="estimate_t_ha">−0.005246 <span>t/ha</span></strong>
-          </div>
-        </div>
-        <div class="r26a-ci-plot" role="img" aria-label="Intervalo bootstrap pareado al 95 por ciento desde menos 0.011068 hasta más 0.000282 toneladas por hectárea; estimación menos 0.005246. El intervalo cruza el cero.">
-          <div class="r26a-ci-track">
-            <span class="r26a-ci-band" aria-hidden="true"></span>
-            <span class="r26a-ci-zero" aria-hidden="true"></span>
-            <span class="r26a-ci-point" aria-hidden="true"></span>
-          </div>
-          <div class="r26a-ci-scale"><span>−0.012</span><span>0</span><span>+0.002 t/ha</span></div>
-        </div>
-        <div class="r26a-ci-interval">
-          <span>IC bootstrap pareado del 95 %</span>
-          <strong><span data-r26a-paired="ci_low">−0.011068</span> a <span data-r26a-paired="ci_high">+0.000282</span> t/ha</strong>
-        </div>
-        <p class="r26a-ci-caveat"><strong>Interpretación:</strong> el intervalo incluye cero; la mejora observada no es concluyente bajo este análisis. Se usaron 10 000 remuestreos de pares de errores LOOCV, sin reentrenar Reference26. Este es un intervalo para <em>la diferencia de RMSE</em>, no para el RMSE absoluto de 0.462892 t/ha.</p>
-      </div>
-
       <details class="r26a-detail r26a-inference-detail">
-        <summary>Prueba estadística, supuestos y métricas aún no publicadas</summary>
-        <p>La prueba exploratoria de cambios de signo sobre mejoras del MSE, con ajuste maxT entre las seis alternativas de esta familia, obtuvo <strong data-r26a-paired="maxT_p">p = 0.052895</strong> para el selector anidado. No se trata de una prueba confirmatoria: las cinco correcciones se eligieron anteriormente al estudiar los mismos datos, y tanto la prueba como el bootstrap simple pueden verse afectados por la dependencia espacial entre parcelas.</p>
-        <p>El informe completo de GeoC también calcula mediana del error, otros percentiles, pérdidas robustas y porcentuales, correlaciones, intervalos de otras métricas e influencia de observaciones. Sus valores numéricos <strong>no aparecen en el resumen compartido</strong> y no se inventan aquí. El intervalo bootstrap del <strong>RMSE absoluto</strong> requiere el archivo agregado <code>bootstrap_95ci_7.csv</code>; el intervalo publicado arriba corresponde exclusivamente al <strong>cambio pareado de RMSE</strong>.</p>
+        <summary>Intervalos de confianza y límites de inferencia</summary>
+        <p>El modelo se evaluó con 138 parcelas conocidas mediante validación por exclusión y selección interna. Para publicar un <strong>intervalo bootstrap del RMSE absoluto</strong> necesitamos sus límites numéricos del archivo agregado <code>bootstrap_95ci_7.csv</code>, que todavía no se ha compartido. No se infieren ni inventan estos límites a partir del RMSE puntual.</p>
+        <p>Las cinco opciones de corrección se eligieron tras analizar previamente las mismas 138 etiquetas, por lo que estos resultados son exploratorios. Además, la posible dependencia espacial entre parcelas limita la interpretación de los intervalos obtenidos por remuestreo ordinario. No existen rendimientos reales disponibles para evaluar el error de las 59 parcelas pendientes.</p>
       </details>
     </section>
 
@@ -437,7 +411,7 @@
       </details>
       <details class="r26a-detail">
         <summary>Qué cambia en el entrenamiento final de las 59 parcelas</summary>
-        <p>Para una entrega, Reference26 se entrena con las 138 cosechas reales y la elección de corrección se vuelve a hacer mediante cuatro folds internos sobre esas 138. Después se aplica la regla seleccionada a las 59 parcelas sin rendimiento conocido. Este apartado comunica <strong>resultados LOOCV</strong>; no confirma todavía que las estimaciones corregidas para las 59 se hayan publicado en esta web. La tabla histórica de 59 estimaciones de otra versión permanece identificada por separado.</p>
+        <p>Para una entrega, Reference26 se entrena con las 138 cosechas reales y la elección de corrección se vuelve a hacer mediante cuatro folds internos sobre esas 138. Después se aplica la regla seleccionada a las 59 parcelas sin rendimiento conocido. Este apartado comunica <strong>resultados LOOCV</strong>; no confirma todavía que las estimaciones corregidas para las 59 se hayan publicado en esta web. Las 59 parcelas con rendimiento desconocido todavía no tienen métricas de error.</p>
       </details>
       <details class="r26a-detail">
         <summary>Limitaciones de la validación anidada</summary>
