@@ -9,6 +9,8 @@
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./styles.css">
 <link rel="stylesheet" href="./reference26_analog_cv.css">
+<link rel="stylesheet" href="./reference26_selected_audit.css">
+<script src="./reference26_selected_audit.js" defer></script>
 <style>
 html{scroll-behavior:smooth}
 body{margin:0;background:#f4f7f2;color:#26352e}
@@ -24,11 +26,131 @@ body{margin:0;background:#f4f7f2;color:#26352e}
 <body>
 <header class="tsb-model-header">
   <div class="tsb-model-header-inner">
-    <span class="tsb-model-brand">Todoseboso</span>
-    <span class="tsb-model-tag">Modelo de rendimiento · Reto AgroCebada</span>
+    <a class="tsb-model-brand" href="./index.html">Todoseboso</a>
+    <span class="tsb-model-tag">Modelo de rendimiento · <a href="#auditoria-modelo-final">Auditoría estadística</a></span>
   </div>
 </header>
 <main>
+
+<section class="tsb-stat-audit" id="auditoria-modelo-final" aria-labelledby="tsb-audit-title">
+  <div class="tsb-audit-shell">
+    <header class="tsb-audit-hero">
+      <div>
+        <p class="tsb-audit-kicker">ANÁLISIS ESTADÍSTICO · MODELO FINAL SELECCIONADO</p>
+        <h1 id="tsb-audit-title">¿Qué tan bien predice el <em>modelo corregido?</em></h1>
+      </div>
+      <p class="tsb-audit-subtitle">Una auditoría separada del predictor final de cebada: magnitud del error, dependencia espacial, parámetros de corrección y límites de la validación. Basada en 138 exclusiones LOOCV auténticas, no en las 59 cosechas desconocidas.</p>
+    </header>
+
+    <div class="tsb-audit-summary" aria-label="Indicadores del modelo final corregido, seleccionado tras búsqueda histórica">
+      <div class="tsb-audit-metric"><span class="tsb-audit-metric-label">RMSE del modelo final</span><strong class="tsb-audit-metric-number" data-audit-stat="rmse">0.462418</strong><small>t/ha · 138 predicciones LOOCV</small></div>
+      <div class="tsb-audit-metric"><span class="tsb-audit-metric-label">R² predictivo</span><strong class="tsb-audit-metric-number" data-audit-stat="r2">0.702693</strong><small>1 − SSE/TSS · no ajustado</small></div>
+      <div class="tsb-audit-metric"><span class="tsb-audit-metric-label">MAE</span><strong class="tsb-audit-metric-number" data-audit-stat="mae">0.332019</strong><small>t/ha · error absoluto promedio</small></div>
+      <div class="tsb-audit-metric"><span class="tsb-audit-metric-label">Diferencia de RMSE</span><strong class="tsb-audit-metric-number" data-audit-stat="delta">−1.22 %</strong><small>frente a Reference26 sin corrección; comparación exploratoria</small></div>
+    </div>
+    <p class="tsb-audit-disclosure"><span><strong>138</strong> etiquetas evaluadas</span><span><strong>137</strong> cosechas para entrenar cada fold</span><span><strong>59</strong> rendimientos ocultos</span><span>Datos del <strong>19 octubre 2026</strong></span></p>
+    <p class="tsb-audit-warning"><strong>Importante:</strong> la regla final y sus cinco alternativas se eligieron después de estudiar los mismos 138 rendimientos. Aunque la predicción externa excluye cada cosecha evaluada, la mejora de RMSE es <strong>exploratoria y susceptible a sesgo de selección</strong>; no constituye una confirmación independiente.</p>
+
+    <div class="tsb-audit-tabs" role="tablist" aria-label="Secciones de la auditoría del modelo corregido">
+      <button class="tsb-audit-tab" type="button" role="tab" id="tsb-audit-tab-errors" aria-controls="tsb-audit-errors" aria-selected="true" tabindex="0" data-audit-tab="errors">Precisión y extremos</button>
+      <button class="tsb-audit-tab" type="button" role="tab" id="tsb-audit-tab-spatial" aria-controls="tsb-audit-spatial" aria-selected="false" tabindex="-1" data-audit-tab="spatial">Moran I y espacio</button>
+      <button class="tsb-audit-tab" type="button" role="tab" id="tsb-audit-tab-parameters" aria-controls="tsb-audit-parameters" aria-selected="false" tabindex="-1" data-audit-tab="parameters">Parámetros estimados</button>
+      <button class="tsb-audit-tab" type="button" role="tab" id="tsb-audit-tab-limits" aria-controls="tsb-audit-limits" aria-selected="false" tabindex="-1" data-audit-tab="limits">Pruebas y límites</button>
+    </div>
+
+    <section class="tsb-audit-panel" id="tsb-audit-errors" role="tabpanel" aria-labelledby="tsb-audit-tab-errors" data-audit-panel="errors">
+      <h2>Tres protocolos, tres resultados distintos</h2>
+      <p class="tsb-audit-lede">El modelo final usa una corrección fija elegida con las 138 etiquetas. El selector anidado decide una regla diferente en cada exclusión. Ambos se contrastan con las predicciones de Reference26 sin corrección, siempre sobre las mismas 138 parcelas.</p>
+      <div class="tsb-audit-grid">
+        <div class="tsb-audit-paper">
+          <h3>RMSE de validación LOOCV</h3>
+          <div class="tsb-audit-compare-row"><span>Corrección final</span><div class="tsb-audit-track" style="--audit-fill:46.24%;--audit-bar:#2d7057" aria-hidden="true"></div><strong>0.462418</strong></div>
+          <div class="tsb-audit-compare-row"><span>Selector anidado</span><div class="tsb-audit-track" style="--audit-fill:46.29%;--audit-bar:#8eac9b" aria-hidden="true"></div><strong>0.462892</strong></div>
+          <div class="tsb-audit-compare-row"><span>Sin corrección</span><div class="tsb-audit-track" style="--audit-fill:46.81%;--audit-bar:#b7c6b9" aria-hidden="true"></div><strong>0.468138</strong></div>
+          <p>Longitudes proporcionales a RMSE desde cero; valores exactos en t/ha. Menor es mejor.</p>
+        </div>
+        <div class="tsb-audit-paper">
+          <span class="tsb-audit-mini-label">Magnitud de la mejora observada</span>
+          <strong class="tsb-audit-finding">0.005720 t/ha</strong>
+          <p>Menor RMSE del predictor final frente a la referencia sin corrección: reducción relativa de aproximadamente 1.22 %. La ventaja no lleva asociado un intervalo de confianza ajustado por selección con los datos compartidos.</p>
+          <p><strong>El selector anidado no es el modelo fijo final:</strong> su RMSE es 0.462892 t/ha; seleccionó la regla dominante en 128/138 exclusiones.</p>
+        </div>
+      </div>
+      <div class="tsb-audit-table-wrap" style="margin-top:19px">
+        <table class="tsb-audit-table">
+          <caption>LOOCV pareado de 138 cosechas reales, una etiqueta excluida en cada ajuste. Los tres vectores son distintos y comparten casos.</caption>
+          <thead><tr><th scope="col">Predicción</th><th scope="col">RMSE · t/ha</th><th scope="col">MAE · t/ha</th><th scope="col">R²</th><th scope="col">Sesgo · t/ha</th><th scope="col">L∞ · t/ha</th></tr></thead>
+          <tbody>
+            <tr data-audit-primary="true"><th scope="row">Regla final corregida</th><td>0.462418</td><td>0.332019</td><td>0.702693</td><td>−0.004103</td><td>2.115301</td></tr>
+            <tr><th scope="row">Selector anidado por fold</th><td>0.462892</td><td>0.331956</td><td>0.702083</td><td>−0.005062</td><td>2.119565</td></tr>
+            <tr><th scope="row">Reference26 sin corrección</th><td>0.468138</td><td>0.333786</td><td>0.695292</td><td>+0.001466</td><td>2.139958</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tsb-audit-grid" style="margin-top:19px">
+        <div class="tsb-audit-paper"><h3>La cola de errores no desaparece</h3><p>Para la regla final, el percentil 95 del error absoluto es <strong>0.782014 t/ha</strong> y el error máximo absoluto es <strong>2.115301 t/ha</strong>. En la referencia original, el P95 era 0.779618 t/ha: el modelo final mejora el RMSE global, pero <strong>no todos los cuantiles de error</strong>.</p></div>
+        <div class="tsb-audit-paper"><h3>Medidas adicionales</h3><p>Regla final: L₁ = <strong>45.818556</strong> t/ha, L₂ = <strong>5.432182</strong> t/ha, MSE = <strong>0.213830</strong> (t/ha)², correlación de Pearson = <strong>0.838282</strong> y WAPE = <strong>8.394137 %</strong>.</p><p>El R² ajustado no se calcula: el modelo regularizado y seleccionado no tiene grados de libertad efectivos fijos defendibles.</p></div>
+      </div>
+    </section>
+
+    <section class="tsb-audit-panel" id="tsb-audit-spatial" role="tabpanel" aria-labelledby="tsb-audit-tab-spatial" data-audit-panel="spatial">
+      <h2>¿Queda estructura espacial en los errores?</h2>
+      <p class="tsb-audit-lede">Moran I global sobre residuos firmados (predicción − rendimiento observado), usando k vecinos geográficos, pesos normalizados por fila y 1,999 permutaciones. Los valores negativos sugieren disimilitud local; por sí solos no confirman independencia ni explican su causa.</p>
+      <div class="tsb-audit-k-buttons" role="group" aria-label="Seleccionar número de vecinos geográficos">
+        <button class="tsb-audit-k" type="button" data-audit-k="4" aria-pressed="false">k = 4</button>
+        <button class="tsb-audit-k" type="button" data-audit-k="8" aria-pressed="false">k = 8</button>
+        <button class="tsb-audit-k" type="button" data-audit-k="12" aria-pressed="true">k = 12</button>
+        <button class="tsb-audit-k" type="button" data-audit-k="24" aria-pressed="false">k = 24</button>
+      </div>
+      <div class="tsb-audit-moran-chart">
+        <svg data-audit-moran-svg viewBox="0 0 740 150" role="img" aria-label="Gráfico del índice de Moran de los tres predictores para los vecinos seleccionados"></svg>
+        <p>El punto vertical señala I = 0. La tabla siguiente conserva los valores exactos.</p>
+      </div>
+      <div class="tsb-audit-table-wrap">
+        <table class="tsb-audit-table">
+          <caption>p bilateral por permutaciones, centrado en la media de permutaciones; Holm ajustado sobre todas las pruebas espaciales reportadas.</caption>
+          <thead><tr><th scope="col">Modelo · <span data-audit-k-label>k = 12</span></th><th scope="col">Moran I</th><th scope="col">p bilateral</th><th scope="col">p Holm</th></tr></thead>
+          <tbody data-audit-moran-table>
+            <tr><th scope="row">Regla final corregida</th><td>−0.065733</td><td>0.0470</td><td>1.0000</td></tr>
+            <tr><th scope="row">Selector anidado por fold</th><td>−0.065556</td><td>0.0445</td><td>1.0000</td></tr>
+            <tr><th scope="row">Sin corrección</th><td>−0.062976</td><td>0.0640</td><td>1.0000</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tsb-audit-warning" style="margin-top:19px"><strong>Interpretación:</strong> para k = 12, las p sin ajustar 0.0470 y 0.0445 parecen pequeñas, pero <strong>ambas pasan a 1.0000 tras Holm</strong>. Ninguna prueba de Moran de residuos firmados evidencia un patrón estadísticamente concluyente después del ajuste. No se demuestra ausencia de dependencia espacial.</p>
+    </section>
+
+    <section class="tsb-audit-panel" id="tsb-audit-parameters" role="tabpanel" aria-labelledby="tsb-audit-tab-parameters" data-audit-panel="parameters">
+      <h2>Qué parámetros gobiernan la corrección</h2>
+      <p class="tsb-audit-lede">La receta fija se seleccionó como <code>analog__robust26__k3__blend0.25__supported</code>. Estos son hiperparámetros del algoritmo, no coeficientes de una regresión lineal con pruebas t clásicas.</p>
+      <div class="tsb-audit-parameter">
+        <div><span>Dimensiones originales</span><strong>26</strong><span>variables escaladas robustamente</span></div>
+        <div><span>Vecinos con rendimiento conocido</span><strong>3</strong><span>media ponderada por distancia inversa</span></div>
+        <div><span>Peso de mezcla</span><strong>0.25</strong><span>atenuado por soporte y desacuerdo</span></div>
+        <div><span>Factor medio de soporte</span><strong>0.501344</strong><span>mediana 0.524740 entre los 138 folds</span></div>
+        <div><span>Mayor cambio absoluto aplicado</span><strong>0.108689</strong><span>t/ha sobre 138 validaciones</span></div>
+        <div><span>Correcciones limitadas por el tope</span><strong>0 / 138</strong><span>máximo permitido ±0.5 t/ha</span></div>
+      </div>
+      <div class="tsb-audit-formula" aria-label="Fórmula de corrección del modelo">
+        ŷ final(x) = ŷ Reference26(x) + clip[0.25 · g(x) · (ŷ 3 vecinos(x) − ŷ Reference26(x)), −0.5, +0.5]
+      </div>
+      <p class="tsb-audit-lede" style="margin-top:17px">El factor <strong>g(x)</strong> disminuye con la distancia al vecino más cercano y la dispersión entre los tres rendimientos de referencia. Su valor medio fue 0.501344. El cambio firmado medio fue <strong>−0.005569 t/ha</strong>, no un desplazamiento común a todas las parcelas. No se estima aquí un p-valor para el coeficiente 0.25.</p>
+    </section>
+
+    <section class="tsb-audit-panel" id="tsb-audit-limits" role="tabpanel" aria-labelledby="tsb-audit-tab-limits" data-audit-panel="limits">
+      <h2>Qué demuestran —y qué no— estas pruebas</h2>
+      <p class="tsb-audit-lede">El procedimiento completo calculó también diagnósticos de normalidad, heterocedasticidad, pérdidas pareadas, intervalos por bloques y semivariogramas; el extracto compartido incluye las métricas generales y Moran I, pero no sus tablas numéricas completas.</p>
+      <div class="tsb-audit-grid">
+        <div class="tsb-audit-paper"><h3>Confirmado por los números</h3><p>La regla corregida presenta RMSE 0.462418 y R² 0.702693 sobre las 138 etiquetas observadas. En el selector anidado, esa variante fue elegida en <strong>128 de 138</strong> exclusiones; 5 escogieron PCA8 y 5 mantuvieron la referencia sin corrección.</p><p>Para Moran I de residuos firmados, <strong>ningún p-valor ajustado por Holm es inferior a 0.05</strong> entre los cuatro tamaños de vecindario comunicados.</p></div>
+        <div class="tsb-audit-paper"><h3>No disponible en el extracto</h3><p>No se proporcionaron límites numéricos de intervalos bootstrap espaciales, intervalos de confianza del RMSE absoluto, ni los resultados completos de Shapiro, Anderson, Breusch–Pagan y pruebas pareadas.</p><p>Por tanto no se muestran intervalos ni significancias inventadas, y ninguna cifra corresponde al error observado de las 59 cosechas desconocidas.</p></div>
+        <div class="tsb-audit-paper"><h3>Sesgo de selección</h3><p>La prueba por exclusión preserva la separación de la etiqueta individual; sin embargo, la familia de cinco reglas ya había sido seleccionada tras examinar estos mismos 138 rendimientos. El RMSE de la regla final fija no es validación independiente de toda la búsqueda.</p></div>
+        <div class="tsb-audit-paper"><h3>Alcance de los parámetros</h3><p>La pendiente y el intercepto de una regresión diagnóstica entre rendimiento observado y estimado no son parámetros del predictor original. Sin sus resultados numéricos no se inventan errores estándar ni intervalos HC3. Tampoco se informa R² ajustado para este modelo adaptativo.</p></div>
+      </div>
+    </section>
+    <p class="tsb-audit-source">Fuente: salida real de <a href="https://github.com/heri-espino/GeoC/blob/analysis/selected-analog-spatial-inference-20261019/tools/report_reference26_top5_statistics.py" target="_blank" rel="noopener noreferrer">auditoría estadística de GeoC ↗</a>, 19 de octubre de 2026. Los valores exactos se conservan en el <a href="./data/reference26_selected_statistical_audit.json">JSON público de agregados</a>; no se publican identificadores, coordenadas ni errores individuales. <a href="#reference26-analog-cv">Ver abajo la explicación de la selección anidada.</a></p>
+  </div>
+</section>
+
 <section class="section reference26-analog-story" id="reference26-analog-cv" aria-labelledby="r26a-title">
   <div class="shell">
     <header class="r26a-head">
