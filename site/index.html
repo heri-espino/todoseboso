@@ -6,8 +6,8 @@
 <meta name="description" content="Cómo funciona la regresión local con mezcla geológica para estimar el rendimiento de cebada: 26 variables, tratamiento de faltantes, K-means, Ridge, Elastic Net, hiperparámetros, resultados y pruebas.">
 <title>Cómo estimamos el rendimiento de cebada · Regresión local con mezcla geológica</title>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css">
-<script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script><script src="./parcel_core.js" defer></script><script src="./predictor.js" defer></script>
+<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css"><link rel="stylesheet" href="./navigation.css">
+<script src="./navigation.js" defer></script><script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script><script src="./parcel_core.js" defer></script><script src="./predictor.js" defer></script>
 <script src="./reference26_engine.js" defer></script>
 <script src="./predictions59.js" defer></script>
 <script src="./browser_inference.js" defer></script>
@@ -18,8 +18,13 @@
 <div class="shell nav-inner">
 <a href="#inicio" class="brand"><span class="brand-icon" aria-hidden="true">✳</span><span>Geo<span>Cebada</span></span><small>FIRA / 2026</small></a>
 <button id="menu-toggle" class="menu-toggle" type="button" aria-controls="nav-links" aria-expanded="false">Menú ☰</button>
-<nav id="nav-links" class="nav-links" aria-label="Índice de la explicación">
-<a href="#datos">Datos</a><a href="#variables">26 variables</a><a href="#preparacion">Preparación</a><a href="#arquitectura">Algoritmo</a><a href="#ajuste">Ajuste</a><a href="#resultados">Resultados</a><a href="#pruebas">Pruebas</a><a href="#limites">Límites</a><a href="#predicciones-59">59 estimaciones</a><a href="#simulador">Probar parcelas</a>
+<nav id="nav-links" class="nav-links" aria-label="Navegación principal">
+<a href="#inicio" class="nav-home">Inicio</a>
+<details class="nav-group"><summary>El estudio<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">01 · CONTEXTO Y DATOS</p><a href="#datos">El problema y las parcelas</a><a href="#variables">Las 26 variables</a><a href="#preparacion">Preparación de datos</a><a href="#datos-reales">Clima y vegetación reales</a></div></details>
+<details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · CÓMO FUNCIONA</p><a href="#arquitectura">Arquitectura y ecuaciones</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a></div></details>
+<details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#resultados">Resultados y métricas</a><a href="#pruebas">Pruebas estadísticas</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
+<details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 estimaciones</a><a href="#simulador">Probar una parcela</a></div></details>
+<a href="#recorrido" class="nav-action">Ver capítulos <span aria-hidden="true">↗</span></a>
 </nav>
 </div></header>
 <main id="contenido">
@@ -45,6 +50,14 @@
 </div></section>
 <div class="stat-band"><div class="shell stats-grid"><div class="stat-item"><strong>197</strong><span>parcelas del estudio</span></div><div class="stat-item"><strong>138</strong><span>con rendimiento conocido</span></div><div class="stat-item"><strong>59</strong><span>sin rendimiento conocido</span></div><div class="stat-item"><strong>26</strong><span>indicadores del modelo</span></div></div></div>
 
+<section class="reading-guide" id="recorrido" aria-labelledby="recorrido-title"><div class="shell">
+<div class="reading-guide-head"><div><p class="eyebrow">GUÍA DE LECTURA</p><h2 id="recorrido-title">Una investigación, <em>cuatro capítulos.</em></h2></div><p>Explora el estudio desde sus datos hasta las estimaciones. Puedes seguir el orden o ir directamente al tema que te interese.</p></div>
+<div class="chapter-grid">
+<article class="chapter-card"><span class="chapter-number">01 / CONTEXTO</span><h3><a href="#datos">Entender los datos <span aria-hidden="true">↗</span></a></h3><p>Las 197 parcelas, las señales satelitales y la preparación de las variables.</p><ul class="chapter-subsections"><li><a href="#datos">El problema y las parcelas</a></li><li><a href="#variables">Las 26 variables</a></li><li><a href="#preparacion">Preparación de datos</a></li><li><a href="#datos-reales">Clima y vegetación reales</a></li></ul></article>
+<article class="chapter-card"><span class="chapter-number">02 / MÉTODO</span><h3><a href="#arquitectura">Conocer el modelo <span aria-hidden="true">↗</span></a></h3><p>Regresiones, vecinos geográficos, composición del terreno y calibración.</p><ul class="chapter-subsections"><li><a href="#arquitectura">Arquitectura y ecuaciones</a></li><li><a href="#geologia">Geología y pesos</a></li><li><a href="#faltantes">Datos incompletos</a></li><li><a href="#ajuste">Entrenamiento y ajuste</a></li></ul></article>
+<article class="chapter-card"><span class="chapter-number">03 / VALIDACIÓN</span><h3><a href="#resultados">Revisar la evidencia <span aria-hidden="true">↗</span></a></h3><p>Qué revelan las pruebas de validación y qué no permiten concluir.</p><ul class="chapter-subsections"><li><a href="#resultados">Resultados y métricas</a></li><li><a href="#pruebas">Pruebas estadísticas</a></li><li><a href="#limites">Limitaciones</a></li><li><a href="#preguntas">Preguntas frecuentes</a></li></ul></article>
+<article class="chapter-card"><span class="chapter-number">04 / EXPLORACIÓN</span><h3><a href="#predicciones-59">Explorar las parcelas <span aria-hidden="true">↗</span></a></h3><p>Consulta estimaciones y utiliza las herramientas interactivas.</p><ul class="chapter-subsections"><li><a href="#predicciones-59">Las 59 estimaciones</a></li><li><a href="#simulador">Probar una parcela</a></li></ul></article>
+</div></div></section>
 <section class="section" id="datos"><div class="shell">
 <div class="section-heading"><div><p class="eyebrow">01 · EL PROBLEMA</p><h2>Sabemos lo que cosecharon 138 parcelas. <em>¿Y las otras 59?</em></h2></div><p>El rendimiento se mide en toneladas de cebada por hectárea (t/ha). Un valor de 4 t/ha significa cuatro toneladas por cada hectárea, sin importar el tamaño de la parcela.</p></div>
 <div class="split-prose"><div><h3>Qué conocemos</h3><p>Para las 197 parcelas se prepararon variables de lluvia, vegetación, relieve, ubicación y geología. Sólo 138 tienen un rendimiento reportado para entrenar y evaluar el modelo.</p><p>Las series históricas provienen principalmente de 2022–2024; las medidas del ciclo que queremos describir utilizan 2025, incluso hasta octubre. <strong>Es una estimación retrospectiva del ciclo, no una predicción disponible desde mayo.</strong></p></div><div><h3>Qué intentamos aprender</h3><p>Una misma cantidad de lluvia no produce necesariamente el mismo rendimiento. Las parcelas varían en vegetación, ubicación y composición geológica. Por eso utilizamos varias estimaciones que se complementan.</p><p>Los rendimientos conocidos pueden contener errores de reporte. El modelo aprende de ellos, pero <strong>no puede verificar que todos sean mediciones exactas</strong>.</p></div></div>
