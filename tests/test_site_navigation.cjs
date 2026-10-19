@@ -37,3 +37,4 @@ for(const source of ["./reference26_residuals.js","./field_charts.js","./predict
 }
 assert.ok(html.includes("andrea-hh.github.io/todoseboso/explorador/mapa.html"),"Collaborator map embed missing");
 console.log("Chapter navigation, Reference26 residuals, charts, predictions, and map: PASS");
+require("./test_reference26_analog_cv.cjs");

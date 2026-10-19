@@ -13,7 +13,7 @@
 
 <script src="./reference26_residuals.js" defer></script>
 <script src="./browser_inference.js" defer></script>
-<link rel="stylesheet" href="./interactive-map.css"><link rel="stylesheet" href="./navigation.css"><link rel="stylesheet" href="./editorial.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="./scroll_motion.css">
+<link rel="stylesheet" href="./interactive-map.css"><link rel="stylesheet" href="./navigation.css"><link rel="stylesheet" href="./editorial.css"><link rel="stylesheet" href="./reference26_analog_cv.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="./scroll_motion.css">
 </head>
 <body>
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -24,7 +24,7 @@
 <nav id="nav-links" class="nav-links" aria-label="Navegación principal">
 <a href="#inicio" class="nav-home">Inicio</a>
 <details class="nav-group"><summary>El estudio<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">01 · CONTEXTO Y DATOS</p><a href="#datos">El problema y las parcelas</a><a href="#variables">Las 26 variables</a><a href="#preparacion">Preparación de datos</a><a href="#datos-reales">Clima y vegetación reales</a></div></details>
-<details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · MODELO REFERENCE26</p><a href="#ensamble">Modelo Reference26</a><a href="#arquitectura">Arquitectura Reference26</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a></div></details>
+<details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · MODELO REFERENCE26</p><a href="#ensamble">Modelo Reference26</a><a href="#arquitectura">Arquitectura Reference26</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a><a href="./modelo-corregido.html">Modelo validado y sus métricas</a></div></details>
 <details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#resultados">Resultados y métricas</a><a href="#pruebas">Pruebas anteriores: asociaciones</a><a href="#estadisticas-finales">Nuevo: diagnóstico de residuos LOOCV</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
 <details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 estimaciones</a><a href="#mapa-interactivo">Mapa interactivo</a></div></details>
 <a href="#recorrido" class="nav-action">Índice</a>
@@ -36,11 +36,11 @@
 <p class="eyebrow hero-eyebrow">GEOCEBADA · RETO AGROCEBADA FIRA 2026</p>
 <h1>Estimación del rendimiento <em>de cebada.</em></h1>
 <p class="hero-description">Estudiamos 197 parcelas agrícolas en Hidalgo, Puebla y Tlaxcala. Conocemos el rendimiento reportado de 138 y estimamos el de las 59 restantes. Reference26 combina clima, vegetación satelital, geología e información espacial.</p>
-<p class="hero-description minor-intro">El modelo seleccionado es <strong>Reference26 (Regresión local con mezcla geológica)</strong>. Presentamos sus datos, arquitectura y diagnósticos estadísticos de residuos en evaluación LOOCV.</p>
-<div class="hero-actions"><a class="primary-cta" href="#recorrido">Leer el índice</a><a class="secondary-cta" href="#estadisticas-finales">Ver residuos y pruebas</a></div>
+<p class="hero-description minor-intro">Conoce el <strong>modelo de corrección adaptativa por parcelas análogas</strong>: metodología, 138 predicciones LOOCV auténticas, métricas de error y límites de validación.</p>
+<div class="hero-actions"><a class="primary-cta" href="./modelo-corregido.html">Ver el modelo y sus resultados</a><a class="secondary-cta" href="#recorrido">Explorar el estudio</a></div>
 <p class="hero-metadata">HIDALGO · PUEBLA · TLAXCALA · CICLO 2025</p>
 </div>
-<div class="hero-visual model-visual" aria-label="Esquema de etapas del modelo"><div class="visual-header"><span>INTERIOR DE REFERENCE26 · PRIMER COMPONENTE</span><span>t/ha</span></div>
+<div class="hero-visual model-visual" aria-label="Esquema de etapas de Reference26: Regresión local con mezcla geológica"><div class="visual-header"><span>INTERIOR DE REFERENCE26 · PRIMER COMPONENTE</span><span>t/ha</span></div>
 <svg viewBox="0 0 580 440" role="img" aria-label="La lluvia y vegetación producen una estimación; las parcelas cercanas producen otra; la geología las mezcla y un corrector residual ajusta el resultado.">
 <path d="M124 99 H290 V174 M455 99 H290 V174" stroke="#aecda8" stroke-width="3" fill="none"/>
 <rect x="18" y="43" width="218" height="92" rx="9" fill="#235848" stroke="#92bc8d"/><text x="127" y="77" text-anchor="middle" font-size="15" fill="#e2eebd">Lluvia + vegetación</text><text x="127" y="104" text-anchor="middle" font-size="12" fill="#c2d9ca">Elastic Net</text>
@@ -78,6 +78,7 @@
 <li><a href="#geologia">Geología y pesos</a><span>Cómo los grupos geológicos modifican la mezcla de predicciones.</span></li>
 <li><a href="#faltantes">Información incompleta</a><span>Cómo se manejan variables ausentes sin inventar cosechas.</span></li>
 <li><a href="#ajuste">Entrenamiento</a><span>Hiperparámetros, separación de datos y calibración interna.</span></li>
+<li><a href="#reference26-analog-cv">Reference26 corregido</a><span>Cómo funciona la corrección por parcelas análogas y sus métricas LOOCV anidadas.</span></li>
 </ul></article>
 <article class="chapter-card">
 <div class="chapter-intro"><span class="chapter-number">03 / EVIDENCIA</span><h3>Resultados y límites</h3><p>Qué tan precisas son las estimaciones y qué conclusiones resisten los diagnósticos.</p><a class="chapter-readmore" href="#resultados">Examinar resultados</a></div>
@@ -250,6 +251,176 @@
 <div class="validation-split"><h3>Cómo se separó el entrenamiento de la evaluación</h3><div class="validation-steps"><div><strong>1. Separación externa</strong><p>Una parcela, o un grupo de parcelas, se reserva para evaluar el resultado. Sus rendimientos no participan en el ajuste que las predice.</p></div><div><strong>2. Validación interna</strong><p>El entrenamiento disponible se vuelve a dividir para comparar hiperparámetros, generar residuos fuera de muestra y calibrar los pesos de mezcla.</p></div><div><strong>3. Reajuste de la receta</strong><p>Las medianas, escalas, coeficientes, centroides K-means y pesos se calculan de nuevo con el entrenamiento permitido.</p></div><div><strong>4. Predicción reservada</strong><p>El modelo produce predicciones para las parcelas apartadas. Sólo entonces se comparan con sus rendimientos observados.</p></div></div>
 <p class="small-note">Se utilizó repetidamente el conjunto de 138 cosechas para investigar y escoger la arquitectura. Por ello, aunque las evaluaciones respetan sus separaciones de entrenamiento, los resultados deben leerse como validación de una investigación exploratoria, no como confirmación completamente independiente.</p></div>
 </div></section>
+
+
+<section class="section reference26-analog-story" id="reference26-analog-cv" aria-labelledby="r26a-title">
+  <div class="shell">
+    <header class="r26a-head">
+      <div>
+        <p class="eyebrow">MODELO ACTUAL · CORRECCIÓN LOCAL VALIDADA</p>
+        <h2 id="r26a-title">Reference26 con <em>corrección adaptativa por parcelas análogas.</em></h2>
+      </div>
+      <p class="r26a-intro">Una predicción de Reference26 se afina con cosechas reales de parcelas semejantes. La decisión de corregir, o mantener la predicción base, se toma mediante validación interna; nunca con la cosecha que se está prediciendo.</p>
+    </header>
+
+    <div class="r26a-statboard" aria-label="Métricas del selector de correcciones en 138 predicciones LOOCV">
+      <div class="r26a-stat">
+        <span class="r26a-label">RMSE · error cuadrático medio raíz</span>
+        <strong data-r26a-metric="rmse">0.462892</strong>
+        <small>t/ha · penaliza más los errores grandes</small>
+      </div>
+      <div class="r26a-stat">
+        <span class="r26a-label">MAE · error absoluto medio</span>
+        <strong data-r26a-metric="mae">0.331956</strong>
+        <small>t/ha · magnitud media del error absoluto</small>
+      </div>
+      <div class="r26a-stat">
+        <span class="r26a-label">R² predictivo</span>
+        <strong data-r26a-metric="r2">0.702083</strong>
+        <small>calculado sobre las 138 predicciones excluidas</small>
+      </div>
+      <div class="r26a-stat">
+        <span class="r26a-label">Sesgo firmado</span>
+        <strong data-r26a-metric="bias">−0.005062</strong>
+        <small>t/ha · predicción menos rendimiento real</small>
+      </div>
+    </div>
+    <div class="r26a-cvline" aria-label="Protocolo utilizado">
+      <span><strong>138</strong> parcelas evaluadas</span>
+      <span><strong>137</strong> etiquetas de entrenamiento por exclusión</span>
+      <span><strong>4</strong> folds de selección interna</span>
+      <span><strong>59</strong> parcelas con rendimiento aún desconocido</span>
+    </div>
+
+    <div class="r26a-method" aria-labelledby="r26a-process-title">
+      <h3 id="r26a-process-title">Cómo se construye una predicción</h3>
+      <p class="r26a-section-intro">No es un clasificador de parcelas ni un nuevo modelo entrenado con datos sintéticos. Conserva el predictor Reference26 y añade una corrección acotada con observaciones reales, seleccionada mediante validación cruzada.</p>
+      <div class="r26a-steps">
+        <article class="r26a-step">
+          <span class="r26a-step-index" aria-hidden="true">01</span>
+          <h4>Predicción de partida</h4>
+          <p>Reference26 combina señales climáticas, satelitales, espaciales y geológicas. En este estudio utiliza imputación por <strong>media calculada en entrenamiento</strong> para obtener una predicción inicial del rendimiento.</p>
+        </article>
+        <article class="r26a-step">
+          <span class="r26a-step-index" aria-hidden="true">02</span>
+          <h4>Tres parcelas análogas</h4>
+          <p>La corrección más seleccionada busca las <strong>3 parcelas más próximas</strong> en el espacio de las 26 variables escaladas robustamente, y calcula una media de sus cosechas observadas ponderada por distancia. Las parcelas reservadas nunca aportan su rendimiento.</p>
+        </article>
+        <article class="r26a-step">
+          <span class="r26a-step-index" aria-hidden="true">03</span>
+          <h4>Corrección controlada</h4>
+          <p>La mezcla utiliza un peso de <strong>0.25</strong>, atenuado cuando falta cercanía o hay desacuerdo entre vecinos. El cambio queda limitado a <strong>±0.5 t/ha</strong>. Una selección interna puede escoger otra corrección o no aplicar ninguna.</p>
+        </article>
+      </div>
+      <figure class="r26a-equation" aria-labelledby="r26a-formula-label">
+        <p id="r26a-formula-label" class="r26a-equation-label">Expresión de la corrección más seleccionada</p>
+        <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Predicción corregida igual a predicción Reference26 más una corrección limitada entre menos 0.5 y más 0.5, calculada como 0.25 por confianza por la diferencia entre promedio de tres vecinos y Reference26.">
+          <mrow>
+            <msub><mover><mi>y</mi><mo>^</mo></mover><mi>c</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo>
+            <msub><mover><mi>y</mi><mo>^</mo></mover><mi>R</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>+</mo>
+            <mi>clip</mi><mo>(</mo><mn>0.25</mn><mo>·</mo><mi>g</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+            <mo>·</mo><mo>[</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mrow><mn>3</mn><mi>NN</mi></mrow></msub><mo>(</mo><mi>x</mi><mo>)</mo>
+            <mo>−</mo><msub><mover><mi>y</mi><mo>^</mo></mover><mi>R</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>]</mo>
+            <mo>,</mo><mo>−</mo><mn>0.5</mn><mo>,</mo><mn>0.5</mn><mo>)</mo>
+          </mrow>
+        </math>
+        <figcaption>El factor <strong>g(x)</strong>, entre 0 y 1, disminuye la corrección cuando los vecinos son lejanos o sus rendimientos difieren mucho. Esta es la variante dominante; el modelo final se define por la regla que selecciona una de las cinco correcciones o mantiene la predicción base.</figcaption>
+      </figure>
+    </div>
+
+    <div class="r26a-validation" aria-labelledby="r26a-selection-title">
+      <div>
+        <h3 id="r26a-selection-title">La elección también se valida</h3>
+        <p>En cada una de las <strong>138 exclusiones externas</strong>, se aparta una parcela real. Sólo con las otras 137 cosechas se hacen cuatro particiones internas: allí se evalúan cinco formas de corrección y la posibilidad de mantener la predicción base.</p>
+        <p>Se realizan <strong>552 ajustes internos de Reference26</strong> a lo largo de los 138 folds externos. Se elige la opción con menor MSE interno, siempre que una corrección mejore el MSE original al menos <strong>1 %</strong>. La receta elegida predice después la parcela externa sin utilizar su rendimiento. Así se construyen las 138 predicciones utilizadas para calcular las métricas superiores.</p>
+      </div>
+      <figure class="r26a-choices" aria-labelledby="r26a-choices-title">
+        <h4 id="r26a-choices-title">Qué decidió la selección interna · 138 folds</h4>
+        <div class="r26a-distribution" role="img" aria-label="128 de 138 folds eligieron corrección robust26 con 3 vecinos y mezcla 0.25, 5 eligieron corrección PCA de 3 vecinos y 5 conservaron Reference26 sin corrección.">
+          <span class="primary"></span><span class="secondary"></span><span class="fallback"></span>
+        </div>
+        <div class="r26a-choice"><span class="r26a-swatch primary" aria-hidden="true"></span><span>3 vecinos · 26 variables · mezcla 0.25</span><b>128 / 138</b></div>
+        <div class="r26a-choice"><span class="r26a-swatch secondary" aria-hidden="true"></span><span>3 vecinos · PCA de 8 componentes</span><b>5 / 138</b></div>
+        <div class="r26a-choice"><span class="r26a-swatch fallback" aria-hidden="true"></span><span>Sin corrección adicional</span><b>5 / 138</b></div>
+        <figcaption>Frecuencia de elección por fold, no probabilidad de acierto ni distribución de los 59 rendimientos pendientes.</figcaption>
+      </figure>
+    </div>
+
+    <section class="r26a-extended" aria-labelledby="r26a-extended-title">
+      <div class="r26a-extended-heading">
+        <div>
+          <p class="r26a-equation-label">MÉTRICAS LOOCV · 138 PARCELAS</p>
+          <h3 id="r26a-extended-title">Error, extremos e incertidumbre</h3>
+        </div>
+        <p>Resultados adicionales del <strong>selector anidado</strong>. Todos los errores se calcularon sobre las mismas 138 cosechas reales excluidas una por una; no son errores de las 59 parcelas desconocidas.</p>
+      </div>
+
+      <details class="r26a-detail r26a-metric-detail">
+        <summary>Explorar las 12 métricas disponibles del modelo</summary>
+        <div class="r26a-metric-grid">
+          <div class="r26a-metric-group">
+            <h4>Magnitud del error</h4>
+            <table class="r26a-metric-table">
+              <caption>Errores y normas del selector anidado</caption>
+              <thead><tr><th scope="col">Métrica</th><th scope="col">Valor</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">RMSE</th><td data-r26a-extra="rmse_t_ha">0.462892 t/ha</td></tr>
+                <tr><th scope="row">MAE</th><td data-r26a-extra="mae_t_ha">0.331956 t/ha</td></tr>
+                <tr><th scope="row">MSE</th><td data-r26a-extra="mse_t_ha2">0.214269 (t/ha)²</td></tr>
+                <tr><th scope="row">Norma L₁</th><td data-r26a-extra="l1_t_ha">45.809975 t/ha</td></tr>
+                <tr><th scope="row">Norma L₂</th><td data-r26a-extra="l2_t_ha">5.437752 t/ha</td></tr>
+                <tr><th scope="row">Norma L∞ (máximo error absoluto)</th><td data-r26a-extra="linf_t_ha">2.119565 t/ha</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="r26a-metric-group">
+            <h4>Colas, ajuste y sesgo</h4>
+            <table class="r26a-metric-table">
+              <caption>Extremos de error y calidad del ajuste</caption>
+              <thead><tr><th scope="col">Métrica</th><th scope="col">Valor</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">P95 del error absoluto</th><td data-r26a-extra="p95_absolute_error_t_ha">0.782014 t/ha</td></tr>
+                <tr><th scope="row">P99 del error absoluto</th><td data-r26a-extra="p99_absolute_error_t_ha">1.687373 t/ha</td></tr>
+                <tr><th scope="row">R² predictivo</th><td data-r26a-extra="r2_cv">0.702083</td></tr>
+                <tr><th scope="row">Sesgo (estimado − real)</th><td data-r26a-extra="bias_t_ha">−0.005062 t/ha</td></tr>
+                <tr><th scope="row">WAPE</th><td data-r26a-extra="wape_pct">8.392565 %</td></tr>
+                <tr><th scope="row">Pérdida Huber, δ = 0.5 t/ha</th><td data-r26a-extra="huber_mean_delta_0p5">0.082625 (t/ha)²</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="r26a-metric-note">L₁ suma los errores absolutos; L₂ es la raíz de la suma de errores cuadrados; L∞ es el mayor error absoluto. Los percentiles P95 y P99 son cuantiles de |estimado − real|. WAPE expresa la suma de errores absolutos respecto de la suma de rendimientos observados. No se informa R² ajustado porque el modelo compuesto no tiene un número único y justificable de parámetros.</p>
+      </details>
+
+      <details class="r26a-detail r26a-inference-detail">
+        <summary>Intervalos de confianza y límites de inferencia</summary>
+        <p>El modelo se evaluó con 138 parcelas conocidas mediante validación por exclusión y selección interna. Para publicar un <strong>intervalo bootstrap del RMSE absoluto</strong> necesitamos sus límites numéricos del archivo agregado <code>bootstrap_95ci_7.csv</code>, que todavía no se ha compartido. No se infieren ni inventan estos límites a partir del RMSE puntual.</p>
+        <p>Las cinco opciones de corrección se eligieron tras analizar previamente las mismas 138 etiquetas, por lo que estos resultados son exploratorios. Además, la posible dependencia espacial entre parcelas limita la interpretación de los intervalos obtenidos por remuestreo ordinario. No existen rendimientos reales disponibles para evaluar el error de las 59 parcelas pendientes.</p>
+      </details>
+    </section>
+
+    <div class="r26a-more">
+      <h3>Detalle de las métricas y del alcance</h3>
+      <details class="r26a-detail">
+        <summary>Fórmula del promedio local y del factor de confianza</summary>
+        <p>Para las tres parcelas elegidas, la media análoga pondera cada rendimiento observado con el inverso de su distancia: <strong>wⱼ ∝ 1/max(dⱼ, 10⁻⁵)</strong>, normalizando los tres pesos para que sumen uno. Las distancias se calculan sobre las 26 variables escaladas robustamente. El factor de confianza es <strong>g(x) = exp[−½(dₘᵢₙ/s)²] / [1 + (σᵥₑc/σₑₙₜ)²]</strong>, donde <strong>s</strong> es la distancia mediana al vecino más próximo entre parcelas de entrenamiento, <strong>σᵥₑc</strong> es la dispersión ponderada de rendimientos de los vecinos y <strong>σₑₙₜ</strong> es la desviación estándar del rendimiento de entrenamiento. Así una consulta poco representada o con vecinos discordantes recibe una corrección menor.</p>
+      </details>
+      <details class="r26a-detail">
+        <summary>Definiciones estadísticas de las cuatro métricas</summary>
+        <p>Con residuos firmados <strong>eᵢ = predicciónᵢ − cosechaᵢ</strong> y 138 predicciones excluidas, RMSE = raíz del promedio de eᵢ²; MAE = promedio de |eᵢ|; sesgo = promedio de eᵢ; R² = 1 − suma(eᵢ²) / suma[(cosechaᵢ − media observada)²]. RMSE, MAE y sesgo se expresan en toneladas por hectárea; R² no tiene unidades. No se informa R² ajustado para este predictor compuesto. El intervalo bootstrap de la diferencia de RMSE y la prueba exploratoria se muestran en el apartado de incertidumbre anterior.</p>
+      </details>
+      <details class="r26a-detail">
+        <summary>Qué cambia en el entrenamiento final de las 59 parcelas</summary>
+        <p>Para una entrega, Reference26 se entrena con las 138 cosechas reales y la elección de corrección se vuelve a hacer mediante cuatro folds internos sobre esas 138. Después se aplica la regla seleccionada a las 59 parcelas sin rendimiento conocido. Este apartado comunica <strong>resultados LOOCV</strong>; no confirma todavía que las estimaciones corregidas para las 59 se hayan publicado en esta web. Las 59 parcelas con rendimiento desconocido todavía no tienen métricas de error.</p>
+      </details>
+      <details class="r26a-detail">
+        <summary>Limitaciones de la validación anidada</summary>
+        <p>La selección interna de cada fold no utiliza el rendimiento de su parcela externa. Sin embargo, las cinco reglas candidatas se eligieron después de estudiar repetidamente los mismos 138 rendimientos. Por eso la validación es <strong>anidada de manera condicional</strong>, no una evaluación independiente de todo el proceso de investigación. El RMSE de 0.462892 t/ha no es el error observado de las 59 parcelas desconocidas.</p>
+      </details>
+    </div>
+    <p class="r26a-foot">Fuente: ejecución completa de 138/138 folds de <strong>Reference26 con selección interna de corrección analógica</strong>, 19 de octubre de 2026. <a href="https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/docs/REFERENCE26_TOP5_NESTED_LOOCV.md" target="_blank" rel="noopener noreferrer">Metodología y resultados documentados en GeoC ↗</a>.</p>
+  </div>
+</section>
 
 <section class="section section-soft" id="resultados"><div class="shell">
 <div class="section-heading"><div><p class="eyebrow">08 · LO QUE MOSTRARON LAS PRUEBAS</p><h2>¿Cuánto se equivoca <em>la regresión local con mezcla geológica?</em></h2></div><p>El rendimiento se mide en toneladas por hectárea. Se muestran tanto la validación LOOCV de 138 parcelas como las evaluaciones anteriores, indicando siempre cuántas parcelas se usaron para entrenar y para evaluar.</p></div>
