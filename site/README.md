@@ -48,19 +48,19 @@ No se presenta un segundo modelo, un ensamble externo o valores p inventados. La
 
 La publicación de GitHub Pages usa solo site/; website/ conserva material histórico, pero no se despliega.
 
-## Métricas ampliadas del modelo nuevo e incertidumbre
+## Página independiente del modelo validado
 
-La sección exclusiva de Reference26 corregido incluye una tabla
-desplegable con L1, L2, L∞, MSE, RMSE, MAE, P95, P99, R²,
-sesgo, WAPE y Huber. Para la política anidada muestra además
-el **cambio pareado de RMSE** frente a Reference26 original
-(−0.005246 t/ha), IC bootstrap exploratorio de percentiles
-al 95 % **[−0.011068, +0.000282] t/ha** con 10 000 remuestreos
-y p maxT exploratorio **0.052895**. El intervalo incluye cero;
-no es un IC del RMSE absoluto. No publicar un IC absoluto
-sin `bootstrap_95ci_7.csv`, que no fue compartido.
+`site/modelo-corregido.html` contiene únicamente la explicación
+del predictor corregido, sus métricas LOOCV y la interpretación
+de su validación anidada. La portada `site/index.html` enlaza
+directamente a esta página.
 
-Fuente pública agregada y sin resultados individuales:
-`site/data/reference26_analog_extended_metrics.json`.
-Metodología: `docs/REFERENCE26_ANALOG_NESTED_SITE.md`.
-Prueba: `node tests/test_reference26_analog_extended_metrics.cjs`.
+Se documentan RMSE, MAE, MSE, L1, L2, L∞, P95, P99, R²,
+sesgo, WAPE y Huber sobre las 138 parcelas evaluadas.
+El intervalo bootstrap para el RMSE absoluto no se muestra,
+porque el archivo agregado `bootstrap_95ci_7.csv` no se
+compartió. No se añaden comparaciones con modelos anteriores.
+
+Fuente pública: `site/data/reference26_analog_extended_metrics.json`.
+Validación: `node tests/test_reference26_analog_extended_metrics.cjs`.
+
