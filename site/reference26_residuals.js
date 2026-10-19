@@ -387,7 +387,7 @@
       $("r26-moran-k").addEventListener("change",()=>updateSpatial(data));
       $("r26-spatial-target").addEventListener("change",()=>renderMoran(data));
       renderSemivariogram(data);
-      $("r26-unavailable").textContent=data.spatial.reason_missing;
+      $("r26-unavailable").textContent="Los histogramas y gráficos Q–Q de residuos por parcela no están publicados; no se simulan observaciones individuales para dibujarlos. Moran, Geary y el semivariograma sí utilizan resultados agregados reales y auditados de GeoC.";
       status.textContent="Datos agregados verificados · Reference26 con imputación por media · 138 exclusiones LOOCV";
     }catch(error){
       status.textContent="Diagnósticos no disponibles: "+error.message+
