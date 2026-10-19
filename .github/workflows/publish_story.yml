@@ -27,6 +27,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "tests/test_svg_charts.cjs"
       - "deployment/model_artifacts/**"
       - "scripts/export_reference26_browser.py"
       - "tests/test_reference26_browser.cjs"
