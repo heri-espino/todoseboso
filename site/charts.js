@@ -344,8 +344,8 @@
     textNode(canvas, "Con rendimiento conocido · 138", 20, 26,
       {size: 13, color: colors.jade, weight: 720});
     textNode(canvas, "Rendimiento por estimar · 59", 350, 26,
-      {size: 13, color: colors.forest, weight: 720});
-    const x0 = 260, scale = 6.0, max = 100, barHeight = 34;
+      {size: 13, color: colors.gold, weight: 720});
+    const x0 = 260, scale = 6.0, barHeight = 34;
     const yBase = 86;
     for (const [i, item] of counts.entries()) {
       const y = yBase + i * 70;
