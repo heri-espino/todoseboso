@@ -64,3 +64,10 @@ compartió. No se añaden comparaciones con modelos anteriores.
 Fuente pública: `site/data/reference26_analog_extended_metrics.json`.
 Validación: `node tests/test_reference26_analog_extended_metrics.cjs`.
 
+## Auditoría estadística del modelo final con corrección analógica (2026-10-19)
+
+La página independiente [modelo-corregido.html#auditoria-modelo-final](modelo-corregido.html#auditoria-modelo-final) abre con una **sección propia** para la regla fija seleccionada `analog__robust26__k3__blend0.25__supported`. Presenta RMSE 0.462418 t/ha, MAE 0.332019, R² 0.702693, diagnósticos de extremos y parámetros, y Moran I para 4/8/12/24 vecinos mediante un selector visual. Los p-valores se exhiben **antes y después de Holm**: ninguno de los 12 tests de residuos firmados es concluyente tras el ajuste.
+
+La regla fija final, el selector anidado y Reference26 sin corrección son predictores distintos; sus variantes fueron elegidas anteriormente usando las mismas 138 etiquetas y la ventaja no tiene confirmación independiente. No se publicaron intervalos bootstrap numéricos, pruebas de normalidad no proporcionadas ni errores de las 59 parcelas desconocidas. Los datos son agregados, sin identificadores ni coordenadas; el motor del navegador y las predicciones anteriores permanecen intactos.
+
+Datos: `site/data/reference26_selected_statistical_audit.json`; código: `site/reference26_selected_audit.css`, `site/reference26_selected_audit.js`; método: `docs/REFERENCE26_SELECTED_STATISTICAL_SITE.md`; test: `node --test tests/test_reference26_selected_audit.cjs`.
