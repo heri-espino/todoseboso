@@ -1,4 +1,4 @@
-"""Site is an ensemble-first preparation with the original Reference26 research intact."""
+"""Reference26-only site with historical browser predictions distinguished from mean LOOCV."""
 from __future__ import annotations
 
 import json
