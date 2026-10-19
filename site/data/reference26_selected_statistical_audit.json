@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "source": {
+    "study": "GeoC selected-analog statistical analysis",
+    "date": "2026-10-19",
+    "code": "https://github.com/heri-espino/GeoC/blob/analysis/selected-analog-spatial-inference-20261019/tools/report_reference26_top5_statistics.py",
+    "run": "User-supplied --check, --run, --summary output, 2026-10-19",
+    "numbers": "Console-printed aggregates rounded as received; no parcel-level records imported."
+  },
+  "evaluation": {
+    "labeled": 138,
+    "total": 197,
+    "unknown": 59,
+    "training_per_outer": 137,
+    "outer_folds": 138,
+    "hidden_y_evaluated": false,
+    "model_selection_historically_posthoc": true,
+    "independent_validation": false
+  },
+  "final_selected_rule": "analog__robust26__k3__blend0.25__supported",
+  "parameters": {
+    "geometry": "robust26",
+    "feature_count": 26,
+    "k": 3,
+    "blend": 0.25,
+    "gate": "supported",
+    "max_abs_shift_t_ha": 0.5,
+    "distance_power": 1,
+    "median_gate": 0.5247401669456493,
+    "mean_gate": 0.5013438487185324,
+    "mean_signed_shift_t_ha": -0.005569266881703551,
+    "max_observed_abs_shift_t_ha": 0.10868873329099671,
+    "capped_on_138": 0,
+    "coefficient_p_values": null,
+    "adjusted_r2": null
+  },
+  "models": [
+    {
+      "id": "SelectedFinalRule",
+      "label": "Corrección final seleccionada",
+      "kind": "fixed_recipe_historically_selected_on_same_138",
+      "n": 138,
+      "train": 137,
+      "rmse": 0.462418,
+      "mae": 0.332019,
+      "r2": 0.702693,
+      "bias": -0.004103,
+      "l1": 45.818556,
+      "l2": 5.432182,
+      "linf": 2.115301,
+      "mse": 0.21383,
+      "sse": 29.508601,
+      "median_ae": 0.244838,
+      "p90_ae": 0.638737,
+      "p95_ae": 0.782014,
+      "wape": 8.394137,
+      "pearson": 0.838282,
+      "spearman": 0.77581
+    },
+    {
+      "id": "NestedSelection",
+      "label": "Selector anidado por fold",
+      "kind": "outer_137_labels_inner_4fold_preselected_family",
+      "n": 138,
+      "train": 137,
+      "rmse": 0.462892,
+      "mae": 0.331956,
+      "r2": 0.702083,
+      "bias": -0.005062,
+      "l1": 45.809975,
+      "l2": 5.437752,
+      "linf": 2.119565,
+      "mse": 0.214269,
+      "sse": 29.569144,
+      "median_ae": 0.244838,
+      "p90_ae": 0.638737,
+      "p95_ae": 0.782014,
+      "wape": 8.392565,
+      "pearson": 0.837927,
+      "spearman": 0.77428
+    },
+    {
+      "id": "Reference26_mean",
+      "label": "Reference26 sin corrección",
+      "kind": "native_outer_137_labels",
+      "n": 138,
+      "train": 137,
+      "rmse": 0.468138,
+      "mae": 0.333786,
+      "r2": 0.695292,
+      "bias": 0.001466,
+      "l1": 46.062466,
+      "l2": 5.499378,
+      "linf": 2.139958,
+      "mse": 0.219153,
+      "sse": 30.243156,
+      "median_ae": 0.244645,
+      "p90_ae": 0.679528,
+      "p95_ae": 0.779618,
+      "wape": 8.438822,
+      "pearson": 0.833884,
+      "spearman": 0.766091
+    }
+  ],
+  "moran": [
+    {
+      "model": "Reference26_mean",
+      "k": 4,
+      "I": -0.055864,
+      "p_two_sided": 0.3455,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "SelectedFinalRule",
+      "k": 4,
+      "I": -0.065382,
+      "p_two_sided": 0.2715,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "NestedSelection",
+      "k": 4,
+      "I": -0.06466,
+      "p_two_sided": 0.2825,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "Reference26_mean",
+      "k": 8,
+      "I": -0.076861,
+      "p_two_sided": 0.063,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "SelectedFinalRule",
+      "k": 8,
+      "I": -0.079994,
+      "p_two_sided": 0.058,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "NestedSelection",
+      "k": 8,
+      "I": -0.079316,
+      "p_two_sided": 0.0545,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "Reference26_mean",
+      "k": 12,
+      "I": -0.062976,
+      "p_two_sided": 0.064,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "SelectedFinalRule",
+      "k": 12,
+      "I": -0.065733,
+      "p_two_sided": 0.047,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "NestedSelection",
+      "k": 12,
+      "I": -0.065556,
+      "p_two_sided": 0.0445,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "Reference26_mean",
+      "k": 24,
+      "I": -0.041802,
+      "p_two_sided": 0.0645,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "SelectedFinalRule",
+      "k": 24,
+      "I": -0.041157,
+      "p_two_sided": 0.075,
+      "p_holm": 1,
+      "permutations": 1999
+    },
+    {
+      "model": "NestedSelection",
+      "k": 24,
+      "I": -0.041329,
+      "p_two_sided": 0.065,
+      "p_holm": 1,
+      "permutations": 1999
+    }
+  ],
+  "nested_choice_counts": [
+    {
+      "name": "Corrección de 26 variables · 3 vecinos",
+      "count": 128
+    },
+    {
+      "name": "Corrección con PCA8 · 3 vecinos",
+      "count": 5
+    },
+    {
+      "name": "Sin corrección",
+      "count": 5
+    }
+  ],
+  "significance": {
+    "spatial_test": "Global Moran I, signed LOOCV residuals",
+    "test_weights": "Equal-weight directed geographic kNN",
+    "two_sided_center": "Permutation mean",
+    "holm_family": "All model × k × residual definitions × Moran/Geary and additional spatial signals in the shared table",
+    "holm_12_selected": 1,
+    "ci_abs_rmse_available": false,
+    "normality_test_values_supplied": false,
+    "grouped_bootstrap_interval_values_supplied": false
+  },
+  "cautions": {
+    "fixed_rule": "Fixed correction was globally selected after historical screening using the same 138 observed labels. The fixed-rule RMSE is post-selection exploratory.",
+    "nested": "Outer-fold selection excludes each outer y, but the candidate family was shortlisted using the same 138 labels.",
+    "spatial": "No signed-residual Moran result survives Holm correction; failure to reject does not demonstrate spatial independence.",
+    "intervals": "Neither numerical grouped-bootstrap confidence intervals nor absolute-RMSE confidence limits were supplied. Do not display an inferred interval.",
+    "tail": "No observed yields for the 59 target parcels; diagnostic yield tails cannot be used to compute their errors.",
+    "scope": "No new predictions or browser model weights are substituted in this publication."
+  }
+}
