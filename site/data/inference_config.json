@@ -1,7 +1,8 @@
 {
-  "schema_version": 2,
+  "schema_version": 1,
   "api_base_url": "",
-  "status": "awaiting verified 138-mean model artifact and API deployment",
+  "status": "pending deployment",
   "model": "agrospatial_analog_v1",
-  "required_runtime": "Python FastAPI with verified mean-imputation joblib and exact 59 prediction parity"
+  "public_name": "Modelo de expertos agroespaciales con corrección por parcelas análogas",
+  "requires_exact_59_reproduction": true
 }
