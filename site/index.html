@@ -3,17 +3,18 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#10372f">
-<meta name="description" content="Reference26: 26 variables, 138 validaciones LOOCV, residuos, Moran I, bootstrap espacial y análisis de observaciones influyentes.">
-<title>GeoCebada · Reference26 y análisis de residuos</title>
+<meta name="description" content="Expertos agroespaciales con corrección por 3 parcelas análogas: 138 LOOCV, 59 predicciones finales, mapa interactivo y análisis estadístico.">
+<title>GeoCebada · Modelo agroespacial y predicciones finales</title>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css"><link rel="stylesheet" href="./reference26_residuals.css">
+<link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./model.css"><link rel="stylesheet" href="./charts.css"><link rel="stylesheet" href="./predictor.css"><link rel="stylesheet" href="./predictions59.css"><link rel="stylesheet" href="./final_model.css"><link rel="stylesheet" href="./final_predictor.css"><link rel="stylesheet" href="./reference26_residuals.css">
 <script src="./navigation.js" defer></script><script src="./scroll_motion.js" defer></script><script src="./native_map.js" defer></script><script src="./charts.js" defer></script><script src="./model.js" defer></script><script src="./field_charts.js" defer></script>
 <script src="./reference26_engine.js" defer></script>
 <script src="./predictions59.js" defer></script>
 
 <script src="./reference26_residuals.js" defer></script>
+<script src="./final_model.js" defer></script><script src="./final_predictor.js" defer></script>
 <script src="./browser_inference.js" defer></script>
-<link rel="stylesheet" href="./interactive-map.css"><link rel="stylesheet" href="./navigation.css"><link rel="stylesheet" href="./editorial.css"><link rel="stylesheet" href="./reference26_analog_cv.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="./scroll_motion.css">
+<link rel="stylesheet" href="./interactive-map.css"><link rel="stylesheet" href="./navigation.css"><link rel="stylesheet" href="./editorial.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="./scroll_motion.css"><link rel="stylesheet" href="./reference26_analog_cv.css">
 </head>
 <body>
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -23,10 +24,10 @@
 <button id="menu-toggle" class="menu-toggle" type="button" aria-controls="nav-links" aria-expanded="false">Menú</button>
 <nav id="nav-links" class="nav-links" aria-label="Navegación principal">
 <a href="#inicio" class="nav-home">Inicio</a>
-<details class="nav-group"><summary>El estudio<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">01 · CONTEXTO Y DATOS</p><a href="#datos">El problema y las parcelas</a><a href="#variables">Las 26 variables</a><a href="#preparacion">Preparación de datos</a><a href="#datos-reales">Clima y vegetación reales</a></div></details>
-<details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · MODELO REFERENCE26</p><a href="#ensamble">Modelo Reference26</a><a href="#arquitectura">Arquitectura Reference26</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#ajuste">Entrenamiento y ajuste</a><a href="#reference26-analog-cv">Modelo corregido: métricas LOOCV</a></div></details>
-<details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#resultados">Resultados y métricas</a><a href="#pruebas">Pruebas anteriores: asociaciones</a><a href="#estadisticas-finales">Nuevo: diagnóstico de residuos LOOCV</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
-<details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 estimaciones</a><a href="#mapa-interactivo">Mapa interactivo</a></div></details>
+<details class="nav-group"><summary>El estudio<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">01 · CONTEXTO Y DATOS</p><a href="#datos">El problema y las parcelas</a><a href="#variables">Las 26 variables</a><a href="#preparacion">Preparación de datos</a><a href="#control-calidad">Pruebas de calidad de datos</a><a href="#datos-reales">Clima y vegetación reales</a></div></details>
+<details class="nav-group"><summary>El modelo<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">02 · EXPERTOS AGROESPACIALES</p><a href="#ensamble">Modelo agroespacial final</a><a href="#arquitectura">Arquitectura de expertos</a><a href="#geologia">Geología y pesos</a><a href="#faltantes">Datos incompletos</a><a href="#predecir-parcela">Predecir una nueva parcela</a><a href="#ajuste">Entrenamiento y ajuste</a></div></details>
+<details class="nav-group"><summary>Evaluación<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">03 · EVIDENCIA Y ALCANCE</p><a href="#modelo-final-analisis">Comparación de siete predictores</a><a href="./modelo-corregido.html#auditoria-modelo-final">Auditoría estadística del modelo final</a><a href="#reference26-analog-cv">Selección anidada LOOCV</a><a href="#resultados">Estudios anteriores</a><a href="#pruebas">Pruebas anteriores: asociaciones</a><a href="#estadisticas-finales">Nuevo: diagnóstico de residuos LOOCV</a><a href="#limites">Limitaciones</a><a href="#preguntas">Preguntas frecuentes</a></div></details>
+<details class="nav-group"><summary>Explorar<span class="nav-chevron" aria-hidden="true">⌄</span></summary><div class="nav-popover"><p class="nav-popover-label">04 · HERRAMIENTAS</p><a href="#predicciones-59">Las 59 predicciones finales</a><a href="#mapa-interactivo">Mapa interactivo</a></div></details>
 <a href="#recorrido" class="nav-action">Índice</a>
 </nav>
 </div></header>
@@ -35,18 +36,12 @@
 <div class="hero-content">
 <p class="eyebrow hero-eyebrow">GEOCEBADA · RETO AGROCEBADA FIRA 2026</p>
 <h1>Estimación del rendimiento <em>de cebada.</em></h1>
-<p class="hero-description">Estudiamos 197 parcelas agrícolas en Hidalgo, Puebla y Tlaxcala. Conocemos el rendimiento reportado de 138 y estimamos el de las 59 restantes. Reference26 combina clima, vegetación satelital, geología e información espacial.</p>
-<p class="hero-description minor-intro">El modelo actual utiliza <strong>corrección adaptativa por parcelas análogas</strong>, con selección interna sin utilizar la respuesta de la parcela evaluada. Sus 138 predicciones LOOCV permiten calcular las métricas siguientes.</p>
-<div class="hero-new-model-summary" role="group" aria-label="Métricas del modelo corregido, 138 predicciones reales LOOCV">
-  <span><strong>0.462892</strong><small>RMSE · t/ha</small></span>
-  <span><strong>0.331956</strong><small>MAE · t/ha</small></span>
-  <span><strong>0.702083</strong><small>R² predictivo</small></span>
-  <span><strong>138</strong><small>parcelas LOOCV</small></span>
-</div>
-<div class="hero-actions"><a class="primary-cta" href="#reference26-analog-cv">Ver el modelo y sus resultados</a><a class="secondary-cta" href="#recorrido">Explorar el estudio</a></div>
+<p class="hero-description">Estudiamos 197 parcelas agrícolas en Hidalgo, Puebla y Tlaxcala: 138 con rendimiento reportado y 59 por estimar. Integramos información climática, satelital, geográfica y geológica; después ajustamos las predicciones mediante tres parcelas análogas con rendimientos conocidos.</p>
+<p class="hero-description minor-intro">El modelo final es un <strong>ensamble de expertos agroespaciales con corrección por parcelas análogas</strong>. Comparamos sus errores en 138 exclusiones LOOCV y presentamos las 59 predicciones finales, sin confundirlas con cosechas observadas.</p>
+<div class="hero-actions"><a class="primary-cta" href="#modelo-final-analisis">Resultados del modelo final</a><a class="secondary-cta" href="./modelo-corregido.html#auditoria-modelo-final">Auditoría estadística completa</a><a class="secondary-cta" href="#recorrido">Índice</a></div>
 <p class="hero-metadata">HIDALGO · PUEBLA · TLAXCALA · CICLO 2025</p>
 </div>
-<div class="hero-visual model-visual" aria-label="Esquema de etapas de Reference26: Regresión local con mezcla geológica"><div class="visual-header"><span>INTERIOR DE REFERENCE26 · PRIMER COMPONENTE</span><span>t/ha</span></div>
+<div class="hero-visual model-visual" aria-label="Esquema de etapas del modelo"><div class="visual-header"><span>ENSAMBLE AGROESPACIAL · ETAPA DE EXPERTOS</span><span>t/ha</span></div>
 <svg viewBox="0 0 580 440" role="img" aria-label="La lluvia y vegetación producen una estimación; las parcelas cercanas producen otra; la geología las mezcla y un corrector residual ajusta el resultado.">
 <path d="M124 99 H290 V174 M455 99 H290 V174" stroke="#aecda8" stroke-width="3" fill="none"/>
 <rect x="18" y="43" width="218" height="92" rx="9" fill="#235848" stroke="#92bc8d"/><text x="127" y="77" text-anchor="middle" font-size="15" fill="#e2eebd">Lluvia + vegetación</text><text x="127" y="104" text-anchor="middle" font-size="12" fill="#c2d9ca">Elastic Net</text>
@@ -65,40 +60,39 @@
 <p>Esta es la ruta de lectura completa. Cada apartado resume qué estudiamos y por qué importa. Puedes leer la página de principio a fin o ir directamente al análisis detallado.</p>
 </div>
 <div class="index-introduction">
-<p>Partimos de <strong>197 parcelas</strong>: 138 con rendimientos reportados y 59 sin una cosecha conocida. Estudiamos sus variables ambientales y geográficas, construimos modelos predictivos y examinamos su error fuera de muestra. El modelo final es Reference26, con evaluación residual LOOCV por media de entrenamiento y 59 estimaciones históricas por mediana.</p>
+<p>Partimos de <strong>197 parcelas</strong>: 138 con rendimientos reportados y 59 sin una cosecha conocida. El modelo final combina expertos agroespaciales y una corrección por tres parcelas análogas. Las 59 estimaciones publicadas corresponden ya al ajuste por media sobre 138 datos reales, <strong>no</strong> a la antigua versión con mediana.</p>
 </div>
 <div class="chapter-grid">
 <article class="chapter-card">
 <div class="chapter-intro"><span class="chapter-number">01 / DATOS</span><h3>El estudio</h3><p>Qué información tenemos, cómo se recogió y qué limitaciones hay antes de entrenar un modelo.</p><a class="chapter-readmore" href="#datos">Leer el estudio</a></div>
 <ul class="chapter-subsections">
 <li><a href="#datos">Parcelas y objetivo</a><span>Qué significan los 138 rendimientos conocidos y las 59 parcelas por estimar.</span></li>
-<li><a href="#variables">Variables explicativas</a><span>Los 26 indicadores de Reference26 y su papel agrícola y espacial.</span></li>
+<li><a href="#variables">Variables explicativas</a><span>Los 26 indicadores del ensamble agroespacial y su papel agrícola y geográfico.</span></li>
 <li><a href="#preparacion">Preparación de datos</a><span>Agregaciones, valores faltantes y transformaciones previas a cada ajuste.</span></li>
 <li><a href="#datos-reales">Lluvia y NDVI observados</a><span>Gráficas de 2025 basadas en mediciones de las parcelas, no en ejemplos.</span></li>
 </ul></article>
 <article class="chapter-card">
-<div class="chapter-intro"><span class="chapter-number">02 / MÉTODOS</span><h3>Reference26</h3><p>Cómo funciona la combinación interna de expertos, geología y corrección residual.</p><a class="chapter-readmore" href="#ensamble">Ver el modelo</a></div>
+<div class="chapter-intro"><span class="chapter-number">02 / MÉTODOS</span><h3>Expertos agroespaciales</h3><p>Cómo se combinan clima, geología, regresión local y tres análogos de entrenamiento.</p><a class="chapter-readmore" href="#ensamble">Ver el modelo</a></div>
 <ul class="chapter-subsections">
-<li><a href="#ensamble">Modelo Reference26</a><span>Reference26, sus variables, arquitectura y diagnóstico de residuos.</span></li>
-<li><a href="#arquitectura">Arquitectura de Reference26</a><span>Regresión climática, experto geográfico y corrección residual.</span></li>
+<li><a href="#ensamble">Modelo agroespacial</a><span>Componente nativo y corrección acotada por tres parcelas similares.</span></li>
+<li><a href="#arquitectura">Arquitectura del ensamble base</a><span>Regresión climática, experto geográfico y corrección residual interna.</span></li>
 <li><a href="#geologia">Geología y pesos</a><span>Cómo los grupos geológicos modifican la mezcla de predicciones.</span></li>
 <li><a href="#faltantes">Información incompleta</a><span>Cómo se manejan variables ausentes sin inventar cosechas.</span></li>
 <li><a href="#ajuste">Entrenamiento</a><span>Hiperparámetros, separación de datos y calibración interna.</span></li>
-<li><a href="#reference26-analog-cv">Reference26 corregido</a><span>Cómo funciona la corrección por parcelas análogas y sus métricas LOOCV anidadas.</span></li>
 </ul></article>
 <article class="chapter-card">
 <div class="chapter-intro"><span class="chapter-number">03 / EVIDENCIA</span><h3>Resultados y límites</h3><p>Qué tan precisas son las estimaciones y qué conclusiones resisten los diagnósticos.</p><a class="chapter-readmore" href="#resultados">Examinar resultados</a></div>
 <ul class="chapter-subsections">
-<li><a href="#resultados">Desempeño predictivo</a><span>RMSE, MAE, R² y protocolos diferentes de validación.</span></li>
+<li><a href="#modelo-final-analisis">LOOCV del modelo final</a><span>Siete predictores, elección anidada y métricas comparables sobre 138 parcelas.</span></li><li><a href="#resultados">Desempeño histórico</a><span>Estudios anteriores con protocolos distintos, conservados por trazabilidad.</span></li>
 <li><a href="#pruebas">Pruebas originales: asociaciones</a><span>Regresiones diagnósticas y contrastes de arquitectura; se mantienen en su apartado histórico.</span></li>
-<li class="chapter-residual-link"><a href="#estadisticas-finales">Análisis NUEVO de residuos de Reference26 ↗</a><span>Normalidad, heterocedasticidad, Moran, Geary, semivariograma, observaciones influyentes y bootstrap espacial.</span></li>
+<li class="chapter-residual-link"><a href="#estadisticas-finales">Diagnósticos de residuos del ensamble base ↗</a><span>Análisis del predictor nativo con media: normalidad, Moran, Geary, semivariograma, influencia y bootstrap. No son todavía pruebas del corrector por análogos.</span></li>
 <li><a href="#limites">Limitaciones</a><span>Calidad de las etiquetas, falta de cosechas verificadas y alcance del estudio.</span></li>
 <li><a href="#preguntas">Preguntas frecuentes</a><span>Interpretación correcta de las cifras y de las partes del modelo.</span></li>
 </ul></article>
 <article class="chapter-card">
-<div class="chapter-intro"><span class="chapter-number">04 / PARCELAS</span><h3>Resultados por parcela</h3><p>Consultar las estimaciones verificadas de Reference26 y localizar las parcelas en el mapa.</p><a class="chapter-readmore" href="#predicciones-59">Consultar estimaciones</a></div>
+<div class="chapter-intro"><span class="chapter-number">04 / PARCELAS</span><h3>Predicciones definitivas</h3><p>Consultar las 59 estimaciones corregidas, el mapa y la entrada de una parcela nueva.</p><a class="chapter-readmore" href="#predicciones-59">Consultar estimaciones</a></div>
 <ul class="chapter-subsections">
-<li><a href="#predicciones-59">Las 59 estimaciones</a><span>Predicciones verificadas de Reference26; los rendimientos reales siguen desconocidos.</span></li>
+<li><a href="#predicciones-59">Las 59 estimaciones</a><span>CSV final de GeoC con 59 predicciones corregidas, sin rendimientos reales conocidos.</span></li><li><a href="#predecir-parcela">Tus propios indicadores</a><span>Formulario de 26 variables y CSV para un servicio Python que reproduce el modelo auténtico.</span></li>
 
 <li><a href="#mapa-interactivo">Distribución geográfica</a><span>Ubicación y atributos registrados de las 197 parcelas, con procedencia de Andrea-HH.</span></li>
 </ul></article>
@@ -108,20 +102,80 @@
 
 <section class="section ensemble-story" id="ensamble">
 <div class="shell">
-<div class="section-heading"><div><p class="eyebrow">EL MODELO SELECCIONADO</p><h2>Reference26. <em>Una sola arquitectura predictiva.</em></h2></div>
-<p>El estudio final utiliza únicamente Reference26: un predictor que combina regresión climática, regresión Ridge de vecindarios, mezcla geológica y una corrección residual acotada. No se presentan mezclas externas con otros modelos.</p></div>
-<div class="note-inline"><strong>Dos versiones y dos usos:</strong> el nuevo análisis de residuos y validación LOOCV corresponde a <strong>Reference26 con imputación por media</strong> aprendida dentro de cada entrenamiento. Las 59 estimaciones históricas mostradas abajo proceden del <strong>Reference26 archivado con mediana</strong>; no se afirma que sean las 59 predicciones de la versión con media.</div>
+<div class="section-heading"><div><p class="eyebrow">EL MODELO FINAL</p><h2>Expertos agroespaciales. <em>Corrección por parcelas análogas.</em></h2></div>
+<p>Partimos de un ensamble de regresión climática, Ridge local, mezcla geológica y corrector residual interno, entrenado con imputación por la media. Una segunda etapa contrasta la predicción con tres parcelas reales similares en un espacio robusto de 26 indicadores, con mezcla acotada por un filtro de soporte.</p></div>
+<div class="note-inline"><strong>Nombre metodológico:</strong> modelo de expertos agroespaciales con corrección por parcelas análogas. En los archivos técnicos el componente nativo se denomina Reference26_mean; no es el antiguo artefacto Reference26 entrenado con mediana. Los diagnósticos de residuos archivados se refieren al componente nativo con media, salvo indicación contraria.</div>
 </div>
+<div class="shell">
+<div class="shell"><div class="note-inline" style="margin-block:24px"><strong>Auditoría reproducible del predictor final:</strong> consulta <a href="./modelo-corregido.html#auditoria-modelo-final">las 22 métricas agregadas, Moran I para cuatro tamaños de vecindario, parámetros de corrección e interpretación prueba por prueba</a>. El análisis histórico de residuos pertenece al ensamble sin corrección y permanece en su sección independiente.</div></div><div class="fm-overview" id="modelo-final-analisis">
+<p class="fm-kicker">RESULTADOS DEFINITIVOS DEL EXPERIMENTO · 138 LOOCV</p>
+<h3>La mejora se evalúa fuera de cada entrenamiento.</h3>
+<p>La versión base del ensamble aprende con <strong>137 parcelas</strong> y estima la parcela excluida. Cinco correcciones por vecinos se comparan con el modelo original; la política anidada selecciona una variante mediante cuatro folds internos y después la aplica a la parcela externa. Los cinco candidatos se eligieron previamente sobre estos mismos datos: los resultados son exploratorios, no una evaluación independiente de toda la búsqueda.</p>
+<div class="fm-core" aria-label="Métricas principales">
+<div><span>RMSE · corrección fija elegida</span><strong>0.462418</strong><small>t/ha · 138 exclusiones auténticas</small></div>
+<div><span>R² predictivo · corrección fija</span><strong>0.702693</strong><small>Coeficiente de determinación LOOCV</small></div>
+<div><span>RMSE · selector anidado</span><strong>0.462892</strong><small>t/ha · MAE 0.331956</small></div>
+</div>
+<div class="fm-figure-grid">
+<div class="fm-figure">
+<h4>Comparar las siete estrategias</h4>
+<p>Selecciona una métrica. Los gráficos comparten las mismas 138 parcelas; L1, L2 y MSE se derivan aproximadamente de los RMSE y MAE publicados.</p>
+<div class="fm-tabs" role="group" aria-label="Métricas de evaluación"><button type="button" data-fm-metric="rmse" aria-pressed="true" class="active">RMSE</button><button type="button" data-fm-metric="mae" aria-pressed="false">MAE</button><button type="button" data-fm-metric="r2" aria-pressed="false">R²</button><button type="button" data-fm-metric="bias" aria-pressed="false">Sesgo</button><button type="button" data-fm-metric="mse" aria-pressed="false">MSE</button><button type="button" data-fm-metric="l1" aria-pressed="false">L1</button><button type="button" data-fm-metric="l2" aria-pressed="false">L2</button></div>
+<div id="final-model-bars" class="fm-bars">Cargando la comparación de modelos…</div>
+<p id="final-model-chart-note" class="fm-note" aria-live="polite">Cargando procedencia y métricas…</p>
+</div>
+<div class="fm-figure">
+<h4>¿Qué eligió la validación interna?</h4>
+<p>Los cuatro folds de selección interna se repitieron para cada una de las 138 parcelas excluidas.</p>
+<div id="final-model-selections" class="fm-selections">Cargando elecciones…</div>
+<p class="fm-note">El selector usó tres vecinos robustos en 128 de los 138 folds; otros cinco eligieron PCA y cinco conservaron el ensamble sin ajuste.</p>
+</div>
+</div>
+<div class="fm-figure" style="margin-top:24px">
+<h4>Distribución de las 59 estimaciones definitivas</h4>
+<p>Frecuencias de las predicciones finales por intervalos de 0.25 t/ha. Es una distribución de predicciones, no una evaluación de errores.</p>
+<div id="final-model-histogram" class="fm-histogram" role="group" aria-label="Histograma de 59 predicciones corregidas"></div>
+<p id="final-model-hist-status" class="fm-note">Cargando las 59 estimaciones…</p>
+</div>
+<p id="final-model-state" class="fm-note" role="status" aria-live="polite">Verificando resultados del experimento…</p>
+<p class="fm-caution"><strong>Alcance:</strong> RMSE 0.462418 de la corrección fija y 0.462892 de la política anidada se midieron con las 138 cosechas conocidas. No representan el error observado de las 59 parcelas desconocidas. La selección de los cinco candidatos fue post-hoc. Los diagnósticos de residuos y pruebas de hipótesis de la sección histórica pertenecen al ensamble base, no automáticamente a esta corrección.</p>
+<div class="fm-links">
+<a href="https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/docs/REFERENCE26_FINAL59_SELECTED.md" target="_blank" rel="noopener noreferrer">Metodología y cierre reproducible ↗</a>
+<a href="#predicciones-59">Explorar las 59 estimaciones ↓</a>
+<a href="#predecir-parcela">Predecir con tus datos ↓</a>
+</div>
+</div>
+<div class="fm-predict" id="predecir-parcela">
+<p class="fm-kicker">INFERENCIA · PARCELA PROPIA</p>
+<h3>Estimar el rendimiento con tus indicadores.</h3>
+<p>Para ejecutar el modelo auténtico con una parcela nueva necesitas sus 26 indicadores ambientales, de ubicación y geología. El navegador no entrena ni inventa coeficientes: llama a un servicio Python que debe tener el <strong>modelo reentrenado con media</strong> y verificar numéricamente las 59 predicciones finales antes de aceptar solicitudes.</p>
+<div class="fm-api-bar"><label for="fm-api-url">Servicio de inferencia HTTPS<input id="fm-api-url" type="url" placeholder="https://tu-servicio-ejemplo.onrender.com" autocomplete="url"></label><button id="fm-api-connect" type="button">Verificar conexión</button></div>
+<p id="fm-api-status" class="fm-api-status" data-error="false" role="status" aria-live="polite">Preparando el catálogo de indicadores…</p>
+<details><summary>Introducir los 26 indicadores de la parcela</summary>
+<p class="fm-api-notes" id="fm-predict-count">Las coordenadas son obligatorias; algunos indicadores admiten valores faltantes. No escribas rendimientos observados en los campos: éstos son explicativos.</p>
+<div id="fm-predict-fields" class="fm-input-grid"></div>
+<button id="fm-predict-button" type="button" disabled>Calcular estimación real</button>
+<div id="fm-own-result" class="fm-real-result" role="status" aria-live="polite"></div>
+</details>
+<details><summary>Predecir varias parcelas desde un CSV</summary>
+<p class="fm-api-notes">Hasta 50 filas por lote. El encabezado debe utilizar códigos exactos del catálogo de 26 variables; se requieren <code>base_centroid_lat</code> y <code>base_centroid_lon</code>. Los campos restantes pueden omitirse. La descarga contiene predicciones y no rendimientos observados.</p>
+<div class="fm-batch-layout"><input id="fm-batch-file" type="file" accept=".csv,text/csv" aria-label="CSV con 26 indicadores"><button id="fm-batch-button" type="button" disabled>Calcular lote y descargar</button></div>
+<p id="fm-batch-result" class="fm-real-result" role="status" aria-live="polite"></p>
+</details>
+<p class="fm-api-notes"><strong>Estado de publicación:</strong> las 59 estimaciones del concurso ya pueden consultarse y descargarse sin servidor. Las predicciones de parcelas nuevas requieren que el operador publique el artefacto entrenado con media y configure un backend, pues GitHub Pages no ejecuta Python o archivos <code>joblib</code>. Hasta entonces los botones de predicción permanecerán desactivados.</p>
+</div>
+</div>
+
 <div id="reference26-view">
 <div class="ensemble-reference-section" id="predicciones-59"><div class="shell">
-<div class="section-heading"><div><p class="eyebrow">REFERENCE26 · RESULTADOS INDIVIDUALES</p><h2>Reference26: <em>59 estimaciones históricas.</em></h2></div>
-<p>Estas son las estimaciones archivadas del ajuste Reference26 con imputación por mediana, entrenado con las 138 parcelas etiquetadas. La evaluación estadística de 2026 utiliza Reference26 con imputación por media, que es una versión distinta. Son resultados reales del modelo, <strong>no ejemplos inventados</strong>, pero el rendimiento de esas 59 parcelas todavía no se ha observado o confirmado.</p></div>
-<div class="pred59-status" id="pred59-status" role="status" aria-live="polite">Verificando las 59 estimaciones frente a los resultados originales de Python…</div>
+<div class="section-heading"><div><p class="eyebrow">PREDICCIONES FINALES · 59 PARCELAS</p><h2>59 parcelas. <em>Estimaciones agroespaciales corregidas.</em></h2></div>
+<p>Resultados finales publicados por GeoC después de entrenar el ensamble nativo con los 138 rendimientos reales y elegir la corrección de tres análogos mediante cuatro folds internos. Son <strong>59 estimaciones reales del modelo final</strong>, no ejemplos ni las antiguas predicciones con mediana. Las 59 cosechas observadas siguen siendo desconocidas.</p></div>
+<div class="pred59-status" id="pred59-status" role="status" aria-live="polite">Cargando el CSV de las 59 estimaciones finales y comprobando sus agregados…</div>
 <div class="pred59-data" id="pred59-data" hidden>
 <div class="pred59-summary" id="pred59-summary" aria-label="Resumen de las 59 estimaciones"></div>
 <div class="pred59-highlights"><div><h3>Tres parcelas como ejemplo</h3><p>Seleccionadas automáticamente por sus valores estimados: menor, mediano y mayor. No son parcelas elegidas por un rendimiento observado.</p></div><div id="pred59-examples" class="pred59-example-grid"></div></div>
 <div class="pred59-viz"><div class="pred59-viz-top"><div><h3>¿Cómo se distribuyen las estimaciones?</h3><p>Cada punto representa una parcela. La posición horizontal indica el rendimiento estimado, en toneladas por hectárea. Selecciona un punto para consultar su predicción.</p></div></div><div id="pred59-plot" class="pred59-plot" role="group" aria-label="Predicciones de las parcelas por estado"></div></div>
-<div class="pred59-explorer"><div class="pred59-explorer-heading"><h3>Consultar las 59 predicciones</h3><p>Busca por identificador o municipio, filtra por estado y ordena los resultados. Todos los valores proceden de la versión archivada con mediana y no deben confundirse con el análisis LOOCV de media.</p></div>
+<div class="pred59-explorer"><div class="pred59-explorer-heading"><h3>Consultar las 59 predicciones</h3><p>Busca por identificador; cuando la capa cartográfica termine de cargar también podrás filtrar por estado o municipio. El CSV proviene del ajuste corregido seleccionado, y no permite medir el error de las 59 cosechas.</p></div>
 <div class="pred59-filters">
 <label for="pred59-search">Buscar parcela o municipio<input id="pred59-search" type="search" placeholder="ID de parcela o municipio" autocomplete="off"></label>
 <label for="pred59-state">Estado<select id="pred59-state"><option value="all">Todos los estados</option></select></label>
@@ -132,7 +186,7 @@
 <div id="pred59-detail" class="pred59-detail" aria-live="polite"><p>Selecciona una parcela del gráfico o de la tabla para analizar su estimación.</p></div>
 <button id="pred59-export" type="button" class="pred59-export">Descargar las 59 estimaciones (CSV)</button>
 </div>
-<p class="small-note"><strong>Procedencia:</strong> resultado histórico de Reference26 con imputación por mediana calculado con 138 rendimientos de entrenamiento y verificado en el navegador contra los 59 resultados de Python. La columna de corrección indica si se activó la última etapa; no es una medida de calidad de los datos ni un intervalo de confianza. Los rendimientos reales de estas 59 parcelas son desconocidos.</p>
+<p class="small-note"><strong>Procedencia:</strong> <a href="https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/submission59_final.csv" target="_blank" rel="noopener noreferrer">CSV definitivo de 59 predicciones en GeoC ↗</a>, verificado en el navegador por número de parcelas y agregados (media, mediana, mínimo y máximo). Los rendimientos reales siguen desconocidos y no hay intervalos por parcela calculados para este nuevo corrector.</p>
 </div></div>
 
 </div>
@@ -160,12 +214,36 @@
 <p class="small-note">Cada variable conserva debajo su identificador exacto del código. Las categorías geológicas son códigos cartográficos, no etiquetas de calidad agrícola. <a href="https://github.com/heri-espino/todoseboso/blob/main/configs/current_champions_inputs.json" target="_blank" rel="noopener noreferrer">Inventario fuente de las 26 entradas ↗</a></p>
 </div></section>
 
+
+<section class="section section-soft data-integrity" id="control-calidad" aria-labelledby="quality-title">
+ <div class="shell">
+  <div class="section-heading"><div><p class="eyebrow">AUDITORÍA DEL CONJUNTO DE DATOS</p><h2 id="quality-title">¿Qué comprobamos <em>antes de confiar en las predicciones?</em></h2></div>
+  <p>Distinguimos comprobaciones reproducidas a partir de archivos publicados de verificaciones que todavía requieren los registros privados. Ninguna prueba usa como observados los 59 rendimientos ocultos.</p></div>
+  <div class="quality-summary">
+   <article><strong>197</strong><span>polígonos del conjunto</span></article>
+   <article><strong>138</strong><span>rendimientos conocidos</span></article>
+   <article><strong>59</strong><span>predicciones finales identificadas</span></article>
+   <article><strong>138/138</strong><span>exclusiones LOOCV auténticas</span></article>
+  </div>
+  <div class="quality-checks">
+   <details open><summary>Integridad de las 59 filas y procedencia</summary><p>El CSV final contiene 59 identificadores distintos con valores numéricos finitos; sus agregados se cotejan con el manifiesto y el hash del archivo original publicado por GeoC. Es una comprobación de integridad de resultados <strong>estimados</strong>, no una medición de su exactitud.</p><a href="./data/submission59_final.csv">Consultar el CSV verificado ↗</a></details>
+   <details><summary>Separación de etiquetas y prevención de fuga de información</summary><p>En cada fold externo se retiene la cosecha de una parcela y se entrena con las 137 restantes. La media de imputación y la corrección basada en rendimientos deben ajustarse sólo dentro del entrenamiento. La selección interna de cuatro folds impide consultar la etiqueta de la parcela externa durante ese ajuste; <strong>no corrige</strong> la preselección histórica de las cinco recetas con esas mismas 138 etiquetas.</p></details>
+   <details><summary>Datos faltantes e imputación por media</summary><p>Para la versión nativa seleccionada se imputan las características ausentes usando la <strong>media del conjunto de entrenamiento</strong>, en lugar de la mediana o interpolación espacial-temporal. Esta decisión respondió a comparaciones exploratorias de error LOOCV, no a una propiedad universal de la media. No hay un conteo público de faltantes por variable y municipio para afirmar que el conjunto está completo.</p></details>
+   <details><summary>Clima, vegetación y temporalidad</summary><p>Los agregados observacionales publicados documentan lluvia y NDVI de abril a octubre de 2025 para las 197 parcelas, con 197 observaciones mensuales registradas en esas series. Esto verifica la disponibilidad de esas <em>series agregadas</em>, no la completitud de las 26 variables ni la ausencia de errores de medición en sus fuentes.</p><a href="./data/real_charts.json">Examinar agregados de clima y NDVI ↗</a></details>
+   <details><summary>Consistencia de escala, geometrías y vecindarios</summary><p>La corrección final utiliza 26 indicadores escalados de forma robusta y tres parcelas análogas con cosechas conocidas. El mapa y las distancias geográficas permiten examinar soporte espacial; no reemplazan una auditoría parcelaria de coordenadas, solapamientos, geología y calidad del etiquetado.</p></details>
+   <details><summary>Valores extremos, normalidad y dependencia espacial</summary><p>Los residuos del ensamble nativo rechazan normalidad con Shapiro–Wilk (p = 1.401988 × 10⁻⁷), mientras Koenker–Breusch–Pagan no rechaza su nula en la especificación reportada (p = 0.400797). Se analizan también influencia, Moran, Geary y semivariograma. <strong>Estos p-valores no deben atribuirse al predictor corregido</strong>: su nueva auditoría tiene estadísticas y familias de pruebas independientes.</p><a href="#estadisticas-finales">Ver las pruebas nativas y su interpretación ↗</a></details>
+   <details><summary>Pruebas todavía no verificables públicamente</summary><p>No se publican por fila las tasas de faltantes, pruebas de rangos agronómicos, duplicados geométricos, calidad de supervisores ni errores reales de las 59 parcelas. Tampoco están disponibles los límites numéricos verificados de intervalos bootstrap absolutos del RMSE del corrector final. Estos diagnósticos quedan pendientes de los archivos agregados y de su ejecución local, en vez de producir cifras supuestas.</p></details>
+  </div>
+  <p class="small-note">Fuentes: <a href="./data/final_model.json">manifiesto final</a>, <a href="./data/reference26_selected_statistical_audit.json">auditoría del corrector</a>, <a href="./data/reference26_residuals.json">diagnósticos del modelo nativo</a> y <a href="./data/real_charts.json">agregados reales de 2025</a>. No se mezclan resultados de protocolos distintos.</p>
+ </div>
+</section>
+
 <section class="section" id="preparacion"><div class="shell">
 <div class="section-heading"><div><p class="eyebrow">03 · DEL DATO A LA VARIABLE</p><h2>Antes de ajustar una regresión, <em>preparamos los datos.</em></h2></div><p>Las transformaciones dependen de la función de cada columna. No sustituimos todos los valores faltantes por cero ni normalizamos indiscriminadamente.</p></div>
 <div class="process-grid">
 <article><span>01</span><h3>Resumir la lluvia</h3><p>De siete meses obtenemos lluvia total, fracción de abril a junio y concentración HHI. Si falta un mes, la variable derivada queda sin información completa y se trata durante el ajuste.</p><p class="process-explain">La precipitación total se obtiene sumando los siete meses. La fracción temprana compara abril a junio con el total.</p></article>
 <article><span>02</span><h3>Resumir los satélites</h3><p>Calculamos medias, dispersiones temporales, cambios entre meses y cambios de dirección sobre observaciones válidas. No creamos imágenes faltantes ni hacemos una PCA de estas siete señales.</p><p class="process-explain">El cambio de vegetación se obtiene restando el NDVI de junio al de agosto.</p></article>
-<article><span>03</span><h3>Imputar sin mirar el resultado</h3><p>En las regresiones, los faltantes numéricos se sustituyen por medianas del <strong>entrenamiento</strong>; una columna completamente vacía recibe el tratamiento de respaldo definido en el código. Después se centra y escala con ese mismo entrenamiento.</p><p class="process-explain">Cada valor se centra y escala con estadísticas calculadas en las parcelas de entrenamiento.</p></article>
+<article><span>03</span><h3>Imputar sin mirar el resultado</h3><p>El ajuste definitivo del ensamble nativo utiliza <strong>medias calculadas únicamente en el entrenamiento</strong> para los valores numéricos faltantes, de acuerdo con la ejecución final de GeoC. Las representaciones del análisis anterior con mediana permanecen documentadas por separado.</p><p class="process-explain">Cada valor se centra y escala con estadísticas calculadas en las parcelas de entrenamiento.</p></article>
 <article><span>04</span><h3>Transformar la geología</h3><p>Las diez proporciones se expresan entre 0 y 1. La representación física toma su raíz cuadrada y las centra usando el entrenamiento. No divide por la rareza de una clase ni usa PCA en este modelo.</p><p class="process-explain">Las proporciones geológicas se transforman con raíz cuadrada y se centran sin ponderar las clases poco frecuentes.</p></article>
 <article><span>05</span><h3>Medir distancia real</h3><p>Latitud y longitud sirven para medir distancias geográficas entre centroides y elegir los 24 vecinos de entrenamiento. Se respeta la escala de distancia congelada del experimento original.</p><p class="process-explain">Las parcelas más próximas reciben más peso en el ajuste Ridge local.</p></article>
 <article><span>06</span><h3>Comprobar datos para corregir</h3><p>El corrector final necesita tres indicadores completos. Si falta alguno, <strong>no inventamos el indicador ausente para activar la corrección</strong>: esa etapa se omite para la parcela.</p><p class="process-explain">Si falta información requerida, la última corrección toma valor cero.</p></article>
@@ -217,9 +295,9 @@
 <section class="section section-soft" id="faltantes"><div class="shell">
 <div class="section-heading"><div><p class="eyebrow">06 · INFORMACIÓN INCOMPLETA</p><h2>¿Qué pasa cuando <em>falta un dato?</em></h2></div><p>No todas las ausencias se tratan igual. La imputación permite utilizar variables incompletas; la máscara del corrector evita aplicar una corrección cuando falta información necesaria.</p></div>
 <div class="missing-grid">
-<div class="missing-item"><span>Medidas del clima y experto</span><h3>Imputación en entrenamiento</h3><p>Se calcula la mediana de la columna dentro de las parcelas de entrenamiento. La misma mediana se aplica a las parcelas evaluadas. El escalado también se ajusta dentro del entrenamiento.</p></div>
-<div class="missing-item"><span>Datos geológicos</span><h3>Representación física</h3><p>Las columnas numéricas no observadas utilizan la mediana del entrenamiento antes de la transformación. Un cero real en la composición no es un dato faltante.</p></div>
-<div class="missing-item"><span>Información para R3</span><h3>Corrección desactivada</h3><p>Si falta cualquiera de los tres indicadores de la corrección, la predicción conserva la mezcla base. En el ajuste final esto ocurre para 8 de las 59 parcelas.</p></div>
+<div class="missing-item"><span>Clima y experto base</span><h3>Imputación con media</h3><p>En el ajuste final se emplea la media de las columnas de entrenamiento para imputar faltantes, sin aprender de los rendimientos de la parcela excluida. La receta antigua con mediana se conserva sólo para explicar resultados históricos.</p></div>
+<div class="missing-item"><span>Datos geológicos</span><h3>Representación física</h3><p>Los valores numéricos faltantes reciben la regla de imputación de la versión final con media. Un cero real en una proporción geológica no equivale a un dato faltante.</p></div>
+<div class="missing-item"><span>Información del corrector interno</span><h3>Soporte del componente nativo</h3><p>En el modelo anterior el corrector residual interno podía desactivarse por indicadores ausentes. El nuevo ajuste por tres análogos es una segunda etapa diferente, cuyo filtro depende de distancia en el espacio de 26 variables y concordancia de los vecinos.</p></div>
 </div>
 
 </div></section>
@@ -259,6 +337,7 @@
 </div></section>
 
 
+<!-- Preserved source-verified nested-policy evidence from main; distinct from the final fixed rule. -->
 <section class="section reference26-analog-story" id="reference26-analog-cv" aria-labelledby="r26a-title">
   <div class="shell">
     <header class="r26a-head">
@@ -427,11 +506,10 @@
     <p class="r26a-foot">Fuente: ejecución completa de 138/138 folds de <strong>Reference26 con selección interna de corrección analógica</strong>, 19 de octubre de 2026. <a href="https://github.com/heri-espino/GeoC/blob/experiment/reference26-top5-final59/docs/REFERENCE26_TOP5_NESTED_LOOCV.md" target="_blank" rel="noopener noreferrer">Metodología y resultados documentados en GeoC ↗</a>.</p>
   </div>
 </section>
-
 <section class="section section-soft" id="resultados"><div class="shell">
-<div class="section-heading"><div><p class="eyebrow">08 · LO QUE MOSTRARON LAS PRUEBAS</p><h2>¿Cuánto se equivoca <em>la regresión local con mezcla geológica?</em></h2></div><p>El rendimiento se mide en toneladas por hectárea. Se muestran tanto la validación LOOCV de 138 parcelas como las evaluaciones anteriores, indicando siempre cuántas parcelas se usaron para entrenar y para evaluar.</p></div>
+<div class="section-heading"><div><p class="eyebrow">08 · PRUEBAS HISTÓRICAS DEL ENSAMBLE NATIVO</p><h2>¿Cuánto se equivoca <em>la regresión local con mezcla geológica?</em></h2></div><p>El rendimiento se mide en toneladas por hectárea. Se muestran tanto la validación LOOCV de 138 parcelas como las evaluaciones anteriores, indicando siempre cuántas parcelas se usaron para entrenar y para evaluar.</p></div>
 <div class="loocv-panel">
-<div class="loocv-head"><p class="eyebrow">VALIDACIÓN DEJANDO UNA PARCELA FUERA</p><h3>138 parcelas evaluadas, una a la vez</h3><p>En cada repetición se entrena el modelo con 137 cosechas conocidas y se predice la cosecha de la parcela restante. Así se obtienen 138 predicciones para medir el error conjunto. Este procedimiento se conoce como LOOCV.</p></div>
+<div class="loocv-head"><p class="eyebrow">RESULTADOS ANTERIORES · ENSEMBLE BASE CON MEDIANA</p><h3>138 parcelas evaluadas, una a la vez</h3><p>En cada repetición se entrena el modelo con 137 cosechas conocidas y se predice la cosecha de la parcela restante. Así se obtienen 138 predicciones para medir el error conjunto. Este procedimiento se conoce como LOOCV.</p></div>
 <div class="loocv-metrics"><div><span>Parcelas evaluadas</span><strong>138</strong></div><div><span>RMSE</span><strong>0.468186</strong><small>toneladas por hectárea</small></div><div><span>R²</span><strong>≈ 0.6952</strong><small>ajuste estadístico, no porcentaje de aciertos</small></div></div>
 <div class="loocv-reading"><div><h4>¿Cuántos kilogramos representa el error?</h4><p>Un RMSE de 0.468186 toneladas por hectárea equivale a <strong>468.186 kilogramos por hectárea</strong>. Como el RMSE eleva los errores al cuadrado antes de promediarlos, penaliza especialmente las equivocaciones grandes. <strong>No significa que cada parcela tenga un error de 468 kilogramos.</strong></p></div><div><h4>¿Y cómo expresarlo como porcentaje?</h4><p>La media de las 138 cosechas conocidas fue aproximadamente <strong>3.9554 toneladas por hectárea</strong>. El RMSE equivale al <strong>11.84 % de esa media</strong>; sólo es una comparación de escalas. No es el porcentaje de error esperado de una parcela ni un MAPE. Para calcular un error porcentual medio real se necesitan los errores individuales y rendimientos observados correspondientes.</p></div><div><h4>¿Qué nos dice R²?</h4><p>Un R² cercano a 0.6952 indica que, en esta evaluación, el modelo redujo aproximadamente el <strong>69.52 % de la suma de errores cuadrados</strong> respecto a predecir siempre la media observada del conjunto evaluado. <strong>No significa acertar el 69.52 % de las parcelas.</strong></p></div></div>
 
@@ -466,7 +544,7 @@
 <section class="section section-soft" id="limites"><div class="shell">
 <div class="section-heading"><div><p class="eyebrow">10 · ENTREGA Y LÍMITES</p><h2>Se pueden generar 59 estimaciones. <em>¿Qué no sabemos todavía?</em></h2></div><p>Que dos conjuntos de parcelas tengan el mismo promedio no significa que las predicciones individuales sean correctas. Además, las parcelas pueden quedar fuera de las condiciones mejor representadas en el entrenamiento.</p></div>
 <div class="scoreline"><div><span>Corrección R3 disponible</span><strong>51</strong><small>de 59 parcelas</small></div><div><span>Corrección R3 desactivada</span><strong>8</strong><small>de 59 parcelas</small></div><div><span>Con algún aviso de soporte</span><strong>11</strong><small>de 59 parcelas; avisos superpuestos</small></div></div>
-<div class="detail-pair evidence-chart-stack"><div><h3>Distribución de las cosechas y las estimaciones</h3><p>Medianas y percentiles por estado. Las 138 cosechas conocidas y las 59 estimaciones corresponden a parcelas distintas: la gráfica no mide el error de las 59.</p><div id="distribution-quantiles"></div></div><div><h3>¿Qué cobertura tuvieron los intervalos?</h3><p>Selecciona el nivel nominal. La línea corresponde a la cobertura solicitada y los puntos a la observada en validación aleatoria; no hay garantía de igual cobertura para las 59 parcelas.</p><div class="buttonset"><button data-level="0.8" type="button" aria-pressed="false">80 % nominal</button><button data-level="0.9" class="active" type="button" aria-pressed="true">90 % nominal</button></div><div id="interval-results"></div></div></div>
+<div class="detail-pair evidence-chart-stack"><div><h3>Distribución histórica de cosechas y estimaciones</h3><p>Esta gráfica de archivo corresponde a las 59 estimaciones de la versión nativa antigua con mediana, no al CSV final corregido. Las 138 cosechas conocidas y las 59 estimaciones corresponden a parcelas distintas: la gráfica no mide el error de las 59. Para la distribución final utiliza el histograma del inicio.</p><div id="distribution-quantiles"></div></div><div><h3>¿Qué cobertura tuvieron los intervalos?</h3><p>Selecciona el nivel nominal. La línea corresponde a la cobertura solicitada y los puntos a la observada en validación aleatoria; no hay garantía de igual cobertura para las 59 parcelas.</p><div class="buttonset"><button data-level="0.8" type="button" aria-pressed="false">80 % nominal</button><button data-level="0.9" class="active" type="button" aria-pressed="true">90 % nominal</button></div><div id="interval-results"></div></div></div>
 <div class="note-inline">Las 59 cosechas reales todavía se desconocen. La media de esas estimaciones es <strong>3.9564 t/ha</strong>, frente a <strong>3.9554 t/ha</strong> entre las cosechas conocidas, pero no son las mismas parcelas y esa coincidencia no demuestra precisión. Las 59 estimaciones individuales, obtenidas por el modelo final, se presentan en la siguiente sección como resultados del estudio, no como cosechas observadas.</div>
 <details class="source-details"><summary>Consultar las curvas acumuladas originales</summary><figure class="distribution-figure"><img src="./media/distribution_ECDF.png" alt="Distribución acumulada original de cosechas conocidas y estimaciones del modelo por región."><figcaption>Gráfico original conservado; las curvas exactas no se reconstruyen a partir de percentiles.</figcaption></figure></details>
 </div></section>
@@ -477,18 +555,18 @@
 <details><summary>¿Por qué 24 vecinos y cuatro grupos geológicos?</summary><p>Los 24 vecinos y la penalización de Ridge se conservaron de una receta local anterior; no se demuestra que sean universalmente óptimos. Para la mezcla geológica se probaron internamente cuatro y ocho grupos y el ajuste final seleccionó cuatro.</p></details>
 <details><summary>¿Las 26 variables tienen valores p significativos?</summary><p>No se han realizado 26 pruebas individuales de efecto dentro de esta arquitectura. Hay asociaciones para algunas señales climáticas y experimentos de retirada de bloques. No se debe atribuir un efecto causal a una variable por aparecer en el modelo.</p></details>
 <details><summary>¿Qué pasa si la lluvia es cero o si falta un mes?</summary><p>Cuando todos los meses tienen cero precipitación observada, los resúmenes correspondientes toman cero. Si no se observó un mes, no se interpreta como cero: los faltantes derivados se tratan durante el ajuste con reglas aprendidas sólo en entrenamiento.</p></details>
-<details><summary>¿Se sustituyen los datos faltantes siempre por la media?</summary><p>Depende de la versión: en el LOOCV actual de Reference26 se usa media aprendida en cada entrenamiento; las 59 estimaciones archivadas usan mediana. Ambas versiones conservan el tratamiento de faltantes propio de sus respectivos ajustes.</p></details>
+<details><summary>¿Se sustituyen los datos faltantes siempre por la media?</summary><p>El predictor nativo utilizado para las 59 predicciones finales fue entrenado con imputación de media en las parcelas disponibles. Los resultados históricos del ensamble con mediana son una referencia anterior que sigue documentada, pero no se utilizan para producir el CSV final.</p></details>
 <details><summary>¿Qué significa un peso geológico de 0.86?</summary><p>Que, en esa mezcla ajustada, la estimación local recibe un peso cercano a 86 % y la climática el resto. No significa que la geología explique 86 % del rendimiento o que lo cause.</p></details>
 <details><summary>¿Cuánto acierta el modelo?</summary><p>En LOOCV de Reference26 con media se evaluaron 138 parcelas (137 etiquetas para entrenar): RMSE 0.468138 t/ha y R² predictivo 0.695292. En la evaluación anterior con mediana el RMSE fue 0.468186 t/ha. Otra evaluación de 16 particiones obtuvo RMSE medio de 0.4625 t/ha. Ninguno representa un porcentaje de aciertos ni una garantía para cada parcela.</p></details>
-<details><summary>¿Qué estimaciones puedo consultar?</summary><p>Se publican las 59 predicciones de Reference26 correspondientes a parcelas del estudio cuya cosecha no se conoce. Cada estimación se contrasta con el resultado archivado de Python antes de mostrarse. No se ofrecen cálculos para parcelas nuevas ni resultados obtenidos con valores hipotéticos.</p></details>
+<details><summary>¿Qué estimaciones puedo consultar?</summary><p>Se publican las 59 predicciones definitivas del modelo de expertos agroespaciales con corrección por tres parcelas análogas. Para parcelas nuevas se ofrece un formulario de 26 indicadores que requiere conexión con la API Python real; hasta que se verifique y despliegue el artefacto, el cálculo permanece desactivado.</p></details>
 </div>
 <div class="source-index"><strong>Documentación técnica original</strong><a href="https://github.com/heri-espino/todoseboso/blob/main/documentation/models/Reference26/README.md" target="_blank" rel="noopener noreferrer">Fórmula, 26 variables y ajuste final ↗</a><a href="https://github.com/heri-espino/todoseboso/blob/main/results/reference26_component_evidence/v1/README.md" target="_blank" rel="noopener noreferrer">Pruebas de cada componente ↗</a><a href="https://github.com/heri-espino/todoseboso/blob/main/results/four_final_checks/v1/README.md" target="_blank" rel="noopener noreferrer">Soporte, sensibilidad e intervalos ↗</a></div></div></section>
 <section class="section reference26-residuals" id="estadisticas-finales" aria-labelledby="r26-residual-title">
 <div class="shell" id="reference26-residuals">
   <div class="r26-section-head">
-    <p class="eyebrow">REFERENCE26 · DIAGNÓSTICO DE RESIDUOS</p>
+    <p class="eyebrow">ENSAMBLE AGROESPACIAL BASE · RESIDUOS ANTERIORES A LOS ANÁLOGOS</p>
     <h2 id="r26-residual-title">Una pregunta. <em>Un análisis a la vez.</em></h2>
-    <p class="r26-introduction">Explora los resultados nuevos de los 138 errores LOOCV. Elige qué quieres estudiar; las pruebas estadísticas históricas permanecen en <a href="#pruebas">su propia sección</a>.</p>
+    <p class="r26-introduction">Explora los diagnósticos ya calculados sobre 138 errores LOOCV del ensamble nativo con media, antes de incorporar los tres análogos. Elige qué quieres estudiar; las pruebas estadísticas históricas permanecen en <a href="#pruebas">su propia sección</a>.</p>
     <details class="r26-method-detail"><summary>¿Cómo se obtuvieron estos residuos?</summary><p>Cada una de las 138 parcelas se excluyó una vez: Reference26 se ajustó con las otras 137 y predijo la parcela excluida. La imputación se hizo por media dentro del entrenamiento; el residuo es la predicción menos el rendimiento observado. No se conocen los 59 rendimientos reservados y este estudio no mide su error.</p></details>
   </div>
   <div class="r26-explorer" aria-label="Explorador de pruebas estadísticas de residuos">
@@ -565,7 +643,7 @@
     <p class="r26-eyebrow">07 · INTERPRETACIÓN Y REPRODUCIBILIDAD</p><h3>¿Qué conclusiones permiten estos diagnósticos?</h3>
     <p>La distribución marginal de residuos se aparta de la normal. Las pruebas de heterocedasticidad no detectaron evidencia con sus especificaciones, y las señales espaciales no sobreviven la corrección de Holm sobre la familia analizada. <strong>No rechazar no equivale a demostrar independencia espacial ni varianza constante.</strong> Los errores más grandes concentran una fracción apreciable de la pérdida cuadrática.</p>
     <p>Las pruebas p son exploratorias: los ajustes LOOCV comparten gran parte de sus datos y la arquitectura fue estudiada con las mismas parcelas. No se infieren efectos causales, capacidad de extrapolar municipios nuevos ni cobertura probabilística para las 59 parcelas sin rendimiento.</p>
-    <p>Este estudio utiliza <strong>Reference26 con imputación por media</strong> dentro de cada entrenamiento. Las 59 estimaciones históricas del sitio se generaron con <strong>imputación por mediana</strong>: son una versión diferente y aquí no se sustituyen.</p>
+    <p>Este estudio estadístico de archivo utiliza el <strong>ensamble nativo con imputación por media</strong> en cada entrenamiento. Las 59 estimaciones exhibidas en la página ahora proceden del <strong>ensamble nativo con media más la corrección por tres análogos</strong>. Las pruebas de residuos de esta sección no se extrapolan automáticamente al nuevo corrector.</p>
     <p id="r26-unavailable" class="r26-note">No se publican histogramas o Q–Q individuales sin los respectivos agregados comprobables.</p>
     <p><a href="https://github.com/heri-espino/GeoC/blob/experiment/nuria-champions-loocv/results/peer_models/REFERENCE26_COMPACT14_STATISTICAL_INTERPRETATION_138_2026-10-19.md" target="_blank" rel="noopener noreferrer">Valores y pruebas originales (GeoC) ↗</a> · <a href="https://github.com/heri-espino/GeoC/blob/analysis/reference26-inferential-sensitivity-20261019/docs/REFERENCE26_INFERENTIAL_SENSITIVITY.md" target="_blank" rel="noopener noreferrer">Método del bootstrap e influencia ↗</a></p>
   </div>
@@ -603,8 +681,8 @@
     </div>
   </div>
 </div>
-<p class="small-note collaborator-map-credit" id="collaborator-map-credit">Fuente cartográfica y de datos: <a href="https://github.com/Andrea-HH/todoseboso/tree/paginAndrea/site/explorador" target="_blank" rel="noopener noreferrer">Andrea-HH</a>, versión documentada de los 197 polígonos, 138 rendimientos reportados y 59 predicciones archivadas de Reference26. Este visor dispone de una interfaz propia; el rendimiento real de las 59 parcelas permanece desconocido. <a href="https://andrea-hh.github.io/todoseboso/explorador/mapa.html" target="_blank" rel="noopener noreferrer">Consultar el explorador original.</a></p>
+<p class="small-note collaborator-map-credit" id="collaborator-map-credit">Geometrías, clima y 138 rendimientos reportados de <a href="https://github.com/Andrea-HH/todoseboso/tree/paginAndrea/site/explorador" target="_blank" rel="noopener noreferrer">Andrea-HH</a>, versión documentada de los 197 polígonos, 138 rendimientos reportados y 59 predicciones corregidas tomadas del CSV final de GeoC. Este visor dispone de una interfaz propia; el rendimiento real de las 59 parcelas permanece desconocido. <a href="https://andrea-hh.github.io/todoseboso/explorador/mapa.html" target="_blank" rel="noopener noreferrer">Consultar el explorador original.</a></p>
 </div></section>
 
-</main><footer class="model-footer"><div class="shell"><strong>GeoCebada · AgroCebada FIRA 2026</strong><span>Reference26 · Diagnóstico LOOCV · Investigación retrospectiva de 2025</span><a href="#inicio">Volver al inicio ↑</a></div></footer>
+</main><footer class="model-footer"><div class="shell"><strong>GeoCebada · AgroCebada FIRA 2026</strong><span>Expertos agroespaciales · 3 parcelas análogas · AgroCebada 2025</span><a href="#inicio">Volver al inicio ↑</a></div></footer>
 </body></html>
