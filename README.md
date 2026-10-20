@@ -1,5 +1,14 @@
 # AgroCebada FIRA 2026 · fira_nuria
 
+## Website consolidation and verification (October 2026)
+
+**Unified preview** after the integration PR: `site/index.html`. It combines (a) mean-imputed final agrospatial experts with robust 3-neighbor analog correction, (b) 138 genuine LOOCV comparisons and their conditional nested selection, (c) the verified 59 target estimates with a CSV and map, (d) 22 source-grounded statistical metrics and Moran permutation tests on the separate `site/modelo-corregido.html#auditoria-modelo-final`, (e) explicitly historical native Reference26 residual tests, and (f) a data-integrity/quality checklist.
+
+The final fixed recipe (0.462418 RMSE), the foldwise nested policy (0.462892 RMSE), and the native ensemble without analog correction (0.468138 RMSE) are **distinct**. Candidate screening reused the 138 known yields; reported comparisons are exploratory. The 59 unknown yields have no observed errors. No numerical absolute-RMSE bootstrap interval has been published for the final corrected rule. New-parcel prediction requires a separate verified mean-trained Python deployment and must remain disabled without it.
+
+**Publication:** [GitHub Pages](https://heri-espino.github.io/todoseboso/) · [static alternative](https://raw.githack.com/heri-espino/todoseboso/main/site/index.html). The proposed consolidated version has its own branch preview; merging is deliberately held pending CI and review.
+
+
 **Sitio público de GeoCebada:** [Abrir GitHub Pages](https://heri-espino.github.io/todoseboso/) · [Vista alternativa de la versión publicada (sin depender de Pages)](https://raw.githack.com/heri-espino/todoseboso/main/site/index.html) · [Fuentes y auditoría](site/README.md). El despliegue oficial usa GitHub Actions y publica el contenido de `site/` desde `main`; las ramas y pull requests no aparecen automáticamente en el sitio oficial.
 
 **Vista previa del próximo modelo (PR #24, todavía sin fusionar):** [modelo agroespacial corregido y 59 estimaciones](https://raw.githack.com/heri-espino/todoseboso/feature/agrospatial-analog-final-model-site/site/index.html). Esta vista previa no implica que la versión ya haya sido publicada ni que esté habilitada la inferencia de parcelas nuevas. La investigación upstream contiene nuevos [contrastes de las cuatro señales C-T3](results/core4_relevance/v1/README.md) y [evidencia de los componentes Reference26](results/reference26_component_evidence/v1/README.md).

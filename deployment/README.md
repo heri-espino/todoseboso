@@ -1,3 +1,98 @@
+# Servicio final · expertos agroespaciales + tres parcelas análogas
+
+**Este apartado sustituye operativamente al API histórico de Reference26.**
+El modelo final de FIRA utiliza el joblib **Reference26_mean**,
+entrenado con 138 etiquetas e imputación por media, seguido de la
+corrección robusta de **3 parcelas análogas, mezcla 0.25 y filtro de
+soporte**. La corrección no se codifica como un nuevo joblib: se
+calcula con las 138 cosechas reales y las 26 características de las
+197 parcelas usando exactamente la regla seleccionada en GeoC.
+El código está en `deployment/agrospatial_api.py`.
+
+**Estado actual:** código y formulario preparados. Aún falta
+incorporar el joblib `reference26_mean_train138.joblib` generado en
+GeoC y desplegar la API. El archivo viejo `final_train138.joblib`
+**no debe reemplazar al nuevo**: usa imputación por mediana y no
+produce las 59 predicciones seleccionadas. Si falta el joblib nuevo,
+el nuevo API da `503`, nunca muestra predicciones antiguas como
+si fueran finales.
+
+## Preparar el modelo correcto (Windows PowerShell)
+
+En `C:\Users\175199\todoseboso`, con el directorio hermano
+`C:\Users\175199\GeoC`:
+
+~~~powershell
+New-Item -ItemType Directory -Force deployment\model_artifacts | Out-Null
+Copy-Item "..\GeoC\reports\reference26_compact14_fresh138\final_artifacts\reference26_mean_train138.joblib" "deployment\model_artifacts\reference26_mean_train138.joblib"
+$env:GEOCEBADA_MEAN_MODEL_PATH = (Resolve-Path "deployment\model_artifacts\reference26_mean_train138.joblib").Path
+$env:GEOCEBADA_MEAN_MODEL_SHA256 = (Get-FileHash $env:GEOCEBADA_MEAN_MODEL_PATH -Algorithm SHA256).Hash.ToLowerInvariant()
+python -m pip install -r deployment/requirements-api.txt
+python -m uvicorn deployment.agrospatial_api:app --host 127.0.0.1 --port 8000
+~~~
+
+Verificar desde otra terminal:
+
+~~~powershell
+Invoke-RestMethod http://127.0.0.1:8000/api/health
+~~~
+
+**Sólo está listo** si devuelve:
+`ready=true`, `model=agrospatial_analog_v1`,
+`reproduced_59_individually=true` y
+`new_parcels_supported=true`. Al inicializar, verifica:
+
+- hash SHA del nuevo joblib, imputación por media y 138 posiciones
+  de entrenamiento originales;
+- los tres archivos congelados `final_train138.joblib` anterior,
+  `features197.parquet` y `distance197.npy` por sus hashes
+  auditados (estos últimos se usan como contexto de la nueva
+  corrección);
+- las 26 características originales y 138 cosechas reales;
+- escala geográfica reproducible para parcelas nuevas;
+- **las 59 predicciones** recalculadas desde el nuevo joblib,
+  con la corrección real de tres vecinos, contra cada ID y valor
+  de `site/data/submission59_final.csv` (tolerancia 1e-7 t/ha).
+
+Si no coincide algún resultado, rechaza el despliegue, en vez de
+publicar cifras aproximadas o entrenamientos distintos.
+
+## Publicar el servicio y conectar la web
+
+`render.yaml` ya apunta al nuevo
+`deployment.agrospatial_api:app`. Configura la ruta real del
+joblib en `GEOCEBADA_MEAN_MODEL_PATH` y fija su SHA-256 en
+`GEOCEBADA_MEAN_MODEL_SHA256` en el entorno del servidor. Debes
+colocar el joblib en un volumen accesible para ese servidor. Si
+**eliges expresamente** incluirlo en el repositorio público,
+recuerda que un modelo serializado puede contener valores de
+entrenamiento; revisa las bases y la política de datos del reto.
+La simple creación de este PR **no sube ese archivo** ni
+configura Render por tu cuenta.
+
+Cuando la API devuelva `/api/health` correctamente bajo HTTPS,
+escribe su URL **real** en
+`site/data/inference_config.json` (campo `api_base_url`).
+No inventar una URL ni activar manualmente la interfaz sin
+paridad numérica.
+
+La web estática ya puede consultar las 59 predicciones,
+la comparación de modelos y el mapa sin activar la API.
+El formulario manual y el lote CSV de hasta 50 parcelas
+permanecen deshabilitados hasta la verificación. Cada consulta
+POST a `/api/predict` o `/api/predict-batch` usa la
+receta entrenada auténtica y devuelve la predicción corregida,
+el resultado nativo y la diferencia por análogos; no supone
+conocer la cosecha real de una parcela nueva.
+
+## Documentación histórica del servicio anterior
+
+La siguiente sección describe el API original que usaba la
+mediana y se conserva solamente para auditoría; **no** es el
+modelo final mostrado en la web.
+
+---
+
 # Predicciones reales de Reference26
 
 Esta implementación prepara **inferencia del ajuste entrenado real**, no un nuevo

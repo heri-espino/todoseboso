@@ -56,6 +56,28 @@
     if(result.size!==expected)throw Error("Se esperaban "+expected+" registros en "+path);
     return result;
   };
+  const finalPredictions=async ()=>{
+    const path="./data/submission59_final.csv";
+    const response=await fetch(path,{cache:"no-store"});
+    if(!response.ok)throw Error("Falta el archivo oficial candidato con 59 estimaciones finales.");
+    const lines=(await response.text()).trim().split(/\r?\n/);
+    if(lines.shift()?.replace(/^\uFEFF/,"").trim()!=="ID_POLIGONO,RENDIMIENTO_T_HA")
+      throw Error("El CSV final no tiene los encabezados esperados.");
+    const values=new Map();
+    for(const line of lines){
+      const columns=line.split(",");
+      if(columns.length!==2)throw Error("CSV final incompleto.");
+      const [id,raw]=columns;
+      const number=Number(raw);
+      if(!/^AGC_\d+$/.test(id)||values.has(id)||raw.trim()===""||
+         !Number.isFinite(number)||number<=0)
+        throw Error("Estimación final no válida para una parcela.");
+      values.set(id,number);
+    }
+    if(values.size!==59)throw Error("Las predicciones finales no contienen exactamente 59 parcelas.");
+    return values;
+  };
+
   const openGeoJSON=async ()=>{
     if(typeof DecompressionStream==="undefined")
       throw Error("El navegador no permite descomprimir datos geográficos.");
@@ -103,7 +125,7 @@
     clear(details);
     const r=records.find(item=>item.id===selected);
     if(!r){
-      details.append(el("p","geo-muted","Seleccione una parcela para consultar su ubicación, el rendimiento reportado o la estimación archivada, y las variables ambientales disponibles."));
+      details.append(el("p","geo-muted","Seleccione una parcela para consultar su ubicación, el rendimiento reportado o la estimación agroespacial corregida, y las variables ambientales disponibles."));
       return;
     }
     details.append(el("p","geo-article-tag",r.split==="ENTRENAMIENTO"?"RENDIMIENTO REPORTADO":"ESTIMACIÓN ARCHIVADA"),
@@ -176,7 +198,7 @@
   async function start(){
     say("Cargando geometrías y datos de las 197 parcelas…");
     const [L,dataset,pred,actual]=await Promise.all([
-      loadLeaflet(),openGeoJSON(),csv("predictions.csv",59),csv("training_yields.csv",138)]);
+      loadLeaflet(),openGeoJSON(),finalPredictions(),csv("training_yields.csv",138)]);
     const features=dataset.geometry.features;
     const climate=new Map(dataset.climate.map(row=>[norm(row.ID_POLIGONO),row]));
     if(climate.size!==197)throw Error("La capa climática contiene IDs repetidos.");
@@ -203,6 +225,11 @@
     if(records.filter(x=>x.split==="ENTRENAMIENTO").length!==138||
        records.filter(x=>x.split==="PREDICCION").length!==59)
       throw Error("La división 138/59 no coincide con la fuente publicada.");
+    if(window.GeoCebadaPredictions?.setGeography){
+      const places=Object.fromEntries(records.filter(r=>r.split==="PREDICCION")
+        .map(r=>[r.id,{state:r.state,municipality:r.municipio}]));
+      window.GeoCebadaPredictions.setGeography(places);
+    }
     map=L.map("geo-leaflet-map",{zoomControl:true,scrollWheelZoom:false,attributionControl:true});
     const types=labelMap();
     tiles=types.light.addTo(map);
