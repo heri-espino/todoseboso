@@ -28,6 +28,13 @@
     }catch(error){
       window.GeoCebadaPredictions.unavailable(error.message);
       if(window.GeoCebadaFinalModel)window.GeoCebadaFinalModel.unavailable(error.message);
+      const status=document.getElementById("pred59-status");
+      if(status){
+        const link=document.createElement("a");
+        link.href="#reference26-analog-cv";
+        link.textContent=" Consultar la validación de la corrección (las 59 predicciones requieren su CSV).";
+        status.append(link);
+      }
       console.error("No se verificaron las 59 predicciones finales:",error);
     }
     // The legacy median-imputed Reference26 browser approximation is neither
