@@ -898,6 +898,54 @@
       "bias": null,
       "source": "https://github.com/heri-espino/todoseboso/blob/main/documentation/winner_predictions_statistical_validation.md",
       "precision": "rounded_6"
+    },
+    {
+      "protocol": "random",
+      "id": "L40",
+      "name": "GeoPCA20 · Ridge geográfico (L40)",
+      "description": "GeoPCA20 + Ridge ponderado geográficamente con 24 vecinos; benchmark Local04D.",
+      "rmse": 0.493,
+      "mae": 0.3526,
+      "r2": 0.6619,
+      "bias": -0.009,
+      "source": "https://github.com/heri-espino/todoseboso/blob/main/documentation/four_expert_combinations_results.md",
+      "precision": "mixed_source"
+    },
+    {
+      "protocol": "climate_profile",
+      "id": "L40",
+      "name": "GeoPCA20 · Ridge geográfico (L40)",
+      "description": "GeoPCA20 + Ridge ponderado geográficamente con 24 vecinos; benchmark Local04D.",
+      "rmse": 0.5031,
+      "mae": 0.3479,
+      "r2": 0.6481,
+      "bias": 0.0108,
+      "source": "https://github.com/heri-espino/todoseboso/blob/main/documentation/four_expert_combinations_results.md",
+      "precision": "mixed_source"
+    },
+    {
+      "protocol": "municipality",
+      "id": "L40",
+      "name": "GeoPCA20 · Ridge geográfico (L40)",
+      "description": "GeoPCA20 + Ridge ponderado geográficamente con 24 vecinos; benchmark Local04D.",
+      "rmse": 0.7602,
+      "mae": 0.5991,
+      "r2": 0.1964,
+      "bias": 0.1051,
+      "source": "https://github.com/heri-espino/todoseboso/blob/main/documentation/four_expert_combinations_results.md",
+      "precision": "mixed_source"
+    },
+    {
+      "protocol": "spatial",
+      "id": "L40",
+      "name": "GeoPCA20 · Ridge geográfico (L40)",
+      "description": "GeoPCA20 + Ridge ponderado geográficamente con 24 vecinos; benchmark Local04D.",
+      "rmse": 0.9794,
+      "mae": 0.7434,
+      "r2": -0.3337,
+      "bias": 0.4707,
+      "source": "https://github.com/heri-espino/todoseboso/blob/main/documentation/four_expert_combinations_results.md",
+      "precision": "mixed_source"
     }
   ],
   "scope": "Published historical benchmark snapshot; selection and repeats reuse the same 138 labels. Missing metrics stay null; rounded results remain rounded. The final analog-corrected model is documented independently."

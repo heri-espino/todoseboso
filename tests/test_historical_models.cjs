@@ -9,12 +9,12 @@ const json=JSON.parse(read("site/data/historical_models.json"));
 const home=read("site/index.html"),css=read("site/historical_models.css"),script=read("site/historical_models.js");
 const protocols=["fresh_97_41","random","climate_profile","municipality","spatial"];
 const lookup=(p,id)=>json.rows.find(r=>r.protocol===p&&r.id===id);
-test("historical archive keeps exact 17 model identifiers, 71 model-protocol observations and five distinct protocols",()=>{
+test("historical archive keeps exact 17 model identifiers, 75 model-protocol observations and five distinct protocols",()=>{
  assert.equal(json.schema_version,1);
- assert.equal(json.rows.length,71);
+ assert.equal(json.rows.length,75);
  assert.equal(new Set(json.rows.map(r=>r.id)).size,17);
  assert.deepEqual(json.protocols.map(p=>p.id),protocols);
- assert.deepEqual(protocols.map(p=>json.rows.filter(r=>r.protocol===p).length),[10,16,15,15,15]);
+ assert.deepEqual(protocols.map(p=>json.rows.filter(r=>r.protocol===p).length),[10,17,16,16,16]);
  assert.equal(new Set(json.rows.map(r=>r.protocol+"/"+r.id)).size,json.rows.length);
  assert.ok(json.rows.every(r=>r.source.startsWith("https://github.com/heri-espino/todoseboso/blob/main/")));
 });
