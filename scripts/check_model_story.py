@@ -94,9 +94,16 @@ def check() -> None:
     assert all(a in page.ids for a in page.anchors), "Broken internal navigation"
     for asset in page.assets:
         assert (SITE / asset).is_file(), ("missing site asset", asset)
-    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./reference26_residuals.js", "./final_model.js", "./final_predictor.js", "./browser_inference.js"]
-    for forbidden in ("B1</", "Local04D"):
-        assert forbidden not in html, forbidden
+    assert page.scripts == ["./navigation.js", "./scroll_motion.js", "./native_map.js", "./charts.js", "./model.js", "./field_charts.js", "./reference26_engine.js", "./predictions59.js", "./reference26_residuals.js", "./final_model.js", "./final_predictor.js", "./browser_inference.js", "./historical_models.js"]
+    # Earlier prohibitions apply to the CURRENT model narrative, not to an
+    # explicitly labeled, source-backed archive appended after the map.
+    archive_marker = '<section class="section historic-models" id="modelos-historicos"'
+    assert html.count(archive_marker) == 1
+    current_story, archive = html.split(archive_marker, 1)
+    assert current_story.index('id="mapa-interactivo"') > current_story.index('id="estadisticas-finales"')
+    assert archive.index('data-hm-protocol="fresh_97_41"') >= 0
+    for forbidden in ("B1</", "Local04D", "Compact14"):
+        assert forbidden not in current_story, forbidden
     for required in ("expertos agroespaciales", "K-means",
                      "mediana", "faltantes", "24 vecinas", "α = 30",
                      "0.4625", "0.3387", "0.6971", "952", "3 de 4",
@@ -111,7 +118,7 @@ def check() -> None:
     assert 'id="simulador"' not in html
     assert "id=\"ensamble\"" in html
     assert html.index('id="ensamble"') < html.index('id="datos"')
-    assert "Compact14" not in html
+    assert "Compact14" not in current_story
     assert 'id="modelo-final-analisis"' in html
     assert 'id="predecir-parcela"' in html
     assert (SITE / "data/submission59_final.csv").is_file()

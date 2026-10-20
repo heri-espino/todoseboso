@@ -100,3 +100,15 @@ El RMSE LOOCV de la **regla fija seleccionada** es 0.462418 t/ha; el de la **pol
 **Fuentes verificables**: `site/data/final_model.json`, `site/data/reference26_selected_statistical_audit.json`, `site/data/reference26_analog_extended_metrics.json`, `site/data/reference26_residuals.json` y `site/data/real_charts.json`.
 
 **Pruebas automáticas**: `node --test tests/test_site_consolidation.cjs`, `node --test tests/test_reference26_selected_audit.cjs` y `node --test tests/test_predictions59.cjs`. La inferencia para una parcela nueva permanece deshabilitada hasta instalar y verificar un backend Python de la versión entrenada con media.
+
+## Historical comparative model archive
+
+The public website has an additional final section, [Los otros modelos que investigamos](index.html#modelos-historicos), after the 197-parcel interactive map. The section is a **source-backed historical catalog**, not a new evaluation or a replacement for the final selected predictor.
+
+The exact [aggregate catalog](data/historical_models.json) contains **17 named models or variants, 75 model-by-protocol records and five separate validation designs**. It includes Reference26, Compact14, C-T3, GeoPCA20 geographically weighted Ridge (L40/Local04D), B1–B6, F5-00-C, F5-01, F6-E0, F7-00/F7-01, EQUAL3 and the historical TOP20/TOP15 predictor. These are only the models for which a source-referenced comparable aggregate could be identified; some other proposed variants lack published measurements and remain listed in `documentation/model_registry.md`.
+
+Source provenance is stored on each row. Original numerical sources: `results/comparison_97_41/v1/metrics.csv`, `results/current_champions/v1/metrics.csv`, `documentation/four_expert_combinations_results.md`, `documentation/family5_gpr_initial_decision.md`, `documentation/family7_boosting.md`, and `documentation/winner_predictions_statistical_validation.md`. Rounded historical numbers stay rounded. An unknown MAE, R² or bias is JSON `null` and rendered as *No publicado*; the website never manufactures it.
+
+Protocols: 16 × 97/41 splits, ten random 138-parcel OOF repetitions, climate-profile grouped validation, municipality-grouped validation and spatial-block grouped validation. Their RMSEs are **not pooled or ranked across protocols**. All metrics derive from previously studied 138 labeled parcels; **none** are observed error on the final 59 targets. The fixed analog-corrected predictor and genuine nested LOOCV are reported separately earlier in the portal.
+
+The archive works without a JavaScript backend: ten 97/41 models render immediately as a static fallback. JavaScript optionally loads all 71 source-backed records, interactive protocol buttons, ranking by RMSE/MAE/R²/absolute bias, search and animated relative visualizations. Bars explicitly disclose their *truncated within-protocol scale*. Keyboard-visible focus and reduced-motion preference are respected. Tests: `node --test tests/test_historical_models.cjs`.
