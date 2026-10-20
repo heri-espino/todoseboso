@@ -87,6 +87,16 @@ jobs:
             node --test tests/test_reference26_browser.cjs
             node --test tests/test_reference26_residuals.cjs
           fi
+      - name: Verify unified final model, source metrics, data quality and interactive states
+        run: |
+          node --test tests/test_site_consolidation.cjs
+          node --test tests/test_reference26_selected_audit.cjs
+          node --test tests/test_reference26_analog_cv.cjs
+          node --test tests/test_reference26_analog_extended_metrics.cjs
+          node --test tests/test_predictions59.cjs
+          node --check site/final_model.js
+          node --check site/final_predictor.js
+          node --check site/reference26_selected_audit.js
       - name: Validate observed-data chart exporter syntax
         run: python -m py_compile scripts/export_real_chart_data.py
       - name: Validate source-backed 2025 chart data
@@ -163,6 +173,8 @@ jobs:
           test -s _pages/modelo-corregido.html
           test -s _pages/styles.css
           test -s _pages/data/reference26_analog_extended_metrics.json
+          test -s _pages/data/submission59_final.csv
+          test -s _pages/data/reference26_selected_statistical_audit.json
           echo "Pages artifact contains its homepage, corrected-model chapter, styles and source metrics."
       - name: Upload public single-model site
         uses: actions/upload-pages-artifact@v3

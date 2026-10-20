@@ -91,3 +91,68 @@
 @media(prefers-reduced-motion:reduce){
  .geo-interactive,.missing-demo{transform:none!important;box-shadow:none!important}
 }
+
+/* Consistent interactive affordances across the unified portal.
+   Hover/keyboard effects never move Leaflet's draggable map surface. */
+.data-integrity{background:#f1f5ed}
+.data-integrity .section-heading{margin-bottom:30px}
+.quality-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid #d9e3d7;background:#fffefa;margin:25px 0 33px}
+.quality-summary article{padding:23px 22px;border-right:1px solid #d9e3d7;min-width:0}
+.quality-summary article:last-child{border-right:0}
+.quality-summary strong{display:block;font-size:clamp(26px,3vw,42px);font-variant-numeric:tabular-nums;color:#174d41;letter-spacing:-.05em;line-height:1.25}
+.quality-summary span{display:block;margin-top:8px;font-size:12px;color:#53695d}
+.quality-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;align-items:start}
+.quality-checks details{border:1px solid #d6e2d6;background:#fffefa;padding:0 20px;min-width:0}
+.quality-checks summary{cursor:pointer;list-style:none;font-size:15px;font-weight:730;line-height:1.42;color:#204b3b;padding:21px 28px 21px 0;position:relative}
+.quality-checks summary::-webkit-details-marker{display:none}
+.quality-checks summary::after{content:"+";position:absolute;right:0;top:19px;color:#39765e;font-size:21px;line-height:1;transition:transform .22s ease}
+.quality-checks details[open] summary::after{content:"−";transform:rotate(180deg)}
+.quality-checks details[open] summary{border-bottom:1px solid #e1e8de}
+.quality-checks details p{font-size:13px!important;line-height:1.77;margin:14px 0;color:#52675c!important}
+.quality-checks details a{display:inline-block;font-size:12px;text-decoration:underline;text-underline-offset:4px;color:#265e4d;margin:0 0 17px}
+.data-integrity .small-note{font-size:12px;line-height:1.8;margin:26px 0 0}
+.data-integrity .small-note a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:820px){.quality-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.quality-summary article:nth-child(2){border-right:0}.quality-summary article:nth-child(-n+2){border-bottom:1px solid #d9e3d7}.quality-checks{grid-template-columns:1fr}}
+@media(max-width:480px){.quality-summary article{padding:17px 13px}.quality-checks details{padding-inline:15px}}
+@media(prefers-reduced-motion:no-preference){
+  :where(button:not(:disabled),[role="button"]:not([aria-disabled="true"]),[role="tab"],summary,a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled)){
+    transition:background-color .25s ease,color .25s ease,border-color .25s ease,box-shadow .25s ease,opacity .25s ease,filter .25s ease,transform .3s cubic-bezier(.22,1,.36,1);
+  }
+  :where(.fm-bar-fill,.fm-share-track span,.tsb-audit-track,.result-fill,.evidence-tab,.ablation-fill){
+    transition:width .52s cubic-bezier(.22,1,.36,1),background-color .3s ease,opacity .3s ease,filter .3s ease;
+  }
+  :where(.fm-figure,.pred59-table tbody tr,.tsb-audit-paper,.quality-summary article,.quality-checks details,.tsb-audit-metric,.pred59-viz,.geo-native-sidebar,.chapter-card){
+    transition:background-color .3s ease,border-color .3s ease,box-shadow .36s ease,filter .3s ease;
+  }
+  .quality-checks details[open] > :not(summary){animation:quality-expand .3s ease both}
+  @keyframes quality-expand{from{opacity:.35;transform:translateY(-5px)}to{opacity:1;transform:none}}
+  @media(hover:hover) and (pointer:fine){
+    :where(.fm-tabs button,.tsb-audit-tab,.quality-checks summary,.pred59-filters select,.pred59-filters input,.fm-predict button,.nav-popover a,.geo-map-controls button,.geo-native-controls select):not(:disabled):hover{
+      filter:brightness(.97);
+      box-shadow:0 5px 14px rgba(24,56,47,.11);
+    }
+    :where(button:not(:disabled):not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out),[role="tab"],.chapter-readmore,.nav-popover a):hover{
+      transform:translateY(-2px);
+    }
+    :where(.quality-checks details,.fm-figure,.tsb-audit-paper,.tsb-audit-metric,.quality-summary article,.pred59-table tbody tr):hover{
+      background-color:#f0f6ed;
+      box-shadow:0 9px 26px rgba(24,56,47,.09);
+    }
+    :where(.fm-figure,.pred59-plot,.tsb-audit-panel,.figure-host) svg :is(circle,rect):hover{
+      filter:brightness(.88);
+      opacity:.83;
+    }
+    :where(.nav-popover a,.quality-checks summary,.tsb-audit-tab):hover{
+      color:#247558;
+    }
+  }
+  :where(button:not(:disabled),[role="tab"],.chapter-readmore):active{transform:translateY(1px) scale(.985)}
+}
+:where(button,[role="button"],[role="tab"],summary,a[href],input,select,textarea):focus-visible{
+  outline:3px solid #ac833b!important;outline-offset:3px;
+  box-shadow:0 0 0 5px rgba(223,185,119,.18);
+}
+:where(button,select,input):disabled{opacity:.58;cursor:not-allowed}
+@media(prefers-reduced-motion:reduce){
+  :where(.quality-checks summary::after,.quality-checks details *,.fm-bar-fill,.fm-share-track span,.tsb-audit-track,.quality-checks details){animation:none!important;transition:none!important;transform:none!important}
+}
