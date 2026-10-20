@@ -224,7 +224,10 @@ test("site ships no external ensemble UI or fabricated private histogram",()=>{
  assert.ok(html.indexOf('id="pruebas"') < html.indexOf('id="estadisticas-finales"'));
  assert.ok(html.indexOf('id="estadisticas-finales"') < html.indexOf('id="mapa-interactivo"'));
  assert.match(html,/src="\.\/reference26_residuals\.js"/);
- assert.doesNotMatch(html,/Compact14|Ensamble de dos modelos/);
+ // The separate end-of-page historical catalog may mention Compact14.
+ // Keep the original exclusion only in the current-model and native-residual narrative.
+ const mainStory=html.split('<section class="section historic-models" id="modelos-historicos"')[0];
+ assert.doesNotMatch(mainStory,/Compact14|Ensamble de dos modelos/);
  assert.doesNotMatch(html,/src="\.\/ensemble_/);
  assert.ok(!fs.existsSync(path.join(SITE,"data","ensemble_models.json")));
  assert.ok(!fs.existsSync(path.join(SITE,"data","ensemble_evaluation.json")));
