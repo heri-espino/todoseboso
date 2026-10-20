@@ -1,0 +1,32 @@
+name: Validate selected analog statistical audit
+
+on:
+  pull_request:
+    paths:
+      - "site/modelo-corregido.html"
+      - "site/reference26_selected_audit.css"
+      - "site/reference26_selected_audit.js"
+      - "site/data/reference26_selected_statistical_audit.json"
+      - "tests/test_reference26_selected_audit.cjs"
+      - ".github/workflows/verify_selected_analog_audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  selected-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check selected-model UI syntax
+        run: node --check site/reference26_selected_audit.js
+      - name: Verify selected model evidence and privacy contract
+        run: node --test tests/test_reference26_selected_audit.cjs
+      - name: Check previous nested metrics stay unchanged
+        run: |
+          node --test tests/test_reference26_analog_extended_metrics.cjs
+          node --test tests/test_reference26_analog_cv.cjs

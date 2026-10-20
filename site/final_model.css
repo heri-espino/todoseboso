@@ -1,0 +1,44 @@
+/* Final selected agrospatial model: restrained, responsive scientific dashboard. */
+.fm-overview{margin:38px 0 46px;padding:32px;background:#eef3e9;border:1px solid #d7e1d4}
+.fm-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:var(--jade);font-weight:750;margin:0 0 12px}
+.fm-overview h3{font-size:clamp(28px,3vw,38px);line-height:1.2;letter-spacing:-.045em;max-width:960px;margin:0 0 12px;color:var(--forest)}
+.fm-overview p{font-size:14px;line-height:1.85;max-width:980px;margin:10px 0}
+.fm-core{display:grid;grid-template-columns:repeat(3,1fr);margin:28px 0;border-block:1px solid #cfdccf}
+.fm-core>div{padding:23px 20px;border-right:1px solid #cfdccf}
+.fm-core>div:last-child{border-right:0}
+.fm-core span,.fm-core small{display:block;font-size:11px;color:var(--muted)}
+.fm-core strong{display:block;margin:6px 0;font-size:clamp(24px,3vw,37px);letter-spacing:-.05em;color:var(--forest);font-variant-numeric:tabular-nums}
+.fm-figure-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(245px,1fr);gap:24px;margin-top:32px}
+.fm-figure{padding:26px;background:var(--paper);border:1px solid #d7e1d4;min-width:0}
+.fm-figure h4{font-size:22px;color:var(--forest);margin:0 0 6px}
+.fm-figure>p{font-size:12px;margin:0 0 20px;line-height:1.7}
+.fm-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:22px 0 26px}
+.fm-tabs button{font:inherit;font-size:11px;font-weight:730;padding:10px 12px;border:1px solid #b4c6b8;background:#fff;color:var(--forest);cursor:pointer}
+.fm-tabs button:hover,.fm-tabs button.active{background:var(--forest);color:#fff;border-color:var(--forest)}
+.fm-bars{display:grid;gap:15px}
+.fm-bar{display:grid;gap:4px}
+.fm-bar-caption,.fm-share-heading{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.fm-bar-caption strong,.fm-share-heading strong{font-size:12px;color:var(--forest);line-height:1.5;font-weight:690}
+.fm-bar-caption span,.fm-share-heading span{font-size:12px;white-space:nowrap;font-weight:760;font-variant-numeric:tabular-nums}
+.fm-bar-track,.fm-share-track{height:9px;background:#e2eadf;position:relative}
+.fm-bar-fill,.fm-share-track span{display:block;height:100%;background:#91ab9a}
+.fm-bar.fm-policy .fm-bar-fill{background:#c7a168}
+.fm-bar.fm-selected .fm-bar-fill{background:#246b55}
+.fm-bar small{font-size:10px;color:var(--muted);line-height:1.35}
+.fm-note{font-size:11px!important;color:var(--muted);border-top:1px solid #e0e8de;padding-top:14px;margin-top:18px!important}
+.fm-selections{display:grid;gap:19px}
+.fm-share{display:grid;gap:8px}
+.fm-share-track span{background:#387562}
+.fm-share:nth-child(2) .fm-share-track span{background:#8cab91}
+.fm-share:nth-child(3) .fm-share-track span{background:#c7a168}
+.fm-histogram{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;height:180px;padding-top:14px;margin:20px 0}
+.fm-hist-bin{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:0}
+.fm-hist-bin strong{font-size:11px;color:var(--forest);font-variant-numeric:tabular-nums}
+.fm-hist-bin small{font-size:9px;color:var(--muted);margin-top:5px}
+.fm-hist-track{width:100%;height:125px;background:#f3f7f1;display:flex;align-items:end}
+.fm-hist-fill{width:100%;display:block;background:#387562}
+.fm-links{display:flex;flex-wrap:wrap;gap:14px;margin-top:20px}
+.fm-links a{font-weight:720;font-size:12px;color:var(--jade);text-decoration:underline;text-underline-offset:4px}
+.fm-caution{padding:17px 20px;background:#f5efe0;border-left:3px solid #b98c48;font-size:12px!important;line-height:1.8!important;color:#473e2c}
+@media(max-width:840px){.fm-figure-grid{grid-template-columns:1fr}.fm-core{grid-template-columns:1fr}.fm-core>div{border-right:0;border-bottom:1px solid #cfdccf}.fm-core>div:last-child{border-bottom:0}.fm-overview{padding:20px}.fm-figure{padding:19px}}
+@media(max-width:480px){.fm-histogram{gap:2px}.fm-hist-bin small{font-size:8px}.fm-bar-caption{flex-direction:column;gap:3px}.fm-tabs{gap:4px}}

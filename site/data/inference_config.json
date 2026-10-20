@@ -1,6 +1,8 @@
 {
   "schema_version": 1,
   "api_base_url": "",
-  "status": "pending deployment",
-  "model": "Reference26"
+  "status": "awaiting verified 138-mean model artifact and API deployment",
+  "model": "agrospatial_analog_v1",
+  "public_name": "Modelo de expertos agroespaciales con corrección por parcelas análogas",
+  "requires_exact_59_reproduction": true
 }

@@ -32,17 +32,26 @@ class InferenceContractTests(unittest.TestCase):
         self.assertIn("np.isclose", src)
         self.assertIn("HTTPException(503", src)
 
-    def test_browser_requires_59_reference26_numerical_parity(self):
+    def test_browser_requires_59_corrected_final_predictions(self):
         html = (SITE / "index.html").read_text(encoding="utf-8")
         browser = (SITE / "browser_inference.js").read_text(encoding="utf-8")
         engine = (SITE / "reference26_engine.js").read_text(encoding="utf-8")
+        new_api = (ROOT / "deployment/agrospatial_api.py").read_text(encoding="utf-8")
+        ast.parse(new_api)
         self.assertIn("./browser_inference.js", html)
+        self.assertIn("./final_predictor.js", html)
         self.assertIn("./reference26_engine.js", html)
-        self.assertIn("Reference26Browser.parity", browser)
+        self.assertIn("submission59_final.csv", browser)
         self.assertIn("GeoCebadaPredictions.unavailable", browser)
-        self.assertIn("if(parity.tested!==59)", browser)
-        self.assertNotIn('id="predict-real"', html)
-        self.assertNotIn('id="simulador"', html)
+        self.assertIn("final_model.json", browser)
+        self.assertIn("reproduced_59_individually", new_api)
+        self.assertIn("GEOCEBADA_MEAN_MODEL_SHA256", new_api)
+        self.assertIn("arithmetic_train_means", new_api)
+        self.assertIn("predict_saved", new_api)
+        self.assertIn("robust26_inputs", new_api)
+        self.assertIn("CORRECTION_CAP = 0.5", new_api)
+        self.assertIn("BLEND = 0.25", new_api)
+        self.assertIn("if not np.allclose", new_api)
         self.assertIn("function ridge", engine)
         self.assertIn("function geology", engine)
         self.assertIn("function correction", engine)
@@ -50,13 +59,14 @@ class InferenceContractTests(unittest.TestCase):
     def test_no_fabricated_server_url(self):
         cfg = json.loads((SITE / "data/inference_config.json").read_text(encoding="utf-8"))
         self.assertTrue(cfg["api_base_url"] == "" or cfg["api_base_url"].startswith("https://"))
-        self.assertEqual(cfg["model"], "Reference26")
-        self.assertIn(cfg["status"], ("pending deployment", "deployed"))
+        self.assertEqual(cfg["model"], "agrospatial_analog_v1")
+        self.assertIn(cfg["status"], ("awaiting verified 138-mean model artifact and API deployment", "deployed"))
         self.assertTrue((ROOT / "render.yaml").is_file())
         self.assertTrue((ROOT / "deployment/requirements-api.txt").is_file())
         readme = (ROOT / "deployment/README.md").read_text(encoding="utf-8")
         self.assertIn("138 cosechas observadas", readme)
         self.assertIn("scripts/check_inference_runtime.py", readme)
+        self.assertTrue((ROOT / "deployment/agrospatial_api.py").is_file())
 
 
 if __name__ == "__main__":
