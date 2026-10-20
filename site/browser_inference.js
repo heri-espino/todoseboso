@@ -20,7 +20,7 @@
       if(status){
         const link=document.createElement("a");
         link.href="#reference26-analog-cv";
-        link.textContent=" Ver el modelo corregido y sus métricas LOOCV.";
+        link.textContent=" Ver el modelo corregido y sus métricas.";
         status.append(link);
       }
       console.warn("Archivo opcional de inferencia no disponible:",error);
