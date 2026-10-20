@@ -2,16 +2,16 @@
 
 ## Website consolidation and verification (October 2026)
 
-**Unified preview** after the integration PR: `site/index.html`. It combines (a) mean-imputed final agrospatial experts with robust 3-neighbor analog correction, (b) 138 genuine LOOCV comparisons and their conditional nested selection, (c) the verified 59 target estimates with a CSV and map, (d) 22 source-grounded statistical metrics and Moran permutation tests on the separate `site/modelo-corregido.html#auditoria-modelo-final`, (e) explicitly historical native Reference26 residual tests, and (f) a data-integrity/quality checklist.
+**Published unified website** (merged via PR #29): `site/index.html`. It combines (a) mean-imputed final agrospatial experts with robust 3-neighbor analog correction, (b) 138 genuine LOOCV comparisons and their conditional nested selection, (c) the verified 59 target estimates with a CSV and map, (d) 22 source-grounded statistical metrics and Moran permutation tests on the separate `site/modelo-corregido.html#auditoria-modelo-final`, (e) explicitly historical native Reference26 residual tests, and (f) a data-integrity/quality checklist.
 
 The final fixed recipe (0.462418 RMSE), the foldwise nested policy (0.462892 RMSE), and the native ensemble without analog correction (0.468138 RMSE) are **distinct**. Candidate screening reused the 138 known yields; reported comparisons are exploratory. The 59 unknown yields have no observed errors. No numerical absolute-RMSE bootstrap interval has been published for the final corrected rule. New-parcel prediction requires a separate verified mean-trained Python deployment and must remain disabled without it.
 
-**Publication:** [GitHub Pages](https://heri-espino.github.io/todoseboso/) · [static alternative](https://raw.githack.com/heri-espino/todoseboso/main/site/index.html). The proposed consolidated version has its own branch preview; merging is deliberately held pending CI and review.
+**Publication:** [GitHub Pages](https://heri-espino.github.io/todoseboso/) · [static alternative](https://raw.githack.com/heri-espino/todoseboso/main/site/index.html). The consolidated publication was merged following all four passing validation workflows; publishing uses the `site/` directory.
 
 
 **Sitio público de GeoCebada:** [Abrir GitHub Pages](https://heri-espino.github.io/todoseboso/) · [Vista alternativa de la versión publicada (sin depender de Pages)](https://raw.githack.com/heri-espino/todoseboso/main/site/index.html) · [Fuentes y auditoría](site/README.md). El despliegue oficial usa GitHub Actions y publica el contenido de `site/` desde `main`; las ramas y pull requests no aparecen automáticamente en el sitio oficial.
 
-**Vista previa del próximo modelo (PR #24, todavía sin fusionar):** [modelo agroespacial corregido y 59 estimaciones](https://raw.githack.com/heri-espino/todoseboso/feature/agrospatial-analog-final-model-site/site/index.html). Esta vista previa no implica que la versión ya haya sido publicada ni que esté habilitada la inferencia de parcelas nuevas. La investigación upstream contiene nuevos [contrastes de las cuatro señales C-T3](results/core4_relevance/v1/README.md) y [evidencia de los componentes Reference26](results/reference26_component_evidence/v1/README.md).
+**Integración completada:** [PR #29](https://github.com/heri-espino/todoseboso/pull/29) incorpora la visualización final de PR #24 y la auditoría estadística de PR #27, sin sustituir las pruebas históricas del ensamble nativo.nes](https://raw.githack.com/heri-espino/todoseboso/feature/agrospatial-analog-final-model-site/site/index.html). Esta vista previa no implica que la versión ya haya sido publicada ni que esté habilitada la inferencia de parcelas nuevas. La investigación upstream contiene nuevos [contrastes de las cuatro señales C-T3](results/core4_relevance/v1/README.md) y [evidencia de los componentes Reference26](results/reference26_component_evidence/v1/README.md).
 
 
 **El propósito del proyecto es desarrollar y validar un modelo que estime el rendimiento de cebada, en toneladas por hectárea, para las parcelas sin rendimiento conocido del Reto AgroCebada FIRA 2026.** La investigación de variables y algoritmos sirve para elegir y explicar esa solución; no es un objetivo independiente ni una búsqueda del menor error sin considerar su uso.
@@ -20,7 +20,7 @@ Trabajamos con **197 parcelas de Hidalgo, Puebla y Tlaxcala**, ciclo 2025: **138
 
 La finalidad práctica es apoyar la estimación de productividad y aportar información para decisiones agropecuarias y financieras. Este estudio no valida un sistema automático de otorgamiento de crédito, una relación causal agronómica ni la transferencia a cualquier región o año.
 
-**Etapa actual: champions Reference26 y Compact14**, con C-T3 como control y B1 como sensibilidad. L40 se conserva como benchmark fuerte del equipo; queda fuera del reentrenamiento propio, no de la comparación. [Resultados: validación y predicciones finales](results/README.md) · [Reproducción](documentation/current_champions_reproduction.md).
+**Etapa comparativa histórica: candidatos Reference26 y Compact14**, con C-T3 como control y B1 como sensibilidad. L40 se conserva como benchmark fuerte del equipo; queda fuera del reentrenamiento propio, no de la comparación. [Resultados: validación y predicciones finales](results/README.md) · [Reproducción](documentation/current_champions_reproduction.md).
 
 ## Propósito y entregables según los lineamientos
 
@@ -37,14 +37,14 @@ La [matriz de entregables y evidencia](documentation/project_scope_and_guideline
 
 ## Qué modelo es cuál y cuál es su estado
 
-**La etapa actual conserva dos champions: Reference26 y Compact14**, por decisión explícita del responsable del proyecto después de las comparaciones. El de 26 prioriza precisión y equilibrio territorial; el de 14 prioriza simplicidad de fuentes con desempeño próximo. C-T3 es el control compacto y B1 una sensibilidad. Ambos champions ya tienen ajuste final con138 rendimientos y59 predicciones incorporadas a la comparación existente.
+**La etapa comparativa histórica conservaba Reference26 y Compact14**, por decisión explícita del responsable del proyecto después de las comparaciones. El de 26 prioriza precisión y equilibrio territorial; el de 14 prioriza simplicidad de fuentes con desempeño próximo. C-T3 es el control compacto y B1 una sensibilidad. Ambos champions ya tienen ajuste final con138 rendimientos y59 predicciones incorporadas a la comparación existente.
 
 `A_CURRENT_CH_H_T` conserva el nombre de modelo histórico TOP20/TOP15 y su entrega previa: no es el champion actual26. El estado y las rutas están en el [registro de modelos](documentation/model_registry.md), la [etapa vigente](configs/current_stage.json) y la [ruta reproducible actual](documentation/current_champions_reproduction.md).
 
 | Modelo | Qué hace | Estado y motivo de conservarlo |
 |---|---|---|
-| **Reference26 · champion actual** | C-T3 + experto local7, compuerta geológica y corrector R3 | Seleccionado por precisión y equilibrio de validación; OOF reproducibles y ajuste final138 con59 predicciones |
-| **Compact14 · champion actual compacto** | C-T3 + experto local5, peso global y R3; sin Planet ni compuerta geológica | Seleccionado por simplificación y desempeño próximo; OOF reproducibles y ajuste final138 con59 predicciones |
+| **Reference26 · candidato de la etapa anterior** | C-T3 + experto local7, compuerta geológica y corrector R3 | Seleccionado por precisión y equilibrio de validación; OOF reproducibles y ajuste final138 con59 predicciones |
+| **Compact14 · candidato compacto de la etapa anterior** | C-T3 + experto local5, peso global y R3; sin Planet ni compuerta geológica | Seleccionado por simplificación y desempeño próximo; OOF reproducibles y ajuste final138 con59 predicciones |
 | **C-T3 / CT3** | Elastic Net global con lluvia total, fracción temprana, concentración mensual y NDVI de mayo | Control compacto de 4 entradas; tiene ajuste final y59 predicciones en la entrega histórica |
 | **B1** | Mezcla aprendida internamente entre C-T3 y26 | Sensibilidad: pequeña ventaja municipal, deterioro espacial; no recomendada para sustituir26 |
 | **L40 / Local04D** | PCA20 de C4 (2082 variables) + Ridge local24 geográfico | Benchmark fuerte externo del equipo; no es champion actual de este repositorio |
