@@ -38,6 +38,12 @@
 <h1>Estimación del rendimiento <em>de cebada.</em></h1>
 <p class="hero-description">Estudiamos 197 parcelas agrícolas en Hidalgo, Puebla y Tlaxcala: 138 con rendimiento reportado y 59 por estimar. Integramos información climática, satelital, geográfica y geológica; después ajustamos las predicciones mediante tres parcelas análogas con rendimientos conocidos.</p>
 <p class="hero-description minor-intro">El modelo final es un <strong>ensamble de expertos agroespaciales con corrección por parcelas análogas</strong>. Comparamos sus errores en 138 exclusiones LOOCV y presentamos las 59 predicciones finales, sin confundirlas con cosechas observadas.</p>
+<div class="hero-new-model-summary" role="group" aria-label="Métricas del modelo corregido, 138 predicciones reales LOOCV">
+<span><strong>0.462892</strong><small>RMSE anidado · t/ha</small></span>
+<span><strong>0.331956</strong><small>MAE anidado · t/ha</small></span>
+<span><strong>0.702083</strong><small>R² predictivo anidado</small></span>
+<span><strong>138</strong><small>parcelas LOOCV</small></span>
+</div><p class="hero-metric-caveat" style="font-size:12px;color:#d7ead4">Estos son resultados de la política anidada. La regla final fija, seleccionada tras la búsqueda histórica, tiene RMSE 0.462418 t/ha y se explica por separado.</p>
 <div class="hero-actions"><a class="primary-cta" href="#modelo-final-analisis">Resultados del modelo final</a><a class="secondary-cta" href="./modelo-corregido.html#auditoria-modelo-final">Auditoría estadística completa</a><a class="secondary-cta" href="./modelo-corregido.html">Ver detalles y métricas</a><a class="secondary-cta" href="#recorrido">Índice</a></div>
 <p class="hero-metadata">HIDALGO · PUEBLA · TLAXCALA · CICLO 2025</p>
 </div>
