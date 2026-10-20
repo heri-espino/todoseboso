@@ -54,9 +54,16 @@ assert.ok(css.includes(".r26a-metric-table"));
 assert.ok(!dedicated.includes('id="resultados"'));
 assert.ok(!dedicated.includes('id="estadisticas-finales"'));
 assert.ok(!dedicated.includes('id="predicciones-59"'));
-assert.ok(site.includes('href="./modelo-corregido.html"'));
+assert.ok(site.includes('href="#reference26-analog-cv"'));
+assert.ok(site.includes('class="hero-new-model-summary"'));
+assert.ok(site.includes('aria-label="Métricas del modelo corregido, 138 predicciones reales LOOCV"'));
+for (const metric of ["0.462892", "0.331956", "0.702083"]) {
+  assert.ok(site.includes(metric), "Current-model hero metric missing: "+metric);
+}
 assert.ok(dedicated.includes("/* Self-contained static publication: works without CDN"));
 assert.ok(dedicated.includes(".reference26-analog-story .r26a-statboard"));
 assert.ok(!dedicated.includes('href="./reference26_analog_cv.css"'));
 assert.ok(!dedicated.includes('href="./styles.css"'));
+const browserRunner=fs.readFileSync("site/browser_inference.js", "utf8");
+assert.ok(browserRunner.includes('link.href="#reference26-analog-cv"'), "Missing-runtime fallback must link to current model");
 console.log("Single-model standalone page: 12 actual LOOCV metrics verified; no prior-model comparison.");
